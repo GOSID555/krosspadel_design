@@ -315,9 +315,10 @@ const styles = `
 
 // ── Data ──────────────────────────────────────────────
 const venues = [
-  { num: "01", region: "BANGKOK", name: "ONNUT", loc: "Sukhumvit 77", courts: "6 Courts", bg: "linear-gradient(160deg,#1a3008,#0a1504)" },
-  { num: "02", region: "PHUKET", name: "PHUKET", loc: "Laguna Area", courts: "4 Courts", bg: "linear-gradient(160deg,#081a30,#020810)" },
-  { num: "03", region: "BANGKOK", name: "THONGLOR", loc: "Sukhumvit 55", courts: "Coming 2025", bg: "linear-gradient(160deg,#301008,#1a0504)" },
+  { num: "01", region: "BANGKOK", name: "ONNUT", loc: "Sukhumvit 77", courts: "6 Courts", bg: "linear-gradient(160deg, #1a3008, #0a1504)" },
+  { num: "02", region: "BANGKOK", name: "ASOKE", loc: "Laguna Area", courts: "4 Courts", bg: "linear-gradient(160deg, #ff8c00, #ff3c00)" },
+  { num: "03", region: "BANGKOK", name: "THONGLOR", loc: "Sukhumvit 55", courts: "Coming 2025", bg: "linear-gradient(160deg, #2b2b2b, #0f0f0f)" },
+  { num: "04", region: "BANGKOK", name: "RAMA IV", loc: "Sukhumvit 55", courts: "Coming 2025", bg: "linear-gradient(160deg, #081a30, #020810)" },
 ];
 
 const stories = [
@@ -354,7 +355,7 @@ function BookModal({ open, onClose, onSubmit }) {
         <div className="modal-title">Book Padel</div>
         <div className="form-group">
           <label>Venue</label>
-          <select><option>Onnut</option><option>Phuket</option><option>Thonglor</option></select>
+          <select><option>Onnut</option><option>Asoke</option><option>Thonglor</option><option>Rama 4</option></select>
         </div>
         <div className="form-row">
           <div className="form-group"><label>Date</label><input type="date" /></div>
