@@ -1,6 +1,8 @@
-import { venues } from "../data";
+import { useContext } from "react";
+import { VenueContext } from "../context/VenueContext";
 
 export default function BookModal({ open, onClose, onSubmit }) {
+  const { venues } = useContext(VenueContext);
   return (
     <div className={`modal${open ? " open" : ""}`}>
       <div className="modal-bg" onClick={onClose} />
