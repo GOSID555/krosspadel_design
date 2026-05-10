@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { activities as fallbackActivities } from "../data";
 import Footer from "../components/Footer";
 
 export default function ActivitiesPage({ navigate, openBook }) {
-  const [activities, setActivities] = useState(fallbackActivities);
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     const load = async () => {

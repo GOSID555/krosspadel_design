@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { plans as fallbackPlans } from "../data";
 import Footer from "../components/Footer";
 
 export default function MembershipPage({ navigate, notify, openBook }) {
-  const [plans, setPlans] = useState(fallbackPlans);
+  const [plans, setPlans] = useState([]);
 
   useEffect(() => {
     const load = async () => {

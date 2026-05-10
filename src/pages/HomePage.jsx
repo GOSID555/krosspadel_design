@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import Footer from "../components/Footer";
-import { plans as fallbackPlans } from "../data";
 import { VenueContext } from "../context/VenueContext";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -9,7 +8,7 @@ import { locationWord } from "../utils/venueUtils";
 export default function HomePage({ navigate, openBook }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
-    const [plans, setPlans] = useState(fallbackPlans);
+    const [plans, setPlans] = useState([]);
 
     const venueWord = locationWord(venues.length);
 
