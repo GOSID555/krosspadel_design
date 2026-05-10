@@ -3,6 +3,12 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
+function formatDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
 export default function ActivitiesPage({ navigate, openBook }) {
   const [activities, setActivities] = useState([]);
 
@@ -42,34 +48,35 @@ export default function ActivitiesPage({ navigate, openBook }) {
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 40
           }}>
-            {activities.map((a, i) => (
-              <div key={a.name} style={{
-                padding: 40,
-                border: `1px solid var(--border)`,
-                background: "var(--mid2)",
-                transition: "all 0.3s ease",
-                cursor: "pointer"
+            {activities.map((a) => (
+              <div key={a.docId || a.name} style={{
+                position: "relative", height: 320, overflow: "hidden",
+                cursor: "pointer", border: "1px solid var(--border)", borderRadius: 4,
+                background: a.imageUrl
+                  ? `url(${a.imageUrl}) center/cover no-repeat`
+                  : "linear-gradient(135deg, var(--green-dark), var(--green-mid))",
+                transition: "transform .4s ease, border-color .3s ease"
               }}
                 onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-6px)";
                   e.currentTarget.style.borderColor = "var(--green-highlight)";
-                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
-                  e.currentTarget.style.transform = "translateY(-8px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.background = "var(--mid2)";
                   e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.borderColor = "var(--border)";
                 }}>
-                <div style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "24px",
-                  letterSpacing: "1.5px",
-                  marginBottom: 12,
-                  lineHeight: 1.1
-                }}>
-                  {a.name}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 55%, transparent 100%)" }} />
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "24px 28px" }}>
+                  {a.date && (
+                    <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 8 }}>
+                      {formatDate(a.date)}
+                    </div>
+                  )}
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 26, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 10 }}>
+                    {a.name}
+                  </div>
+                  <p className="body-txt" style={{ fontSize: 13, opacity: 0.75, margin: 0 }}>{a.text}</p>
                 </div>
-                <p className="body-txt" style={{ fontSize: "14px" }}>{a.text}</p>
               </div>
             ))}
           </div>

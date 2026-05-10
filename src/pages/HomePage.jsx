@@ -5,6 +5,15 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { locationWord } from "../utils/venueUtils";
 
+function formatDate(val) {
+    if (!val) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+        const d = new Date(val + "T00:00:00");
+        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    }
+    return val;
+}
+
 export default function HomePage({ navigate, openBook }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
@@ -133,7 +142,7 @@ export default function HomePage({ navigate, openBook }) {
                             <div className="story-gallery-feature-body">
                                 {stories[0].cat && <div className="story-gallery-cat">{stories[0].cat}</div>}
                                 <div className="story-gallery-title-lg">{stories[0].title}</div>
-                                <div className="story-gallery-date">{stories[0].date}</div>
+                                <div className="story-gallery-date">{formatDate(stories[0].date)}</div>
                                 {stories[0].excerpt && <p className="story-gallery-excerpt">{stories[0].excerpt}</p>}
                                 <div className="story-gallery-read">Read More →</div>
                             </div>
@@ -151,7 +160,7 @@ export default function HomePage({ navigate, openBook }) {
                                     <div className="story-gallery-small-body">
                                         {s.cat && <div className="story-gallery-cat">{s.cat}</div>}
                                         <div className="story-gallery-title-sm">{s.title}</div>
-                                        <div className="story-gallery-date">{s.date}</div>
+                                        <div className="story-gallery-date">{formatDate(s.date)}</div>
                                     </div>
                                 </div>
                             ))}

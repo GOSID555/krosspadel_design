@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { uploadImage } from "../../supabaseClient";
 
-const EMPTY = { num: "", name: "", text: "", icon: "" };
+const EMPTY = { num: "", name: "", text: "", imageUrl: "", date: "" };
 
-const ICON_OPTIONS = ["🎾", "🏋️", "🍽️", "🏆", "👥", "🎯", "🎓", "🌟", "💪", "🤝", "🏅", "⚡"];
+function formatDate(iso) {
+    if (!iso) return "";
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
 
 function ActivityPreview({ form }) {
     return (
@@ -14,18 +19,24 @@ function ActivityPreview({ form }) {
                 <div style={{ fontSize: 11, opacity: 0.5, textTransform: "uppercase", letterSpacing: 2 }}>Live Preview</div>
             </div>
             <div style={{ padding: 24 }}>
-                <div style={{ padding: 36, border: "1px solid rgba(255,255,255,0.08)", background: "var(--mid2)", borderRadius: 4 }}>
-                    <div style={{ fontSize: 46, marginBottom: 16, opacity: 0.85 }}>
-                        {form.icon || "🎾"}
-                    </div>
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, letterSpacing: "1.5px", marginBottom: 10, lineHeight: 1.1 }}>
-                        {form.name || "Activity Name"}
-                    </div>
-                    <div style={{ fontSize: 13, opacity: 0.5, lineHeight: 1.8 }}>
-                        {form.text || "Description will appear here..."}
+                <div style={{
+                    position: "relative", height: 220, borderRadius: 4, overflow: "hidden",
+                    background: form.imageUrl
+                        ? `url(${form.imageUrl}) center/cover no-repeat`
+                        : "linear-gradient(135deg, var(--green-dark), var(--green-mid))"
+                }}>
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.2) 60%, transparent 100%)" }} />
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 20px" }}>
+                        {form.date && <div style={{ fontSize: 10, opacity: 0.6, letterSpacing: "1.5px", marginBottom: 6, textTransform: "uppercase" }}>{formatDate(form.date)}</div>}
+                        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, letterSpacing: "1.5px", lineHeight: 1.1 }}>
+                            {form.name || "Activity Name"}
+                        </div>
                     </div>
                 </div>
-                <div style={{ marginTop: 12, fontSize: 10, opacity: 0.3, letterSpacing: 1, textTransform: "uppercase" }}>
+                <div style={{ marginTop: 12, fontSize: 12, opacity: 0.5, lineHeight: 1.7 }}>
+                    {form.text || "Description will appear here..."}
+                </div>
+                <div style={{ marginTop: 8, fontSize: 10, opacity: 0.3, letterSpacing: 1, textTransform: "uppercase" }}>
                     As shown on Activities page
                 </div>
             </div>
@@ -38,6 +49,7 @@ export default function AdminActivitiesPage({ navigate }) {
     const [editing, setEditing] = useState(null);
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     const load = async () => {
         const snap = await getDocs(collection(db, "activities"));
@@ -69,6 +81,20 @@ export default function AdminActivitiesPage({ navigate }) {
         load();
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setUploading(true);
+        try {
+            const docId = editing === "new" ? `temp_${Date.now()}` : editing;
+            const imageUrl = await uploadImage(file, "activities", docId);
+            setForm(f => ({ ...f, imageUrl }));
+        } catch (error) {
+            console.error("Image upload error:", error);
+        }
+        setUploading(false);
+    };
+
     // LIST
     if (!editing) return (
         <div style={{ minHeight: "100vh", background: "var(--dark)", padding: "120px 40px 40px" }}>
@@ -83,10 +109,13 @@ export default function AdminActivitiesPage({ navigate }) {
                 {activities.map(item => (
                     <div key={item.docId} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", background: "var(--mid)", borderRadius: 8 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                            <div style={{ fontSize: 28 }}>{item.icon || "🎾"}</div>
+                            {item.imageUrl
+                                ? <img src={item.imageUrl} alt="" style={{ width: 56, height: 40, objectFit: "cover", borderRadius: 3, opacity: .8 }} />
+                                : <div style={{ width: 56, height: 40, borderRadius: 3, background: "linear-gradient(135deg, var(--green-dark), var(--green-mid))" }} />
+                            }
                             <div>
                                 <div className="venue-name" style={{ fontSize: 18 }}>{item.name}</div>
-                                <div style={{ opacity: 0.5, fontSize: 13 }}>{item.text?.slice(0, 80)}...</div>
+                                <div style={{ opacity: 0.5, fontSize: 13 }}>{item.date ? formatDate(item.date) + " · " : ""}{item.text?.slice(0, 60)}...</div>
                             </div>
                         </div>
                         <div style={{ display: "flex", gap: 12 }}>
@@ -109,36 +138,9 @@ export default function AdminActivitiesPage({ navigate }) {
             <div className="heading" style={{ fontSize: 32, marginBottom: 32 }}>{editing === "new" ? "New Activity" : "Edit Activity"}</div>
             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 560px) minmax(280px, 1fr)", gap: 48, alignItems: "start" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    {/* Icon picker */}
-                    <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 10, textTransform: "uppercase" }}>Icon</div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
-                            {ICON_OPTIONS.map(emoji => (
-                                <button
-                                    key={emoji}
-                                    type="button"
-                                    onClick={() => handleChange("icon", emoji)}
-                                    style={{
-                                        fontSize: 22, width: 46, height: 46, borderRadius: 4, cursor: "pointer",
-                                        background: form.icon === emoji ? "rgba(45,168,79,0.2)" : "var(--mid)",
-                                        border: form.icon === emoji ? "2px solid var(--green-highlight)" : "1px solid rgba(255,255,255,0.1)",
-                                        transition: "all .15s"
-                                    }}
-                                >
-                                    {emoji}
-                                </button>
-                            ))}
-                        </div>
-                        <input
-                            value={form.icon || ""}
-                            onChange={e => handleChange("icon", e.target.value)}
-                            placeholder="หรือพิมพ์ emoji เอง..."
-                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
-                        />
-                    </div>
                     {/* Number */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Number</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Number (e.g. 01)</div>
                         <input
                             value={form.num || ""}
                             onChange={e => handleChange("num", e.target.value)}
@@ -147,11 +149,21 @@ export default function AdminActivitiesPage({ navigate }) {
                     </div>
                     {/* Name */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Name</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Activity Name</div>
                         <input
                             value={form.name || ""}
                             onChange={e => handleChange("name", e.target.value)}
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                        />
+                    </div>
+                    {/* Date */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Date</div>
+                        <input
+                            type="date"
+                            value={form.date || ""}
+                            onChange={e => handleChange("date", e.target.value)}
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, colorScheme: "dark" }}
                         />
                     </div>
                     {/* Description */}
@@ -163,6 +175,40 @@ export default function AdminActivitiesPage({ navigate }) {
                             rows={5}
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
                         />
+                    </div>
+                    {/* Image upload */}
+                    <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
+                        <div className="tag" style={{ marginBottom: 8 }}>Cover Image</div>
+                        <div style={{ opacity: 0.7, fontSize: 13, marginBottom: 12 }}>Upload activity image (shown as card background)</div>
+                        <label style={{ display: "inline-block", cursor: "pointer" }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                disabled={uploading}
+                                style={{ display: "none" }}
+                            />
+                            <button
+                                type="button"
+                                className="btn-ghost"
+                                disabled={uploading}
+                                onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}
+                            >
+                                {uploading ? "Uploading..." : "Choose Image"}
+                            </button>
+                        </label>
+                        {form.imageUrl && (
+                            <div style={{ marginTop: 12 }}>
+                                <img src={form.imageUrl} alt="Cover" style={{ maxWidth: "100%", maxHeight: 160, borderRadius: 4, objectFit: "cover" }} />
+                                <button
+                                    type="button"
+                                    onClick={() => handleChange("imageUrl", "")}
+                                    style={{ display: "block", marginTop: 8, background: "none", border: "none", color: "#ff6b6b", cursor: "pointer", fontSize: 13 }}
+                                >
+                                    Remove Image
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <button className="btn-primary" onClick={handleSave} disabled={saving}>
                         {saving ? "Saving..." : "Save Activity"}

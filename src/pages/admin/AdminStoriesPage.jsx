@@ -144,7 +144,6 @@ export default function AdminStoriesPage({ navigate }) {
         ["title", "Title"],
         ["cat", "Category (e.g. Community, Tournament)"],
         ["excerpt", "Excerpt"],
-        ["date", "Date (e.g. 12 Apr 2025)"],
         ["bg", "BG Color (fallback if no image)"],
     ];
 
@@ -175,6 +174,16 @@ export default function AdminStoriesPage({ navigate }) {
                             }
                         </div>
                     ))}
+                    {/* Date */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Date</div>
+                        <input
+                            type="date"
+                            value={form.date || ""}
+                            onChange={e => handleChange("date", e.target.value)}
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, colorScheme: "dark" }}
+                        />
+                    </div>
                     {/* Image upload */}
                     <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
                         <div className="tag" style={{ marginBottom: 8 }}>Cover Image</div>
