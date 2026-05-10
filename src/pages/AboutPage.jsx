@@ -15,12 +15,12 @@ export default function AboutPage({ navigate }) {
     ];
 
     const reasons = [
-        { icon: "🏆", title: "Premium Courts", desc: "International standard padel courts with professional-grade equipment" },
-        { icon: "👨‍🏫", title: "Professional Coaching", desc: "Expert coaches for all skill levels, from beginners to advanced" },
-        { icon: "🤝", title: "Thriving Community", desc: "Connect with fellow padel enthusiasts at tournaments and social events" },
-        { icon: "🌍", title: "International Standards", desc: "World-class facilities meeting international padel benchmarks" },
-        { icon: "🎯", title: "Tournaments & Events", desc: "Regular competitions and exclusive member events throughout the year" },
-        { icon: "💎", title: "Lifestyle Experience", desc: "More than padel—a premium lifestyle and social club" },
+        { title: "Premium Courts", desc: "International standard padel courts with professional-grade equipment" },
+        { title: "Professional Coaching", desc: "Expert coaches for all skill levels, from beginners to advanced" },
+        { title: "Thriving Community", desc: "Connect with fellow padel enthusiasts at tournaments and social events" },
+        { title: "International Standards", desc: "World-class facilities meeting international padel benchmarks" },
+        { title: "Tournaments & Events", desc: "Regular competitions and exclusive member events throughout the year" },
+        { title: "Lifestyle Experience", desc: "More than padel—a premium lifestyle and social club" },
     ];
 
     return (
@@ -121,7 +121,6 @@ export default function AboutPage({ navigate }) {
                                     e.currentTarget.style.borderColor = "var(--border)";
                                     e.currentTarget.style.background = "var(--mid2)";
                                 }}>
-                                <div style={{ fontSize: "48px", marginBottom: 16 }}>{r.icon}</div>
                                 <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{r.title}</div>
                                 <p className="body-txt">{r.desc}</p>
                             </div>
@@ -165,43 +164,6 @@ export default function AboutPage({ navigate }) {
                 </div>
             </section>
 
-            {/* GALLERY */}
-            <section style={{ padding: "100px 56px" }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-                    <div className="tag">Visual Story</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>KROSS Venues</div>
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                        gap: 24
-                    }}>
-                        {[1, 2, 3, 4, 5, 6].map((i) => (
-                            <div key={i} style={{
-                                height: "250px",
-                                background: `linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)`,
-                                borderRadius: "8px",
-                                border: "1px solid var(--border)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontSize: "64px",
-                                cursor: "pointer",
-                                transition: "all 0.3s ease"
-                            }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = "scale(1.02)";
-                                    e.currentTarget.style.borderColor = "var(--green-highlight)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = "scale(1)";
-                                    e.currentTarget.style.borderColor = "var(--border)";
-                                }}>
-                                🎾
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* FINAL CTA */}
             <section style={{

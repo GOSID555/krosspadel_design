@@ -95,18 +95,15 @@ export default function HomePage({ navigate, openBook }) {
                 <div className="act-grid">
                     <div className="act-main" onClick={() => navigate("activities")}>
                         <div className="act-main-num">01</div>
-                        <div className="act-icon">🎾</div>
                         <div className="act-title">Padel</div>
                         <div className="act-desc">Book a court, join a clinic, or compete in weekly tournaments.</div>
                     </div>
                     <div className="act-side">
                         <div className="act-card" onClick={() => navigate("activities")}>
-                            <div className="act-icon">🏋️</div>
                             <div className="act-title">Fitness</div>
                             <div className="act-desc">Performance training tailored to court sports.</div>
                         </div>
                         <div className="act-card" onClick={() => navigate("activities")}>
-                            <div className="act-icon">🍽️</div>
                             <div className="act-title">Restaurant</div>
                             <div className="act-desc">Fuel up before or unwind after your match.</div>
                         </div>

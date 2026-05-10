@@ -125,12 +125,12 @@ export default function MembershipPage({ navigate, notify, openBook }) {
             gap: 32
           }}>
             {[
-              { icon: "🎾", title: "Unlimited Court Access", desc: "Play as much as you want at any of our venues" },
-              { icon: "⏰", title: "Priority Booking", desc: "Secure your preferred time slots before general members" },
-              { icon: "🏆", title: "Coaching Discounts", desc: "Get 25-50% off all training sessions and clinics" },
-              { icon: "👥", title: "Member Events", desc: "Exclusive tournaments and social events throughout the year" },
-              { icon: "🎯", title: "Progress Tracking", desc: "Monitor your performance and skill development" },
-              { icon: "💚", title: "Community", desc: "Join a thriving community of passionate padel players" }
+              { title: "Unlimited Court Access", desc: "Play as much as you want at any of our venues" },
+              { title: "Priority Booking", desc: "Secure your preferred time slots before general members" },
+              { title: "Coaching Discounts", desc: "Get 25-50% off all training sessions and clinics" },
+              { title: "Member Events", desc: "Exclusive tournaments and social events throughout the year" },
+              { title: "Progress Tracking", desc: "Monitor your performance and skill development" },
+              { title: "Community", desc: "Join a thriving community of passionate padel players" }
             ].map((item, i) => (
               <div key={i} style={{
                 padding: 32,
@@ -146,7 +146,6 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                   e.currentTarget.style.borderColor = "rgba(45, 168, 79, 0.3)";
                   e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
                 }}>
-                <div style={{ fontSize: "44px", marginBottom: 16 }}>{item.icon}</div>
                 <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{item.title}</div>
                 <p className="body-txt">{item.desc}</p>
               </div>

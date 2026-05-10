@@ -61,13 +61,6 @@ export default function ActivitiesPage({ navigate, openBook }) {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}>
                 <div style={{
-                  fontSize: "48px",
-                  marginBottom: 16,
-                  opacity: 0.8
-                }}>
-                  {a.icon || (i === 0 ? "🏆" : i === 1 ? "👥" : i === 2 ? "🎯" : i === 3 ? "🎓" : "🌟")}
-                </div>
-                <div style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "24px",
                   letterSpacing: "1.5px",
@@ -97,12 +90,12 @@ export default function ActivitiesPage({ navigate, openBook }) {
             gap: 40
           }}>
             {[
-              { icon: "🤝", title: "Community", desc: "Connect with fellow padel enthusiasts and build lasting friendships" },
-              { icon: "📈", title: "Skill Development", desc: "Improve your technique under professional coaching guidance" },
-              { icon: "🏅", title: "Competitions", desc: "Participate in tournaments and test your skills against others" },
-              { icon: "⏰", title: "Flexible Scheduling", desc: "Play at your convenience with 24/7 court availability" },
-              { icon: "💪", title: "Fitness", desc: "Get a full-body workout while having fun on the court" },
-              { icon: "🎉", title: "Social Events", desc: "Join exclusive member events and networking opportunities" }
+              { title: "Community", desc: "Connect with fellow padel enthusiasts and build lasting friendships" },
+              { title: "Skill Development", desc: "Improve your technique under professional coaching guidance" },
+              { title: "Competitions", desc: "Participate in tournaments and test your skills against others" },
+              { title: "Flexible Scheduling", desc: "Play at your convenience with 24/7 court availability" },
+              { title: "Fitness", desc: "Get a full-body workout while having fun on the court" },
+              { title: "Social Events", desc: "Join exclusive member events and networking opportunities" }
             ].map((item, i) => (
               <div key={i} style={{
                 padding: 32,
@@ -118,7 +111,6 @@ export default function ActivitiesPage({ navigate, openBook }) {
                   e.currentTarget.style.borderColor = "rgba(45, 168, 79, 0.3)";
                   e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
                 }}>
-                <div style={{ fontSize: "44px", marginBottom: 16 }}>{item.icon}</div>
                 <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{item.title}</div>
                 <p className="body-txt">{item.desc}</p>
               </div>
