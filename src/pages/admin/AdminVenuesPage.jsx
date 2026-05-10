@@ -7,9 +7,126 @@ import { ChromePicker } from "react-color";
 
 const EMPTY = {
     name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", intro: "",
-    bg: "", bg1: "", imgBg1: "", imgBg2: "", imgCaption1: "", imgCaption2: "",
+    bg: "", bg1: "", bgImage: "", bg1Image: "", courtsImageBg: "", clubImageBg: "", courtsImageBgImage: "", clubImageBgImage: "", courtsImageCaption: "", clubImageCaption: "",
     courtText: "", courtText2: "", clubText: "", clubText2: "", features: [], imageUrl: ""
 };
+
+function VenuePreview({ form }) {
+    return (
+        <div style={{ background: "var(--mid)", borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--green-highlight)" }} />
+                <div style={{ fontSize: 11, opacity: 0.5, textTransform: "uppercase", letterSpacing: 2 }}>Live Preview</div>
+            </div>
+            <div style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
+                {/* Hero */}
+                <div style={{
+                    height: 180,
+                    background: form.bg1Image ? `url(${form.bg1Image}) center/cover no-repeat` : (form.bg1 || "#111"),
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    padding: "20px 24px"
+                }}>
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                        <div style={{ fontSize: 10, opacity: 0.55, marginBottom: 6, letterSpacing: 1 }}>
+                            {form.num || "01"} / {form.region || "Region"} · {form.status || "Open"}
+                        </div>
+                        <div style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.1, marginBottom: 4 }}>
+                            {form.name || "Venue Name"}
+                        </div>
+                        <div style={{ fontSize: 12, opacity: 0.55 }}>
+                            {form.loc || "Location"} · {form.courts ? `${form.courts} Courts` : "Courts"}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Intro */}
+                {form.intro && (
+                    <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ fontSize: 12, opacity: 0.65, lineHeight: 1.7 }}>
+                            {form.intro.slice(0, 180)}{form.intro.length > 180 ? "…" : ""}
+                        </div>
+                    </div>
+                )}
+
+                {/* Courts section */}
+                <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{
+                        height: 130,
+                        background: form.courtsImageBgImage
+                            ? `url(${form.courtsImageBgImage}) center/cover no-repeat`
+                            : (form.courtsImageBg || "#1a1a1a")
+                    }} />
+                    {form.courtsImageCaption && (
+                        <div style={{ padding: "8px 20px", fontSize: 10, opacity: 0.35 }}>{form.courtsImageCaption}</div>
+                    )}
+                    <div style={{ padding: "14px 20px" }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>The Courts</div>
+                        {form.courtText && (
+                            <div style={{ fontSize: 11, opacity: 0.55, lineHeight: 1.6 }}>
+                                {form.courtText.slice(0, 160)}{form.courtText.length > 160 ? "…" : ""}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Features */}
+                {(form.features || []).length > 0 && (
+                    <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", flexWrap: "wrap", gap: 20 }}>
+                        {form.features.map((f, i) => (
+                            <div key={i} style={{ textAlign: "center" }}>
+                                <div style={{ fontSize: 20, fontWeight: 700, color: "var(--green-highlight)" }}>{f.num || "—"}</div>
+                                <div style={{ fontSize: 10, opacity: 0.45, marginTop: 2 }}>{f.label || "label"}</div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Club section */}
+                <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{
+                        height: 130,
+                        background: form.clubImageBgImage
+                            ? `url(${form.clubImageBgImage}) center/cover no-repeat`
+                            : (form.clubImageBg || "#1a1a1a")
+                    }} />
+                    {form.clubImageCaption && (
+                        <div style={{ padding: "8px 20px", fontSize: 10, opacity: 0.35 }}>{form.clubImageCaption}</div>
+                    )}
+                    <div style={{ padding: "14px 20px" }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>The Club</div>
+                        {form.clubText && (
+                            <div style={{ fontSize: 11, opacity: 0.55, lineHeight: 1.6 }}>
+                                {form.clubText.slice(0, 160)}{form.clubText.length > 160 ? "…" : ""}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Cover image */}
+                {form.imageUrl && (
+                    <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ fontSize: 10, opacity: 0.4, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Cover Image</div>
+                        <img src={form.imageUrl} alt="cover" style={{ width: "100%", borderRadius: 4, maxHeight: 140, objectFit: "cover" }} />
+                    </div>
+                )}
+
+                {/* Info sidebar */}
+                <div style={{ padding: "16px 20px", background: "rgba(0,0,0,0.2)" }}>
+                    <div style={{ fontSize: 10, opacity: 0.4, marginBottom: 12, textTransform: "uppercase", letterSpacing: 1 }}>Sidebar Info</div>
+                    {[["Status", form.status], ["Hours", form.hours], ["Address", form.address], ["Phone", form.phone]].map(([label, val]) => val ? (
+                        <div key={label} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                            <div style={{ fontSize: 11, opacity: 0.4 }}>{label}</div>
+                            <div style={{ fontSize: 11, opacity: 0.75, textAlign: "right", maxWidth: "60%" }}>{val}</div>
+                        </div>
+                    ) : null)}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function AdminVenuesPage({ navigate }) {
     const { refreshVenues } = useContext(VenueContext);
@@ -51,6 +168,20 @@ export default function AdminVenuesPage({ navigate }) {
     const handleBack = () => { setEditing(null); load(); };
 
     const handleChange = (key, val) => setForm(f => ({ ...f, [key]: val }));
+
+    const getImageFieldName = (key) => {
+        if (key === "bg") return "bgImage";
+        if (key === "bg1") return "bg1Image";
+        if (key === "courtsImageBg") return "courtsImageBgImage";
+        if (key === "clubImageBg") return "clubImageBgImage";
+        return null;
+    };
+
+    const getImageField = (key) => {
+        const imageName = getImageFieldName(key);
+        return imageName ? form[imageName] : null;
+    };
+
     const handleFeatureChange = (index, key, value) => setForm(f => {
         const features = [...(f.features || [])];
         features[index] = { ...features[index], [key]: value };
@@ -78,7 +209,7 @@ export default function AdminVenuesPage({ navigate }) {
         load();
     };
 
-    const handleImageUpload = async (e) => {
+    const handleImageUpload = async (e, fieldName) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -86,16 +217,20 @@ export default function AdminVenuesPage({ navigate }) {
             setUploading(true);
             const docId = editing === "new" ? "temp" : editing;
             const imageUrl = await uploadImage(file, "venues", docId);
-            setForm(f => ({ ...f, imageUrl }));
+
+            if (fieldName === "cover") {
+                setForm(f => ({ ...f, imageUrl }));
+            } else if (fieldName === "bg" || fieldName === "bg1" || fieldName === "courtsImageBg" || fieldName === "clubImageBg") {
+                const imageFieldName = fieldName === "bg" ? "bgImage" : fieldName === "bg1" ? "bg1Image" : fieldName === "courtsImageBg" ? "courtsImageBgImage" : "clubImageBgImage";
+                setForm(f => ({ ...f, [imageFieldName]: imageUrl }));
+            }
+            setUploading(false);
         } catch (error) {
-            console.error("Upload error:", error);
-            alert("ผิดพลาดในการอัปโหลดรูป");
-        } finally {
+            console.error("Image upload error:", error);
             setUploading(false);
         }
     };
 
-    // LIST
     if (!editing) return (
         <div style={{ minHeight: "100vh", background: "var(--dark)", padding: "120px 40px 40px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 40 }}>
@@ -126,10 +261,10 @@ export default function AdminVenuesPage({ navigate }) {
     const fields = [
         ["name", "Name"], ["loc", "Location"], ["region", "Region"],
         ["num", "Number (01)"], ["status", "Status"], ["hours", "Hours"],
-        ["address", "Address"], ["phone", "Phone"], ["courts", "Courts"],
+        ["address", "Address"], ["phone", "Phone"], ["courts", "Number of Courts"],
         ["intro", "Intro"], ["bg", "BG Gradient"], ["bg1", "Hero BG"],
-        ["imgBg1", "Image BG 1"], ["imgBg2", "Image BG 2"],
-        ["imgCaption1", "Image Caption 1"], ["imgCaption2", "Image Caption 2"],
+        ["courtsImageBg", "Courts Section Image"], ["clubImageBg", "Club Section Image"],
+        ["courtsImageCaption", "Courts Image Caption"], ["clubImageCaption", "Club Image Caption"],
         ["courtText", "Court Section Text"], ["courtText2", "Court Section Text 2"],
         ["clubText", "Club Section Text"], ["clubText2", "Club Section Text 2"],
     ];
@@ -141,40 +276,89 @@ export default function AdminVenuesPage({ navigate }) {
                 <button className="back-btn" onClick={() => navigate("admin")}>← Dashboard</button>
             </div>
             <div className="heading" style={{ fontSize: 32, marginBottom: 32 }}>{editing === "new" ? "New Venue" : "Edit Venue"}</div>
-            <div style={{ maxWidth: 720, display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 640px) minmax(280px, 1fr)", gap: 48, alignItems: "start" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {fields.map(([key, label]) => (
                     <div key={key}>
                         <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>{label}</div>
-                        {key === "bg" || key === "bg1" ? (
-                            <div style={{ display: "flex", gap: 12, alignItems: "center", position: "relative" }}>
-                                <div
-                                    onClick={() => setColorPickerOpen(colorPickerOpen === key ? null : key)}
-                                    style={{
-                                        width: 60, height: 60, background: form[key] || "#000",
-                                        borderRadius: 4, cursor: "pointer", border: "2px solid rgba(255,255,255,0.2)"
-                                    }}
-                                />
-                                <input
-                                    value={form[key] || ""}
-                                    onChange={e => handleChange(key, e.target.value)}
-                                    placeholder="#000000"
-                                    style={{ flex: 1, padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
-                                />
-                                {colorPickerOpen === key && (
-                                    <div ref={colorPickerRef} style={{ position: "absolute", top: 0, left: 80, zIndex: 1000, background: "var(--mid)", padding: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.2)" }}>
-                                        <ChromePicker
-                                            color={form[key] || "#000"}
-                                            onChange={(color) => handleChange(key, color.hex)}
+                        {key === "bg" || key === "bg1" || key === "courtsImageBg" || key === "clubImageBg" ? (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                {/* IMAGE UPLOAD */}
+                                <div style={{ padding: 12, background: "rgba(45, 168, 79, 0.1)", border: "1px solid rgba(45, 168, 79, 0.3)", borderRadius: 4 }}>
+                                    <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 8 }}>📸 Upload Background Image</div>
+                                    <label style={{ display: "inline-block", cursor: "pointer" }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleImageUpload(e, key)}
+                                            disabled={uploading}
+                                            style={{ display: "none" }}
                                         />
                                         <button
-                                            onClick={() => setColorPickerOpen(null)}
-                                            style={{ width: "100%", marginTop: 12, padding: "8px 12px", background: "var(--green-highlight)", border: "none", color: "white", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                                            type="button"
+                                            className="btn-ghost"
+                                            disabled={uploading}
+                                            onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}
+                                            style={{ fontSize: 12, padding: "8px 12px" }}
                                         >
-                                            Close
+                                            {uploading ? "Uploading..." : "Choose Image"}
                                         </button>
+                                    </label>
+                                    {getImageField(key) && (
+                                        <div style={{ marginTop: 8 }}>
+                                            <img src={getImageField(key)} alt="Preview" style={{ maxWidth: "100%", height: "auto", borderRadius: 4, maxHeight: 120 }} />
+                                            <button
+                                                onClick={() => handleChange(getImageFieldName(key), "")}
+                                                style={{ marginTop: 8, fontSize: 11, background: "none", border: "1px solid #ff6b6b", color: "#ff6b6b", padding: "6px 12px", cursor: "pointer", borderRadius: 3 }}
+                                            >
+                                                Remove Image
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* COLOR PICKER */}
+                                <div>
+                                    <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 8 }}>🎨 Or Select Color</div>
+                                    <div style={{ display: "flex", gap: 12, alignItems: "center", position: "relative" }}>
+                                        <div
+                                            onClick={() => setColorPickerOpen(colorPickerOpen === key ? null : key)}
+                                            style={{
+                                                width: 60, height: 60, background: form[key] || "#000",
+                                                borderRadius: 4, cursor: "pointer", border: "2px solid rgba(255,255,255,0.2)"
+                                            }}
+                                        />
+                                        <input
+                                            value={form[key] || ""}
+                                            onChange={e => handleChange(key, e.target.value)}
+                                            placeholder="#000000"
+                                            style={{ flex: 1, padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                                        />
+                                        {colorPickerOpen === key && (
+                                            <div ref={colorPickerRef} style={{ position: "absolute", top: 0, left: 80, zIndex: 1000, background: "var(--mid)", padding: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.2)" }}>
+                                                <ChromePicker
+                                                    color={form[key] || "#000"}
+                                                    onChange={(color) => handleChange(key, color.hex)}
+                                                />
+                                                <button
+                                                    onClick={() => setColorPickerOpen(null)}
+                                                    style={{ width: "100%", marginTop: 12, padding: "8px 12px", background: "var(--green-highlight)", border: "none", color: "white", borderRadius: 4, cursor: "pointer", fontSize: 12 }}
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                </div>
                             </div>
+                        ) : key === "courts" ? (
+                            <input
+                                type="number"
+                                min="0"
+                                value={form[key] || ""}
+                                onChange={e => handleChange(key, e.target.value === "" ? "" : parseInt(e.target.value))}
+                                style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                            />
                         ) : (key === "intro" || key.includes("Text") || key.includes("Caption")) ? (
                             <textarea
                                 value={form[key] || ""}
@@ -199,7 +383,7 @@ export default function AdminVenuesPage({ navigate }) {
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={handleImageUpload}
+                                onChange={(e) => handleImageUpload(e, "cover")}
                                 disabled={uploading}
                                 style={{ display: "none" }}
                             />
@@ -258,6 +442,10 @@ export default function AdminVenuesPage({ navigate }) {
                 <button className="btn-primary" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save Venue"}
                 </button>
+                </div>
+                <div style={{ position: "sticky", top: 120 }}>
+                    <VenuePreview form={form} />
+                </div>
             </div>
         </div>
     );

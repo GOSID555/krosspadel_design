@@ -13,9 +13,11 @@ export default function Nav({ navigate, scrolled }) {
           <a onClick={() => go("stories")}>Club Stories</a>
           <a onClick={() => go("venues")}>Club Venues</a>
           <a onClick={() => go("activities")}>Club Activities</a>
+          <a onClick={() => go("about")}>About</a>
         </div>
         <span className="nav-logo" onClick={() => go("home")}>KROSS</span>
         <div className="nav-right">
+          <a className="desktop-only" onClick={() => go("partner")}>Become a Partner</a>
           <a className="desktop-only" onClick={() => go("membership")}>Membership</a>
           <a className="desktop-only" onClick={() => go("contact")}>Contact</a>
           <button className="lang-toggle desktop-only" onClick={() => setLang(l => l === "THAI" ? "ENG" : "THAI")}>{lang}</button>
@@ -28,6 +30,8 @@ export default function Nav({ navigate, scrolled }) {
         <a onClick={() => go("stories")}>Stories</a>
         <a onClick={() => go("venues")}>Venues</a>
         <a onClick={() => go("activities")}>Activities</a>
+        <a onClick={() => go("about")}>About</a>
+        <a onClick={() => go("partner")}>Become a Partner</a>
         <a onClick={() => go("membership")}>Membership</a>
         <a onClick={() => go("contact")}>Contact</a>
         <button className="mobile-menu-lang" onClick={() => setLang(l => l === "THAI" ? "ENG" : "THAI")}>{lang}</button>

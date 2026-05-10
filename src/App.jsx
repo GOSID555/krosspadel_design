@@ -9,6 +9,8 @@ import ActivitiesPage from "./pages/ActivitiesPage";
 import StoriesPage from "./pages/StoriesPage";
 import MembershipPage from "./pages/MembershipPage";
 import ContactPage from "./pages/ContactPage";
+import AboutPage from "./pages/AboutPage";
+import BecomePartnerPage from "./pages/BecomePartnerPage";
 import { VenueProvider } from "./context/VenueProvider";
 import { VenueContext } from "./context/VenueContext";
 import { AuthProvider } from "./context/AuthProvider";
@@ -65,6 +67,8 @@ function AppInner() {
       {page === "stories" && <StoriesPage navigate={navigate} />}
       {page === "membership" && <MembershipPage navigate={navigate} notify={notify} />}
       {page === "contact" && <ContactPage navigate={navigate} notify={notify} />}
+      {page === "about" && <AboutPage navigate={navigate} />}
+      {page === "partner" && <BecomePartnerPage navigate={navigate} notify={notify} />}
       {page === "admin-login" && <AdminLoginPage navigate={navigate} />}
       {page === "admin" && (user ? <AdminDashboard navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-venues" && (user ? <AdminVenuesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}

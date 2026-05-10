@@ -4,11 +4,14 @@ import { plans as fallbackPlans } from "../data";
 import { VenueContext } from "../context/VenueContext";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { locationWord } from "../utils/venueUtils";
 
 export default function HomePage({ navigate, openBook }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
     const [plans, setPlans] = useState(fallbackPlans);
+
+    const venueWord = locationWord(venues.length);
 
     useEffect(() => {
         const load = async () => {
@@ -61,7 +64,7 @@ export default function HomePage({ navigate, openBook }) {
                 <div style={{ padding: "0 56px 52px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
                     <div>
                         <div className="tag">Our Venues</div>
-                        <div className="heading" style={{ marginBottom: 0 }}>Four<br />Locations.</div>
+                        <div className="heading" style={{ marginBottom: 0 }}>{venueWord}<br />Locations.</div>
                     </div>
                     <div>
                         <p className="body-txt" style={{ marginBottom: 24 }}>World-class padel across Bangkok — each venue designed for the neighbourhood it serves.</p>
@@ -71,7 +74,9 @@ export default function HomePage({ navigate, openBook }) {
                 <div className="venues-grid">
                     {venues.map(v => (
                         <div className="venue-card" key={v.id} onClick={() => navigate("venue-" + v.id)}>
-                            <div className="venue-bg-div" style={{ background: v.bg }} />
+                            <div className="venue-bg-div" style={{
+                                background: v.bgImage ? `url(${v.bgImage}) center/cover no-repeat` : v.bg
+                            }} />
                             <div className="venue-card-inner">
                                 <div className="venue-overlay" />
                                 <div className="venue-info">
@@ -111,31 +116,55 @@ export default function HomePage({ navigate, openBook }) {
             </section>
 
             {/* STORIES */}
-            <section style={{ background: "var(--mid)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
+            <section style={{ background: "var(--mid)", padding: "120px 0" }}>
+                <div style={{ padding: "0 56px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
                     <div>
                         <div className="tag">Our Stories</div>
                         <div className="heading" style={{ marginBottom: 0 }}>Latest<br />News.</div>
                     </div>
                     <button className="btn-ghost" onClick={() => navigate("stories")}>All Stories</button>
                 </div>
-                <div className="stories-grid">
-                    {stories.slice(0, 3).map(s => (
-                        <div className="story-card" key={s.docId} onClick={() => navigate("stories")}>
-                            <div className="story-img">
-                                {s.imageUrl ? (
-                                    <img src={s.imageUrl} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                ) : (
-                                    <div className="story-img-inner" style={{ background: s.bg }} />
-                                )}
+                {stories.length > 0 ? (
+                    <div className="stories-gallery">
+                        {/* Featured — large left */}
+                        <div className="story-gallery-feature" onClick={() => navigate("stories")}>
+                            <div className="story-gallery-bg" style={{
+                                background: stories[0].imageUrl
+                                    ? `url(${stories[0].imageUrl}) center/cover no-repeat`
+                                    : (stories[0].bg || "var(--mid2)")
+                            }} />
+                            <div className="story-gallery-overlay" />
+                            <div className="story-gallery-feature-body">
+                                {stories[0].cat && <div className="story-gallery-cat">{stories[0].cat}</div>}
+                                <div className="story-gallery-title-lg">{stories[0].title}</div>
+                                <div className="story-gallery-date">{stories[0].date}</div>
+                                {stories[0].excerpt && <p className="story-gallery-excerpt">{stories[0].excerpt}</p>}
+                                <div className="story-gallery-read">Read More →</div>
                             </div>
-                            <div className="story-date">{s.date}</div>
-                            <div className="story-title">{s.title}</div>
-                            <div className="story-excerpt">{s.excerpt}</div>
-                            <div className="story-arrow">Read More →</div>
                         </div>
-                    ))}
-                </div>
+                        {/* Side — 2 stacked small cards */}
+                        <div className="story-gallery-side">
+                            {stories.slice(1, 3).map(s => (
+                                <div key={s.docId} className="story-gallery-small" onClick={() => navigate("stories")}>
+                                    <div className="story-gallery-bg" style={{
+                                        background: s.imageUrl
+                                            ? `url(${s.imageUrl}) center/cover no-repeat`
+                                            : (s.bg || "var(--mid2)")
+                                    }} />
+                                    <div className="story-gallery-overlay" />
+                                    <div className="story-gallery-small-body">
+                                        {s.cat && <div className="story-gallery-cat">{s.cat}</div>}
+                                        <div className="story-gallery-title-sm">{s.title}</div>
+                                        <div className="story-gallery-date">{s.date}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div style={{ padding: "80px 56px", opacity: .3, fontSize: 12, letterSpacing: 3, textTransform: "uppercase" }}>No stories yet</div>
+                )}
+
             </section>
 
             {/* MEMBERSHIP */}

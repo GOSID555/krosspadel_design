@@ -5,19 +5,21 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
   const courtText2 = venue.courtText2 || `Court hire is available from opening to close, with online booking up to 7 days in advance. Members receive priority windows and guaranteed slots during peak hours.`;
   const clubText = venue.clubText || `Beyond the courts, KROSS ${venue.name} is a place to stay. The club lounge is designed for post-match recovery and pre-match preparation.`;
   const clubText2 = venue.clubText2 || `Locker rooms are available for members. Equipment rental and restringing services are available at the front desk.`;
-  const imgCaption1 = venue.imgCaption1 || `KROSS ${venue.name} — Courts Overview`;
-  const imgCaption2 = venue.imgCaption2 || `KROSS ${venue.name} — Club Space`;
+  const courtsImageCaption = venue.courtsImageCaption || `KROSS ${venue.name} — Courts Overview`;
+  const clubImageCaption = venue.clubImageCaption || `KROSS ${venue.name} — Club Space`;
 
   return (
     <div>
       <div className="venue-detail-hero">
-        <div className="venue-detail-hero-bg" style={{ background: venue.bg1 }} />
+        <div className="venue-detail-hero-bg" style={{
+          background: venue.bg1Image ? `url(${venue.bg1Image}) center/cover no-repeat` : venue.bg1
+        }} />
         <div className="venue-detail-hero-overlay" />
         <div className="venue-detail-content">
           <button className="back-btn" onClick={() => navigate("venues")}>← All Venues</button>
           <div className="venue-detail-tag">{venue.num} / {venue.region} · {venue.status}</div>
           <div className="venue-detail-title">{venue.name}</div>
-          <div className="venue-detail-sub">{venue.loc} · {venue.courts}</div>
+          <div className="venue-detail-sub">{venue.loc}{venue.courts ? ` · ${venue.courts} Courts` : ""}</div>
         </div>
       </div>
       <div className="venue-detail-body">
@@ -50,8 +52,10 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
         </div>
         <div>
           <p className="venue-intro">{venue.intro}</p>
-          <div className="venue-img-block"><div className="venue-img-inner" style={{ background: venue.imgBg1 }} /></div>
-          <div className="venue-img-caption">{imgCaption1}</div>
+          <div className="venue-img-block"><div className="venue-img-inner" style={{
+            background: venue.courtsImageBgImage && venue.courtsImageBgImage.startsWith('http') ? `url(${venue.courtsImageBgImage}) center/cover no-repeat` : (venue.courtsImageBg || "var(--mid2)")
+          }} /></div>
+          <div className="venue-img-caption">{courtsImageCaption}</div>
           <div className="venue-section-heading">The Courts</div>
           <p className="venue-body-text">{courtText}</p>
           <p className="venue-body-text">{courtText2}</p>
@@ -63,8 +67,10 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
               </div>
             ))}
           </div>
-          <div className="venue-img-block"><div className="venue-img-inner" style={{ background: venue.imgBg2 }} /></div>
-          <div className="venue-img-caption">{imgCaption2}</div>
+          <div className="venue-img-block"><div className="venue-img-inner" style={{
+            background: venue.clubImageBgImage && venue.clubImageBgImage.startsWith('http') ? `url(${venue.clubImageBgImage}) center/cover no-repeat` : (venue.clubImageBg || "var(--mid2)")
+          }} /></div>
+          <div className="venue-img-caption">{clubImageCaption}</div>
           <div className="venue-section-heading">The Club</div>
           <p className="venue-body-text">{clubText}</p>
           <p className="venue-body-text">{clubText2}</p>

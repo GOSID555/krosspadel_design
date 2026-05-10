@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { activities as fallbackActivities } from "../data";
+import Footer from "../components/Footer";
 
 export default function ActivitiesPage({ navigate, openBook }) {
   const [activities, setActivities] = useState(fallbackActivities);
@@ -17,28 +18,129 @@ export default function ActivitiesPage({ navigate, openBook }) {
 
   return (
     <div>
-      <div className="inner-hero">
-        <div className="inner-hero-bg" />
-        <div>
-          <button className="back-btn" onClick={() => navigate("home")}>← Back</button>
-          <div className="inner-hero-title">Our Activities</div>
+      {/* HERO SECTION */}
+      <section id="hero" style={{ padding: 0 }}>
+        <div className="hero-video-wrap" style={{
+          background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
+        }} />
+        <div className="hero-content">
+          <div className="hero-eyebrow">What We Offer</div>
+          <div className="hero-title">Our Activities</div>
+          <div className="hero-sub">From casual play to elite competitions</div>
         </div>
-      </div>
-      <div className="inner-section">
-        <p className="body-txt">From elite competition to casual weekend rallies — something for every player.</p>
-        <div className="activities-list">
-          {activities.map(a => (
-            <div className="activity-item" key={a.name}>
-              <div className="activity-num">{a.num}</div>
-              <div className="activity-name">{a.name}</div>
-              <div className="activity-text">{a.text}</div>
-            </div>
-          ))}
+      </section>
+
+      {/* ACTIVITIES SECTION */}
+      <section style={{ padding: "100px 56px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="tag">Our Programs</div>
+          <div className="heading" style={{ marginBottom: 64 }}>Activities & Programs</div>
+          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 64, lineHeight: "1.8", opacity: 0.9 }}>
+            From elite competition to casual weekend rallies — something for every player. Whether you're a beginner looking to learn or an advanced player seeking competitive challenges, KROSS has the perfect program for you.
+          </p>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 40
+          }}>
+            {activities.map((a, i) => (
+              <div key={a.name} style={{
+                padding: 40,
+                border: `1px solid var(--border)`,
+                background: "var(--mid2)",
+                transition: "all 0.3s ease",
+                cursor: "pointer"
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--green-highlight)";
+                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
+                  e.currentTarget.style.transform = "translateY(-8px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.background = "var(--mid2)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}>
+                <div style={{
+                  fontSize: "48px",
+                  marginBottom: 16,
+                  opacity: 0.8
+                }}>
+                  {a.icon || (i === 0 ? "🏆" : i === 1 ? "👥" : i === 2 ? "🎯" : i === 3 ? "🎓" : "🌟")}
+                </div>
+                <div style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "24px",
+                  letterSpacing: "1.5px",
+                  marginBottom: 12,
+                  lineHeight: 1.1
+                }}>
+                  {a.name}
+                </div>
+                <p className="body-txt" style={{ fontSize: "14px" }}>{a.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{ marginTop: 64, textAlign: "center" }}>
+      </section>
+
+      {/* BENEFITS SECTION */}
+      <section style={{
+        padding: "100px 56px",
+        background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
+      }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="tag" style={{ color: "var(--green-highlight)" }}>Why Join</div>
+          <div className="heading" style={{ marginBottom: 64 }}>What You'll Gain</div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: 40
+          }}>
+            {[
+              { icon: "🤝", title: "Community", desc: "Connect with fellow padel enthusiasts and build lasting friendships" },
+              { icon: "📈", title: "Skill Development", desc: "Improve your technique under professional coaching guidance" },
+              { icon: "🏅", title: "Competitions", desc: "Participate in tournaments and test your skills against others" },
+              { icon: "⏰", title: "Flexible Scheduling", desc: "Play at your convenience with 24/7 court availability" },
+              { icon: "💪", title: "Fitness", desc: "Get a full-body workout while having fun on the court" },
+              { icon: "🎉", title: "Social Events", desc: "Join exclusive member events and networking opportunities" }
+            ].map((item, i) => (
+              <div key={i} style={{
+                padding: 32,
+                border: `1px solid rgba(45, 168, 79, 0.3)`,
+                background: "rgba(45, 168, 79, 0.05)",
+                transition: "all 0.3s ease"
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--green-highlight)";
+                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(45, 168, 79, 0.3)";
+                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
+                }}>
+                <div style={{ fontSize: "44px", marginBottom: 16 }}>{item.icon}</div>
+                <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{item.title}</div>
+                <p className="body-txt">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section style={{ padding: "100px 56px" }}>
+        <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
+          <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Start Your Journey</div>
+          <div className="heading" style={{ marginBottom: 32 }}>Find Your Perfect Activity</div>
+          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 48, opacity: 0.9, margin: "0 auto 48px" }}>
+            Discover which activity suits your style and level, then book your first session today.
+          </p>
           <button className="btn-primary" onClick={openBook}>Book Now</button>
         </div>
-      </div>
+      </section>
+
+      <Footer navigate={navigate} />
     </div>
   );
 }
