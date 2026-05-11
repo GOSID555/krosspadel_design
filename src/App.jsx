@@ -32,7 +32,7 @@ function AppInner() {
   const [scrolled, setScrolled] = useState(false);
 
   const navigate = (p) => { setPage(p); window.scrollTo(0, 0); };
-  const openBook = () => setBookOpen(true);
+  const openBook = () => window.open("https://apps.apple.com/kz/app/kross-padel/id6741785490", "_blank");
   const notify = (msg) => { setNotifMsg(msg); setTimeout(() => setNotifMsg(""), 3200); };
 
   useEffect(() => {
