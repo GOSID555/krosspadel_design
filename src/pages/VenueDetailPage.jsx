@@ -74,6 +74,16 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
           <div className="venue-section-heading">The Club</div>
           <p className="venue-body-text">{clubText}</p>
           <p className="venue-body-text">{clubText2}</p>
+          {(venue.gallery || []).length > 0 && (
+            <div className="venue-gallery">
+              <div className="venue-section-heading">Gallery</div>
+              <div className="venue-gallery-strip">
+                {(venue.gallery || []).map((url, i) => (
+                  <img key={i} src={url} alt={`${venue.name} ${i + 1}`} className="venue-gallery-img" />
+                ))}
+              </div>
+            </div>
+          )}
           <div className="venue-detail-cta">
             <div className="venue-detail-cta-text">Ready to play at {venue.name}?</div>
             <button className="btn-primary" onClick={openBook}>Book A Court</button>

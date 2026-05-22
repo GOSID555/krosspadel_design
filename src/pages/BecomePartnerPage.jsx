@@ -1,8 +1,24 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
 
+const EMPTY_FORM = { name: "", company: "", email: "", phone: "", type: "", message: "" };
+
 export default function BecomePartnerPage({ navigate, notify }) {
     const [expandedFaq, setExpandedFaq] = useState(null);
+    const [form, setForm] = useState(EMPTY_FORM);
+    const [sending, setSending] = useState(false);
+
+    const handleChange = (key, val) => setForm(f => ({ ...f, [key]: val }));
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!form.name || !form.email) return;
+        setSending(true);
+        await new Promise(r => setTimeout(r, 800));
+        setSending(false);
+        setForm(EMPTY_FORM);
+        notify("Partnership inquiry sent! We'll be in touch within 2 business days.");
+    };
 
     const partnerships = [
         { icon: "🏢", title: "Franchise Owner", desc: "Own and operate a KROSS venue with full brand support and proven business model" },
@@ -302,21 +318,80 @@ export default function BecomePartnerPage({ navigate, notify }) {
                 </div>
             </section>
 
-            {/* CONTACT FORM CTA */}
-            <section id="contact-form" style={{
-                padding: "100px 56px",
-                background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-            }}>
-                <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
-                    <div className="tag" style={{ color: "var(--green-highlight)" }}>Ready?</div>
-                    <div className="heading" style={{ marginBottom: 32 }}>Start Your KROSS Journey</div>
-                    <p className="body-txt" style={{ fontSize: "18px", marginBottom: 48, opacity: 0.95 }}>
-                        Ready to become a KROSS partner? Contact our partnership team today and let's build something amazing together.
+            {/* CONTACT FORM */}
+            <section id="contact-form" style={{ padding: "100px 56px" }}>
+                <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+                    <div className="tag">Get In Touch</div>
+                    <div className="heading" style={{ marginBottom: 16 }}>Start Your KROSS Journey</div>
+                    <p className="body-txt" style={{ marginBottom: 56 }}>
+                        Ready to become a KROSS partner? Fill in the form below and our partnership team will be in touch within 2 business days.
                     </p>
-                    <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-                        <button className="btn-primary" onClick={() => navigate("contact")}>Contact Partnership Team</button>
-                        <button className="btn-ghost" onClick={() => navigate("home")}>Back to Home</button>
-                    </div>
+                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                            <div className="form-group">
+                                <label>Full Name *</label>
+                                <input
+                                    value={form.name}
+                                    onChange={e => handleChange("name", e.target.value)}
+                                    placeholder="Your full name"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Company / Organization</label>
+                                <input
+                                    value={form.company}
+                                    onChange={e => handleChange("company", e.target.value)}
+                                    placeholder="Company name"
+                                />
+                            </div>
+                        </div>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                            <div className="form-group">
+                                <label>Email *</label>
+                                <input
+                                    type="email"
+                                    value={form.email}
+                                    onChange={e => handleChange("email", e.target.value)}
+                                    placeholder="your@email.com"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Phone / LINE</label>
+                                <input
+                                    value={form.phone}
+                                    onChange={e => handleChange("phone", e.target.value)}
+                                    placeholder="+66 or LINE ID"
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label>Partnership Type</label>
+                            <select value={form.type} onChange={e => handleChange("type", e.target.value)}>
+                                <option value="">Select partnership type...</option>
+                                <option value="franchise">Franchise Owner</option>
+                                <option value="investment">Investment Partner</option>
+                                <option value="venue">Venue Collaboration</option>
+                                <option value="corporate">Corporate Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>Message</label>
+                            <textarea
+                                value={form.message}
+                                onChange={e => handleChange("message", e.target.value)}
+                                placeholder="Tell us about your interest, location, or any questions you have..."
+                                style={{ height: 140 }}
+                            />
+                        </div>
+                        <div>
+                            <button type="submit" className="btn-primary" disabled={sending}>
+                                {sending ? "Sending..." : "Send Partnership Inquiry"}
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </section>
 

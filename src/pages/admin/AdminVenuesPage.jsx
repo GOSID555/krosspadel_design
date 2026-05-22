@@ -8,7 +8,7 @@ import { ChromePicker } from "react-color";
 const EMPTY = {
     name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", intro: "",
     bg: "", bg1: "", bgImage: "", bg1Image: "", courtsImageBg: "", clubImageBg: "", courtsImageBgImage: "", clubImageBgImage: "", courtsImageCaption: "", clubImageCaption: "",
-    courtText: "", courtText2: "", clubText: "", clubText2: "", features: [], imageUrl: ""
+    courtText: "", courtText2: "", clubText: "", clubText2: "", features: [], imageUrl: "", gallery: []
 };
 
 function VenuePreview({ form }) {
@@ -113,6 +113,18 @@ function VenuePreview({ form }) {
                     </div>
                 )}
 
+                {/* Gallery */}
+                {(form.gallery || []).length > 0 && (
+                    <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ fontSize: 10, opacity: 0.4, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Gallery ({form.gallery.length})</div>
+                        <div style={{ display: "flex", gap: 8, overflowX: "auto" }}>
+                            {form.gallery.map((url, i) => (
+                                <img key={i} src={url} alt="" style={{ flexShrink: 0, width: 80, height: 55, objectFit: "cover", borderRadius: 3 }} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Info sidebar */}
                 <div style={{ padding: "16px 20px", background: "rgba(0,0,0,0.2)" }}>
                     <div style={{ fontSize: 10, opacity: 0.4, marginBottom: 12, textTransform: "uppercase", letterSpacing: 1 }}>Sidebar Info</div>
@@ -189,6 +201,21 @@ export default function AdminVenuesPage({ navigate }) {
     });
     const handleFeatureAdd = () => setForm(f => ({ ...f, features: [...(f.features || []), { num: "", label: "" }] }));
     const handleFeatureRemove = (index) => setForm(f => ({ ...f, features: (f.features || []).filter((_, i) => i !== index) }));
+
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        setUploading(true);
+        const docId = editing === "new" ? "temp" : editing;
+        const urls = await Promise.all(files.map(f => uploadImage(f, "venues", docId)));
+        setForm(f => ({ ...f, gallery: [...(f.gallery || []), ...urls] }));
+        setUploading(false);
+        e.target.value = "";
+    };
+
+    const handleGalleryRemove = (index) => {
+        setForm(f => ({ ...f, gallery: (f.gallery || []).filter((_, i) => i !== index) }));
+    };
 
     const handleSave = async () => {
         setSaving(true);
@@ -438,6 +465,52 @@ export default function AdminVenuesPage({ navigate }) {
                             </button>
                         </div>
                     ))}
+                </div>
+                <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                        <div>
+                            <div className="tag">Gallery</div>
+                            <div style={{ opacity: 0.7, fontSize: 13 }}>รูปภาพ gallery ที่แสดงด้านล่างของหน้า venue</div>
+                        </div>
+                        <label style={{ cursor: "pointer" }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleGalleryUpload}
+                                disabled={uploading}
+                                style={{ display: "none" }}
+                            />
+                            <button
+                                type="button"
+                                className="btn-ghost"
+                                disabled={uploading}
+                                onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}
+                                style={{ fontSize: 13 }}
+                            >
+                                {uploading ? "Uploading..." : "+ Add Photos"}
+                            </button>
+                        </label>
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                        {(form.gallery || []).map((url, i) => (
+                            <div key={i} style={{ position: "relative", width: 110, height: 75 }}>
+                                <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
+                                <button
+                                    onClick={() => handleGalleryRemove(i)}
+                                    style={{
+                                        position: "absolute", top: 4, right: 4,
+                                        background: "rgba(0,0,0,0.75)", border: "none", color: "white",
+                                        width: 22, height: 22, borderRadius: "50%", cursor: "pointer",
+                                        fontSize: 14, lineHeight: 1, padding: 0
+                                    }}
+                                >×</button>
+                            </div>
+                        ))}
+                        {(form.gallery || []).length === 0 && (
+                            <div style={{ opacity: 0.35, fontSize: 13 }}>ยังไม่มีรูป</div>
+                        )}
+                    </div>
                 </div>
                 <button className="btn-primary" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save Venue"}

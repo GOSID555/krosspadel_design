@@ -1335,6 +1335,43 @@ footer {
     letter-spacing: 2px;
 }
 
+/* VENUE GALLERY */
+.venue-gallery {
+    margin-top: 52px;
+    margin-bottom: 0;
+}
+
+.venue-gallery-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-highlight) transparent;
+}
+
+.venue-gallery-strip::-webkit-scrollbar {
+    height: 4px;
+}
+
+.venue-gallery-strip::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.venue-gallery-strip::-webkit-scrollbar-thumb {
+    background: var(--green-highlight);
+    border-radius: 2px;
+}
+
+.venue-gallery-img {
+    flex-shrink: 0;
+    width: 320px;
+    height: 220px;
+    object-fit: cover;
+    background: var(--mid2);
+}
+
 /* CONTACT */
 .contact-form {
     max-width: 640px
