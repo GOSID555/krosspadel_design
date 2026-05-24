@@ -6,7 +6,7 @@ import { uploadImage } from "../../supabaseClient";
 import { ChromePicker } from "react-color";
 
 const EMPTY = {
-    name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", intro: "",
+    name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", intro: "", mapUrl: "",
     bg: "", bg1: "", bgImage: "", bg1Image: "", courtsImageBg: "", clubImageBg: "", courtsImageBgImage: "", clubImageBgImage: "", courtsImageCaption: "", clubImageCaption: "",
     courtText: "", courtText2: "", clubText: "", clubText2: "", features: [], imageUrl: "", gallery: []
 };
@@ -336,7 +336,7 @@ export default function AdminVenuesPage({ navigate }) {
         ["name", "Name"], ["loc", "Location"], ["region", "Region"],
         ["num", "Number (01)"], ["status", "Status"], ["hours", "Hours"],
         ["address", "Address"], ["phone", "Phone"], ["courts", "Number of Courts"],
-        ["intro", "Intro"], ["bg", "BG Gradient"], ["bg1", "Hero BG"],
+        ["intro", "Intro"], ["mapUrl", "Google Maps Embed URL"], ["bg", "BG Gradient"], ["bg1", "Hero BG"],
         ["courtsImageBg", "Courts Section Image"], ["clubImageBg", "Club Section Image"],
         ["courtsImageCaption", "Courts Image Caption"], ["clubImageCaption", "Club Image Caption"],
         ["courtText", "Court Section Text"], ["courtText2", "Court Section Text 2"],
@@ -441,11 +441,20 @@ export default function AdminVenuesPage({ navigate }) {
                                 style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
                             />
                         ) : (
-                            <input
-                                value={form[key] || ""}
-                                onChange={e => handleChange(key, e.target.value)}
-                                style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
-                            />
+                            <>
+                                <input
+                                    value={form[key] || ""}
+                                    onChange={e => handleChange(key, e.target.value)}
+                                    style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                                />
+                                {key === "mapUrl" && (
+                                    <div style={{ marginTop: 8, padding: "10px 14px", background: "rgba(45,168,79,0.06)", border: "1px solid rgba(45,168,79,0.2)", borderRadius: 4 }}>
+                                        <div style={{ fontSize: 11, opacity: 0.7, lineHeight: 1.7 }}>
+                                            วิธีเอา URL: Google Maps → ค้นหาสถานที่ → Share → Embed a map → คัดลอก URL ใน <code style={{ background: "rgba(255,255,255,0.08)", padding: "1px 5px", borderRadius: 3 }}>src="..."</code> มาวางตรงนี้
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 ))}
