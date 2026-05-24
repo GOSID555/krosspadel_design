@@ -23,10 +23,15 @@ export default function ContactPage({ navigate, notify }) {
             <div>
               <div className="tag">Get In Touch</div>
               <div className="heading" style={{ marginBottom: 56 }}>Contact<br />Information</div>
-              {[["Email", "hello@krosspadelclub.com"], ["LINE", "@krosspadel"], ["Instagram", "@krosspadel"], ["Hours", "Daily 07:00 – 22:00"]].map(([k, v]) => (
+              {[
+                ["Email", "info@krosspadel.com"],
+                ["Phone", "On Nut: 097-285-6133\nAsoke: 084-043-8893\nThonglor: 080-331-3883\nRama 4: 091-860-7150"],
+                ["Instagram", "@krosspadelbangkok\n@krosspadelasoke\n@krosspadelsky\n@krosspadelindoor"],
+                ["Hours", "On Nut & Rama 4: 07:00–23:00\nAsoke: 07:00–22:00\nThonglor: 08:00–22:00"],
+              ].map(([k, v]) => (
                 <div key={k} style={{ marginBottom: 40 }}>
                   <div style={{ fontSize: 12, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.5, marginBottom: 8, fontWeight: 600 }}>{k}</div>
-                  <div style={{ fontSize: 16, lineHeight: 1.6, opacity: 0.9 }}>{v}</div>
+                  <div style={{ fontSize: 15, lineHeight: 1.9, opacity: 0.9, whiteSpace: "pre-line" }}>{v}</div>
                 </div>
               ))}
             </div>
@@ -78,10 +83,12 @@ export default function ContactPage({ navigate, notify }) {
             gap: 32
           }}>
             {[
-              { icon: "📧", title: "Email", desc: "hello@krosspadelclub.com", sub: "For general inquiries" },
-              { icon: "💬", title: "LINE Chat", desc: "@krosspadel", sub: "Fast replies during business hours" },
-              { icon: "📱", title: "Instagram", desc: "@krosspadel", sub: "Updates, photos & announcements" },
-              { icon: "☎️", title: "Phone", desc: "+66 (0)80-000-0000", sub: "Call us for urgent matters" }
+              { icon: "📧", title: "Email", desc: "info@krosspadel.com", sub: "For general inquiries & partnerships" },
+              { icon: "📱", title: "Instagram", desc: "@krosspadelbangkok", sub: "@krosspadelasoke · @krosspadelsky · @krosspadelindoor" },
+              { icon: "☎️", title: "On Nut", desc: "097-285-6133", sub: "Daily 07:00–23:00" },
+              { icon: "☎️", title: "Asoke", desc: "084-043-8893", sub: "Daily 07:00–22:00" },
+              { icon: "☎️", title: "Thonglor", desc: "080-331-3883", sub: "Daily 08:00–22:00" },
+              { icon: "☎️", title: "Rama 4", desc: "091-860-7150", sub: "Daily 07:00–23:00" },
             ].map((item, i) => (
               <div key={i} style={{
                 padding: 32,
