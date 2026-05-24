@@ -3,8 +3,10 @@ import { collection, getDocs } from "firebase/firestore";
 
 export const getVenues = async () => {
     const snapshot = await getDocs(collection(db, "venues"));
-    return snapshot.docs.map(doc => ({
-    ...doc.data(),
-    id: doc.id  // ✅ วางทีหลัง ให้ doc.id ชนะเสมอ
-}));
+    const list = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+    }));
+    list.sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+    return list;
 };

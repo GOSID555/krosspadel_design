@@ -149,6 +149,8 @@ export default function AdminVenuesPage({ navigate }) {
     const [uploading, setUploading] = useState(false);
     const [colorPickerOpen, setColorPickerOpen] = useState(null);
     const colorPickerRef = useRef(null);
+    const dragIdx = useRef(null);
+    const [dragOverIdx, setDragOverIdx] = useState(null);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -164,16 +166,29 @@ export default function AdminVenuesPage({ navigate }) {
 
     const load = async () => {
         const snap = await getDocs(collection(db, "venues"));
-        setVenues(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
+        const list = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+        list.sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+        setVenues(list);
     };
 
-    useEffect(() => {
-        const load = async () => {
-            const snap = await getDocs(collection(db, "venues"));
-            setVenues(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
-        };
-        load();
-    }, []);
+    useEffect(() => { load(); }, []);
+
+    const handleDragStart = (i) => { dragIdx.current = i; };
+    const handleDragOver = (e, i) => { e.preventDefault(); setDragOverIdx(i); };
+    const handleDrop = async (i) => {
+        setDragOverIdx(null);
+        const from = dragIdx.current;
+        if (from === null || from === i) return;
+        const reordered = [...venues];
+        const [moved] = reordered.splice(from, 1);
+        reordered.splice(i, 0, moved);
+        setVenues(reordered);
+        await Promise.all(
+            reordered.map((v, idx) => updateDoc(doc(db, "venues", v.docId), { displayOrder: idx }))
+        );
+        await refreshVenues();
+        dragIdx.current = null;
+    };
 
     const handleEdit = (v) => { setForm(v); setEditing(v.docId); };
     const handleNew = () => { setForm(EMPTY); setEditing("new"); };
@@ -267,16 +282,48 @@ export default function AdminVenuesPage({ navigate }) {
                 </div>
                 <button className="btn-primary" onClick={handleNew}>+ Add Venue</button>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {venues.map(v => (
-                    <div key={v.docId} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", background: "var(--mid)", borderRadius: 8 }}>
-                        <div>
-                            <div className="venue-name" style={{ fontSize: 18 }}>{v.name}</div>
-                            <div style={{ opacity: 0.5, fontSize: 13 }}>{v.loc} · {v.status}</div>
+            <div style={{ fontSize: 11, opacity: 0.35, marginBottom: 8, letterSpacing: 1 }}>
+                ลากเพื่อเรียงลำดับ
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                {venues.map((v, i) => (
+                    <div
+                        key={v.docId}
+                        draggable
+                        onDragStart={() => handleDragStart(i)}
+                        onDragOver={(e) => handleDragOver(e, i)}
+                        onDrop={() => handleDrop(i)}
+                        onDragEnd={() => setDragOverIdx(null)}
+                        style={{
+                            display: "flex", justifyContent: "space-between", alignItems: "center",
+                            padding: "18px 20px", background: "var(--mid)", borderRadius: 6,
+                            border: dragOverIdx === i ? "1px solid var(--green-highlight)" : "1px solid transparent",
+                            opacity: dragIdx.current === i ? 0.45 : 1,
+                            transition: "border-color 0.15s, opacity 0.15s",
+                            cursor: "grab",
+                            userSelect: "none",
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                            <div style={{
+                                display: "flex", flexDirection: "column", gap: 4,
+                                opacity: 0.25, flexShrink: 0
+                            }}>
+                                {[0,1,2].map(n => (
+                                    <div key={n} style={{ display: "flex", gap: 3 }}>
+                                        <div style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--white)" }} />
+                                        <div style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--white)" }} />
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>{v.name}</div>
+                                <div style={{ opacity: 0.45, fontSize: 12, marginTop: 2 }}>{v.loc} · {v.status}</div>
+                            </div>
                         </div>
-                        <div style={{ display: "flex", gap: 12 }}>
-                            <button className="btn-ghost" onClick={() => handleEdit(v)}>Edit</button>
-                            <button onClick={() => handleDelete(v.docId)} style={{ background: "none", border: "1px solid #ff6b6b", color: "#ff6b6b", padding: "8px 20px", cursor: "pointer", borderRadius: 2 }}>Delete</button>
+                        <div style={{ display: "flex", gap: 10 }} onClick={e => e.stopPropagation()}>
+                            <button className="btn-ghost" style={{ cursor: "pointer" }} onClick={() => handleEdit(v)}>Edit</button>
+                            <button onClick={() => handleDelete(v.docId)} style={{ background: "none", border: "1px solid #ff6b6b", color: "#ff6b6b", padding: "8px 16px", cursor: "pointer", borderRadius: 2, fontSize: 13 }}>Delete</button>
                         </div>
                     </div>
                 ))}
