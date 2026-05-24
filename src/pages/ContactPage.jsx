@@ -69,38 +69,75 @@ export default function ContactPage({ navigate, notify }) {
         </div>
       </section>
 
-      {/* INFO SECTION */}
-      <section style={{
-        padding: "100px 56px",
-        background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-      }}>
+      {/* VENUE CONTACTS SECTION */}
+      <section style={{ padding: "100px 56px", background: "var(--mid2)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="tag" style={{ color: "var(--green-highlight)" }}>Other Ways To Connect</div>
-          <div className="heading" style={{ marginBottom: 64 }}>Find Your Channel</div>
+          <div className="tag">Venues</div>
+          <div className="heading" style={{ marginBottom: 56 }}>Find Us</div>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 32
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: 2
           }}>
             {[
-              { icon: "📧", title: "Email", desc: "info@krosspadel.com", sub: "For general inquiries & partnerships" },
-              { icon: "📱", title: "Instagram", desc: "@krosspadelbangkok", sub: "@krosspadelasoke · @krosspadelsky · @krosspadelindoor" },
-              { icon: "☎️", title: "On Nut", desc: "097-285-6133", sub: "Daily 07:00–23:00" },
-              { icon: "☎️", title: "Asoke", desc: "084-043-8893", sub: "Daily 07:00–22:00" },
-              { icon: "☎️", title: "Thonglor", desc: "080-331-3883", sub: "Daily 08:00–22:00" },
-              { icon: "☎️", title: "Rama 4", desc: "091-860-7150", sub: "Daily 07:00–23:00" },
+              { venue: "On Nut", phone: "097-285-6133", hours: "07:00–23:00", address: "89 Soi Chinnamat, Phra Khanong" },
+              { venue: "Asoke", phone: "084-043-8893", hours: "07:00–22:00", address: "30 Sukhumvit 21 Rd, 8F" },
+              { venue: "Thonglor", phone: "080-331-3883", hours: "08:00–22:00", address: "88 Soi Sukhumvit 49" },
+              { venue: "Rama 4", phone: "091-860-7150", hours: "07:00–23:00", address: "135 Ardnarong Road, Khlong Toei" },
             ].map((item, i) => (
               <div key={i} style={{
-                padding: 32,
-                border: "1px solid rgba(45, 168, 79, 0.3)",
-                background: "rgba(45, 168, 79, 0.05)"
+                padding: "40px 36px",
+                background: "var(--black)",
+                borderTop: "2px solid var(--green-highlight)",
               }}>
-                <div style={{ fontSize: "44px", marginBottom: 16 }}>{item.icon}</div>
-                <div style={{ fontSize: "18px", fontWeight: 600, marginBottom: 8 }}>{item.title}</div>
-                <div style={{ fontSize: "15px", color: "var(--green-highlight)", fontWeight: 600, marginBottom: 8 }}>{item.desc}</div>
-                <p className="body-txt" style={{ fontSize: "13px" }}>{item.sub}</p>
+                <div style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: 28,
+                  letterSpacing: 2,
+                  marginBottom: 28,
+                  color: "var(--white)"
+                }}>KROSS {item.venue}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                  <div>
+                    <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 6 }}>Phone</div>
+                    <div style={{ fontSize: 15, opacity: 0.9 }}>{item.phone}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 6 }}>Hours</div>
+                    <div style={{ fontSize: 15, opacity: 0.9 }}>Daily {item.hours}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 6 }}>Address</div>
+                    <div style={{ fontSize: 13, opacity: 0.55, lineHeight: 1.6 }}>{item.address}</div>
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* EMAIL ROW */}
+          <div style={{
+            marginTop: 2,
+            padding: "36px 36px",
+            background: "var(--black)",
+            borderTop: "2px solid var(--green-highlight)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 24
+          }}>
+            <div>
+              <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 8 }}>General Enquiries</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, letterSpacing: 1.5 }}>info@krosspadel.com</div>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 8 }}>Instagram</div>
+              <div style={{ fontSize: 13, opacity: 0.6, lineHeight: 1.9 }}>
+                @krosspadelbangkok · @krosspadelasoke<br />
+                @krosspadelsky · @krosspadelindoor
+              </div>
+            </div>
           </div>
         </div>
       </section>
