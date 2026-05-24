@@ -86,8 +86,85 @@ export default function BecomePartnerPage({ navigate, notify }) {
                 </div>
             </section>
 
+            {/* CONTACT FORM */}
+            <section id="contact-form" className="partner-section">
+                <div style={{ maxWidth: 800, margin: "0 auto" }}>
+                    <div className="tag">Get In Touch</div>
+                    <div className="heading" style={{ marginBottom: 16 }}>Start Your KROSS Journey</div>
+                    <p className="body-txt" style={{ marginBottom: 48 }}>
+                        Ready to become a KROSS partner? Fill in the form below and our partnership team will be in touch within 2 business days.
+                    </p>
+                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                        <div className="partner-form-row">
+                            <div className="form-group">
+                                <label>Full Name *</label>
+                                <input
+                                    value={form.name}
+                                    onChange={e => handleChange("name", e.target.value)}
+                                    placeholder="Your full name"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Company / Organization</label>
+                                <input
+                                    value={form.company}
+                                    onChange={e => handleChange("company", e.target.value)}
+                                    placeholder="Company name"
+                                />
+                            </div>
+                        </div>
+                        <div className="partner-form-row">
+                            <div className="form-group">
+                                <label>Email *</label>
+                                <input
+                                    type="email"
+                                    value={form.email}
+                                    onChange={e => handleChange("email", e.target.value)}
+                                    placeholder="your@email.com"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Phone / LINE</label>
+                                <input
+                                    value={form.phone}
+                                    onChange={e => handleChange("phone", e.target.value)}
+                                    placeholder="+66 or LINE ID"
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label>Partnership Type</label>
+                            <select value={form.type} onChange={e => handleChange("type", e.target.value)}>
+                                <option value="">Select partnership type...</option>
+                                <option value="franchise">Franchise Owner</option>
+                                <option value="investment">Investment Partner</option>
+                                <option value="venue">Venue Collaboration</option>
+                                <option value="corporate">Corporate Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>Message</label>
+                            <textarea
+                                value={form.message}
+                                onChange={e => handleChange("message", e.target.value)}
+                                placeholder="Tell us about your interest, location, or any questions you have..."
+                                style={{ height: 130 }}
+                            />
+                        </div>
+                        <div>
+                            <button type="submit" className="btn-primary" disabled={sending}>
+                                {sending ? "Sending..." : "Send Partnership Inquiry"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
             {/* WHY INVEST IN PADEL */}
-            <section className="partner-section">
+            <section className="partner-section" style={{ background: "var(--mid2)" }}>
                 <div className="partner-section-inner">
                     <div className="tag">Market Opportunity</div>
                     <div className="heading" style={{ marginBottom: 48 }}>Why Invest in Padel?</div>
@@ -257,83 +334,6 @@ export default function BecomePartnerPage({ navigate, notify }) {
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* CONTACT FORM */}
-            <section id="contact-form" className="partner-section" style={{ background: "var(--mid2)" }}>
-                <div style={{ maxWidth: 800, margin: "0 auto" }}>
-                    <div className="tag">Get In Touch</div>
-                    <div className="heading" style={{ marginBottom: 16 }}>Start Your KROSS Journey</div>
-                    <p className="body-txt" style={{ marginBottom: 48 }}>
-                        Ready to become a KROSS partner? Fill in the form below and our partnership team will be in touch within 2 business days.
-                    </p>
-                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-                        <div className="partner-form-row">
-                            <div className="form-group">
-                                <label>Full Name *</label>
-                                <input
-                                    value={form.name}
-                                    onChange={e => handleChange("name", e.target.value)}
-                                    placeholder="Your full name"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Company / Organization</label>
-                                <input
-                                    value={form.company}
-                                    onChange={e => handleChange("company", e.target.value)}
-                                    placeholder="Company name"
-                                />
-                            </div>
-                        </div>
-                        <div className="partner-form-row">
-                            <div className="form-group">
-                                <label>Email *</label>
-                                <input
-                                    type="email"
-                                    value={form.email}
-                                    onChange={e => handleChange("email", e.target.value)}
-                                    placeholder="your@email.com"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Phone / LINE</label>
-                                <input
-                                    value={form.phone}
-                                    onChange={e => handleChange("phone", e.target.value)}
-                                    placeholder="+66 or LINE ID"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label>Partnership Type</label>
-                            <select value={form.type} onChange={e => handleChange("type", e.target.value)}>
-                                <option value="">Select partnership type...</option>
-                                <option value="franchise">Franchise Owner</option>
-                                <option value="investment">Investment Partner</option>
-                                <option value="venue">Venue Collaboration</option>
-                                <option value="corporate">Corporate Partnership</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label>Message</label>
-                            <textarea
-                                value={form.message}
-                                onChange={e => handleChange("message", e.target.value)}
-                                placeholder="Tell us about your interest, location, or any questions you have..."
-                                style={{ height: 130 }}
-                            />
-                        </div>
-                        <div>
-                            <button type="submit" className="btn-primary" disabled={sending}>
-                                {sending ? "Sending..." : "Send Partnership Inquiry"}
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </section>
 
