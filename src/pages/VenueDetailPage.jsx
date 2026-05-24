@@ -52,6 +52,27 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
         </div>
         <div>
           <p className="venue-intro">{venue.intro}</p>
+          {venue.address && (
+            <div style={{ marginBottom: 56 }}>
+              <div className="venue-section-heading">Location</div>
+              <iframe
+                title={`Map – KROSS ${venue.name}`}
+                src={venue.mapUrl || `https://www.google.com/maps?q=${encodeURIComponent(venue.address + ", Bangkok")}&output=embed`}
+                width="100%"
+                height="360"
+                style={{
+                  border: 0,
+                  borderRadius: 4,
+                  display: "block",
+                  filter: "grayscale(1) invert(1) hue-rotate(180deg) brightness(0.9)"
+                }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div style={{ marginTop: 10, fontSize: 12, opacity: 0.45, letterSpacing: 1 }}>{venue.address}</div>
+            </div>
+          )}
           <div className="venue-img-block"><div className="venue-img-inner" style={{
             background: venue.courtsImageBgImage && venue.courtsImageBgImage.startsWith('http') ? `url(${venue.courtsImageBgImage}) center/cover no-repeat` : (venue.courtsImageBg || "var(--mid2)")
           }} /></div>
