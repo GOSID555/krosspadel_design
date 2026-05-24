@@ -5,6 +5,13 @@ import { uploadImage } from "../../supabaseClient";
 
 const EMPTY = { title: "", excerpt: "", date: "", cat: "", bg: "", imageUrl: "" };
 
+function parseGradientColors(bg) {
+    const matches = bg?.match(/#[0-9a-fA-F]{3,6}/g);
+    if (matches?.length >= 2) return [matches[0], matches[1]];
+    if (matches?.length === 1) return [matches[0], matches[0]];
+    return ["#0a1a0d", "#1a3d1a"];
+}
+
 function StoryPreview({ form }) {
     return (
         <div style={{ background: "var(--mid)", borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -62,6 +69,7 @@ export default function AdminStoriesPage({ navigate }) {
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [gradColors, setGradColors] = useState(["#0a1a0d", "#1a3d1a"]);
 
     const load = async () => {
         const snap = await getDocs(collection(db, "stories"));
@@ -71,8 +79,14 @@ export default function AdminStoriesPage({ navigate }) {
     useEffect(() => { load(); }, []);
 
     const handleBack = () => { setEditing(null); load(); };
-    const handleEdit = (s) => { setForm(s); setEditing(s.docId); };
-    const handleNew = () => { setForm(EMPTY); setEditing("new"); };
+    const handleEdit = (s) => { setForm(s); setEditing(s.docId); setGradColors(parseGradientColors(s.bg)); };
+    const handleNew = () => { setForm(EMPTY); setEditing("new"); setGradColors(["#0a1a0d", "#1a3d1a"]); };
+
+    const handleGradColor = (idx, hex) => {
+        const next = idx === 0 ? [hex, gradColors[1]] : [gradColors[0], hex];
+        setGradColors(next);
+        handleChange("bg", `linear-gradient(135deg, ${next[0]} 0%, ${next[1]} 100%)`);
+    };
     const handleChange = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
     const handleSave = async () => {
@@ -144,7 +158,6 @@ export default function AdminStoriesPage({ navigate }) {
         ["title", "Title"],
         ["cat", "Category (e.g. Community, Tournament)"],
         ["excerpt", "Excerpt"],
-        ["bg", "BG Color (fallback if no image)"],
     ];
 
     return (
@@ -174,6 +187,36 @@ export default function AdminStoriesPage({ navigate }) {
                             }
                         </div>
                     ))}
+                    {/* BG Gradient Color Picker */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 10, textTransform: "uppercase" }}>BG Gradient (fallback if no image)</div>
+                        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                                <div style={{ fontSize: 10, opacity: 0.4, textTransform: "uppercase", letterSpacing: 1 }}>Color 1</div>
+                                <input
+                                    type="color"
+                                    value={gradColors[0]}
+                                    onChange={e => handleGradColor(0, e.target.value)}
+                                    style={{ width: 48, height: 48, padding: 2, background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, cursor: "pointer" }}
+                                />
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                                <div style={{ fontSize: 10, opacity: 0.4, textTransform: "uppercase", letterSpacing: 1 }}>Color 2</div>
+                                <input
+                                    type="color"
+                                    value={gradColors[1]}
+                                    onChange={e => handleGradColor(1, e.target.value)}
+                                    style={{ width: 48, height: 48, padding: 2, background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, cursor: "pointer" }}
+                                />
+                            </div>
+                            <div style={{
+                                flex: 1, height: 52, borderRadius: 4,
+                                background: form.bg || `linear-gradient(135deg, ${gradColors[0]} 0%, ${gradColors[1]} 100%)`,
+                                border: "1px solid rgba(255,255,255,0.08)"
+                            }} />
+                        </div>
+                    </div>
+
                     {/* Date */}
                     <div>
                         <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Date</div>
