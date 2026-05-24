@@ -28,7 +28,7 @@ function ActivityPreview({ form }) {
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.2) 60%, transparent 100%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 20px" }}>
                         {form.date && <div style={{ fontSize: 10, opacity: 0.6, letterSpacing: "1.5px", marginBottom: 6, textTransform: "uppercase" }}>{formatDate(form.date)}</div>}
-                        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, letterSpacing: "1.5px", lineHeight: 1.1 }}>
+                        <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 22, letterSpacing: "1.5px", lineHeight: 1.1 }}>
                             {form.name || "Activity Name"}
                         </div>
                     </div>

@@ -133,7 +133,7 @@ export default function HomePage({ navigate, openBook }) {
                                 <div className="act-bg-overlay" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 60%, transparent 100%)", transition: "opacity .4s ease" }} />
                                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "24px 28px" }}>
                                     {a.date && <div style={{ fontSize: 10, opacity: 0.55, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 8 }}>{formatDate(a.date)}</div>}
-                                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 8 }}>{a.name}</div>
+                                    <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 28, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 8 }}>{a.name}</div>
                                     <p className="body-txt" style={{ fontSize: 13, opacity: 0.7, margin: 0 }}>{a.text}</p>
                                 </div>
                             </div>

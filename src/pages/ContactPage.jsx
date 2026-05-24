@@ -91,7 +91,7 @@ export default function ContactPage({ navigate, notify }) {
                 borderTop: "2px solid var(--green-highlight)",
               }}>
                 <div style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontFamily: "'Jost', sans-serif",
                   fontSize: 28,
                   letterSpacing: 2,
                   marginBottom: 28,
@@ -129,7 +129,7 @@ export default function ContactPage({ navigate, notify }) {
           }}>
             <div>
               <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 8 }}>General Enquiries</div>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, letterSpacing: 1.5 }}>info@krosspadel.com</div>
+              <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 24, letterSpacing: 1.5 }}>info@krosspadel.com</div>
             </div>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 9, letterSpacing: 2.5, textTransform: "uppercase", opacity: 0.4, marginBottom: 8 }}>Instagram</div>

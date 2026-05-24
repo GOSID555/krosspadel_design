@@ -81,7 +81,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                 )}
                 <div style={{ marginBottom: 24 }}>
                   <div style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontFamily: "'Jost', sans-serif",
                     fontSize: "28px",
                     letterSpacing: "1.5px",
                     marginBottom: 12,

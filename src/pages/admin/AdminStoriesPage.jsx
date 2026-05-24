@@ -24,7 +24,7 @@ function StoryPreview({ form }) {
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.1) 55%, transparent 100%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 24px" }}>
                         {form.cat && <div style={{ fontSize: 9, letterSpacing: "3.5px", textTransform: "uppercase", color: "var(--green-highlight)", marginBottom: 8 }}>{form.cat}</div>}
-                        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 26, letterSpacing: "1.5px", lineHeight: 1, marginBottom: 6 }}>
+                        <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 26, letterSpacing: "1.5px", lineHeight: 1, marginBottom: 6 }}>
                             {form.title || "Story Title"}
                         </div>
                         <div style={{ fontSize: 10, opacity: .4, letterSpacing: "1.5px" }}>{form.date}</div>
@@ -43,7 +43,7 @@ function StoryPreview({ form }) {
                         }} />
                         <div style={{ padding: "14px 16px" }}>
                             {form.cat && <div style={{ fontSize: 8, letterSpacing: "3px", textTransform: "uppercase", color: "var(--green-highlight)", marginBottom: 6 }}>{form.cat}</div>}
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, letterSpacing: "1px", marginBottom: 6, lineHeight: 1.1 }}>
+                            <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 18, letterSpacing: "1px", marginBottom: 6, lineHeight: 1.1 }}>
                                 {form.title || "Story Title"}
                             </div>
                             <div style={{ fontSize: 10, opacity: .4, marginBottom: 8 }}>{form.date}</div>
