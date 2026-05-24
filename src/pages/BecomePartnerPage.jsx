@@ -36,14 +36,6 @@ export default function BecomePartnerPage({ navigate, notify }) {
         { title: "Ongoing Management Consultation", desc: "Continuous business support and optimization strategies" },
     ];
 
-    const process = [
-        { step: "1", title: "Inquiry", desc: "Submit partnership interest and preliminary information" },
-        { step: "2", title: "Consultation", desc: "Meet with our team to discuss vision, location, and partnership type" },
-        { step: "3", title: "Planning", desc: "Develop detailed business plan and financial projections" },
-        { step: "4", title: "Setup", desc: "Prepare venue, train team, and establish operations" },
-        { step: "5", title: "Launch", desc: "Grand opening with community events and member acquisition" },
-    ];
-
     const faqs = [
         {
             q: "What investment is required to become a franchise owner?",
@@ -95,14 +87,14 @@ export default function BecomePartnerPage({ navigate, notify }) {
             </section>
 
             {/* WHY INVEST IN PADEL */}
-            <section style={{ padding: "100px 56px" }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <section className="partner-section">
+                <div className="partner-section-inner">
                     <div className="tag">Market Opportunity</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>Why Invest in Padel?</div>
+                    <div className="heading" style={{ marginBottom: 48 }}>Why Invest in Padel?</div>
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                        gap: 24
+                        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                        gap: 20
                     }}>
                         {[
                             { stat: "+200%", label: "Global Growth", desc: "Padel is the fastest growing sport worldwide" },
@@ -111,19 +103,14 @@ export default function BecomePartnerPage({ navigate, notify }) {
                             { stat: "High ROI", label: "Business Model", desc: "Strong margins and repeat membership revenue" },
                         ].map((item, i) => (
                             <div key={i} style={{
-                                padding: 32,
+                                padding: "clamp(20px, 3vw, 32px)",
                                 background: "var(--mid2)",
                                 border: "1px solid var(--border)",
-                                borderRadius: "8px",
+                                borderRadius: 8,
                                 textAlign: "center"
                             }}>
-                                <div style={{
-                                    fontSize: "36px",
-                                    fontWeight: 600,
-                                    color: "var(--green-highlight)",
-                                    marginBottom: 8
-                                }}>{item.stat}</div>
-                                <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{item.label}</div>
+                                <div style={{ fontSize: "clamp(28px, 4vw, 36px)", fontWeight: 600, color: "var(--green-highlight)", marginBottom: 8 }}>{item.stat}</div>
+                                <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>{item.label}</div>
                                 <p className="body-txt">{item.desc}</p>
                             </div>
                         ))}
@@ -132,20 +119,20 @@ export default function BecomePartnerPage({ navigate, notify }) {
             </section>
 
             {/* PARTNERSHIP MODELS */}
-            <section style={{ padding: "100px 56px", background: "var(--mid2)" }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <section className="partner-section" style={{ background: "var(--mid2)" }}>
+                <div className="partner-section-inner">
                     <div className="tag">Partnership Options</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>Different Ways to Partner</div>
+                    <div className="heading" style={{ marginBottom: 48 }}>Different Ways to Partner</div>
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: 32
+                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                        gap: 24
                     }}>
                         {partnerships.map((p, i) => (
                             <div key={i} style={{
-                                padding: 40,
+                                padding: "clamp(24px, 3vw, 40px)",
                                 border: "1px solid var(--border)",
-                                borderRadius: "8px",
+                                borderRadius: 8,
                                 background: "var(--black)",
                                 transition: "all 0.3s ease"
                             }}
@@ -157,8 +144,8 @@ export default function BecomePartnerPage({ navigate, notify }) {
                                     e.currentTarget.style.borderColor = "var(--border)";
                                     e.currentTarget.style.background = "var(--black)";
                                 }}>
-                                <div style={{ fontSize: "48px", marginBottom: 16 }}>{p.icon}</div>
-                                <div style={{ fontSize: "18px", fontWeight: 600, marginBottom: 12 }}>{p.title}</div>
+                                <div style={{ fontSize: 40, marginBottom: 14 }}>{p.icon}</div>
+                                <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 10 }}>{p.title}</div>
                                 <p className="body-txt">{p.desc}</p>
                             </div>
                         ))}
@@ -167,29 +154,29 @@ export default function BecomePartnerPage({ navigate, notify }) {
             </section>
 
             {/* WHAT YOU GET */}
-            <section style={{ padding: "100px 56px" }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <section className="partner-section">
+                <div className="partner-section-inner">
                     <div className="tag">Your Advantages</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>What You'll Get</div>
+                    <div className="heading" style={{ marginBottom: 48 }}>What You'll Get</div>
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                        gap: 40
+                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                        gap: 32
                     }}>
                         {benefits.map((b, i) => (
-                            <div key={i} style={{ paddingBottom: 24 }}>
+                            <div key={i}>
                                 <div style={{
-                                    width: "48px",
-                                    height: "48px",
+                                    width: 44,
+                                    height: 44,
                                     borderRadius: "50%",
                                     background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-bright) 100%)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    fontSize: "24px",
-                                    marginBottom: 16
+                                    fontSize: 20,
+                                    marginBottom: 14
                                 }}>✓</div>
-                                <div style={{ fontSize: "18px", fontWeight: 600, marginBottom: 8 }}>{b.title}</div>
+                                <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 8 }}>{b.title}</div>
                                 <p className="body-txt">{b.desc}</p>
                             </div>
                         ))}
@@ -197,70 +184,27 @@ export default function BecomePartnerPage({ navigate, notify }) {
                 </div>
             </section>
 
-            {/* PROCESS */}
-            <section style={{
-                padding: "100px 56px",
-                background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-            }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-                    <div className="tag" style={{ color: "var(--green-highlight)" }}>Get Started</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>Partnership Process</div>
-                    <div style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 32
-                    }}>
-                        {process.map((p, i) => (
-                            <div key={i} style={{
-                                display: "flex",
-                                gap: 32,
-                                alignItems: "flex-start",
-                                paddingBottom: i < process.length - 1 ? 32 : 0,
-                                borderBottom: i < process.length - 1 ? "1px solid rgba(255,255,255,0.1)" : "none"
-                            }}>
-                                <div style={{
-                                    minWidth: "60px",
-                                    width: "60px",
-                                    height: "60px",
-                                    borderRadius: "50%",
-                                    background: "rgba(255,255,255,0.1)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: "24px",
-                                    fontWeight: 600
-                                }}>{p.step}</div>
-                                <div style={{ paddingTop: 8 }}>
-                                    <div style={{ fontSize: "20px", fontWeight: 600, marginBottom: 8 }}>{p.title}</div>
-                                    <p className="body-txt">{p.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* TESTIMONIALS */}
-            <section style={{ padding: "100px 56px" }}>
-                <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <section className="partner-section" style={{ background: "var(--mid2)" }}>
+                <div style={{ maxWidth: 1200, margin: "0 auto" }}>
                     <div className="tag">Success Stories</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>Partner Testimonials</div>
+                    <div className="heading" style={{ marginBottom: 48 }}>Partner Testimonials</div>
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                        gap: 40
+                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                        gap: 32
                     }}>
                         {testimonials.map((t, i) => (
                             <div key={i} style={{
-                                padding: 40,
-                                background: "var(--mid2)",
+                                padding: "clamp(24px, 3vw, 40px)",
+                                background: "var(--black)",
                                 border: "1px solid var(--border-green)",
-                                borderRadius: "8px"
+                                borderRadius: 8
                             }}>
-                                <div style={{ fontSize: "32px", marginBottom: 16 }}>⭐⭐⭐⭐⭐</div>
-                                <p className="body-txt" style={{ marginBottom: 24, fontSize: "16px", fontStyle: "italic" }}>"{t.quote}"</p>
-                                <div style={{ fontSize: "16px", fontWeight: 600 }}>{t.name}</div>
-                                <div style={{ fontSize: "14px", color: "var(--green-highlight)" }}>{t.location}</div>
+                                <div style={{ fontSize: 24, marginBottom: 14 }}>⭐⭐⭐⭐⭐</div>
+                                <p className="body-txt" style={{ marginBottom: 20, fontStyle: "italic" }}>"{t.quote}"</p>
+                                <div style={{ fontSize: 16, fontWeight: 600 }}>{t.name}</div>
+                                <div style={{ fontSize: 14, color: "var(--green-highlight)" }}>{t.location}</div>
                             </div>
                         ))}
                     </div>
@@ -268,15 +212,15 @@ export default function BecomePartnerPage({ navigate, notify }) {
             </section>
 
             {/* FAQ */}
-            <section style={{ padding: "100px 56px", background: "var(--mid2)" }}>
-                <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <section className="partner-section">
+                <div style={{ maxWidth: 800, margin: "0 auto" }}>
                     <div className="tag">Questions?</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>Frequently Asked Questions</div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div className="heading" style={{ marginBottom: 48 }}>Frequently Asked Questions</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                         {faqs.map((faq, i) => (
                             <div key={i} style={{
                                 border: "1px solid var(--border)",
-                                borderRadius: "8px",
+                                borderRadius: 8,
                                 overflow: "hidden",
                                 background: expandedFaq === i ? "rgba(45, 168, 79, 0.05)" : "transparent"
                             }}>
@@ -284,31 +228,29 @@ export default function BecomePartnerPage({ navigate, notify }) {
                                     onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                                     style={{
                                         width: "100%",
-                                        padding: "24px",
+                                        padding: "20px clamp(16px, 3vw, 24px)",
                                         background: "transparent",
                                         border: "none",
                                         color: "var(--white)",
-                                        fontSize: "16px",
+                                        fontSize: "clamp(14px, 2vw, 16px)",
                                         fontWeight: 600,
                                         cursor: "pointer",
                                         textAlign: "left",
                                         display: "flex",
                                         justifyContent: "space-between",
                                         alignItems: "center",
-                                        transition: "all 0.3s ease"
+                                        gap: 16
                                     }}>
-                                    {faq.q}
+                                    <span>{faq.q}</span>
                                     <span style={{
-                                        fontSize: "20px",
+                                        flexShrink: 0,
+                                        fontSize: 20,
                                         transition: "transform 0.3s ease",
                                         transform: expandedFaq === i ? "rotate(180deg)" : "rotate(0deg)"
                                     }}>⌄</span>
                                 </button>
                                 {expandedFaq === i && (
-                                    <div style={{
-                                        padding: "0 24px 24px",
-                                        borderTop: "1px solid var(--border)"
-                                    }}>
+                                    <div style={{ padding: "0 clamp(16px, 3vw, 24px) 20px", borderTop: "1px solid var(--border)" }}>
                                         <p className="body-txt">{faq.a}</p>
                                     </div>
                                 )}
@@ -319,15 +261,15 @@ export default function BecomePartnerPage({ navigate, notify }) {
             </section>
 
             {/* CONTACT FORM */}
-            <section id="contact-form" style={{ padding: "100px 56px" }}>
-                <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <section id="contact-form" className="partner-section" style={{ background: "var(--mid2)" }}>
+                <div style={{ maxWidth: 800, margin: "0 auto" }}>
                     <div className="tag">Get In Touch</div>
                     <div className="heading" style={{ marginBottom: 16 }}>Start Your KROSS Journey</div>
-                    <p className="body-txt" style={{ marginBottom: 56 }}>
+                    <p className="body-txt" style={{ marginBottom: 48 }}>
                         Ready to become a KROSS partner? Fill in the form below and our partnership team will be in touch within 2 business days.
                     </p>
-                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                        <div className="partner-form-row">
                             <div className="form-group">
                                 <label>Full Name *</label>
                                 <input
@@ -346,7 +288,7 @@ export default function BecomePartnerPage({ navigate, notify }) {
                                 />
                             </div>
                         </div>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                        <div className="partner-form-row">
                             <div className="form-group">
                                 <label>Email *</label>
                                 <input
@@ -383,7 +325,7 @@ export default function BecomePartnerPage({ navigate, notify }) {
                                 value={form.message}
                                 onChange={e => handleChange("message", e.target.value)}
                                 placeholder="Tell us about your interest, location, or any questions you have..."
-                                style={{ height: 140 }}
+                                style={{ height: 130 }}
                             />
                         </div>
                         <div>

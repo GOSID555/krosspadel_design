@@ -1335,6 +1335,28 @@ footer {
     letter-spacing: 2px;
 }
 
+/* BECOME A PARTNER PAGE */
+.partner-section {
+    padding: clamp(56px, 8vw, 100px) clamp(20px, 5vw, 56px);
+}
+
+.partner-section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.partner-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .partner-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* VENUE GALLERY */
 .venue-gallery {
     margin-top: 52px;
