@@ -3,6 +3,19 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
+function StoryBg({ story }) {
+  return (
+    <div
+      className="story-gallery-bg"
+      style={{
+        background: story.imageUrl
+          ? `url(${story.imageUrl}) center/cover no-repeat`
+          : (story.bg || "var(--mid2)")
+      }}
+    />
+  );
+}
+
 export default function StoriesPage({ navigate }) {
   const [stories, setStories] = useState([]);
 
@@ -14,9 +27,11 @@ export default function StoriesPage({ navigate }) {
     load();
   }, []);
 
+  const [featured, second, third, ...rest] = stories;
+
   return (
     <div>
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section id="hero" style={{ padding: 0 }}>
         <div className="hero-video-wrap" style={{
           background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
@@ -28,81 +43,104 @@ export default function StoriesPage({ navigate }) {
         </div>
       </section>
 
-      {/* STORIES SECTION */}
-      <section style={{ padding: "100px 56px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      {/* STORIES */}
+      <section style={{ padding: "clamp(56px, 8vw, 100px) clamp(20px, 5vw, 56px)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="tag">Community Highlights</div>
-          <div className="heading" style={{ marginBottom: 64 }}>Member Stories & Experiences</div>
+          <div className="heading" style={{ marginBottom: 40 }}>Member Stories &amp; Experiences</div>
+        </div>
+
+        {stories.length === 0 && (
+          <div style={{ maxWidth: 1200, margin: "0 auto", opacity: 0.4, fontSize: 14, paddingBottom: 40 }}>
+            No stories yet.
+          </div>
+        )}
+
+        {/* EDITORIAL BLOCK — featured (left 2/3) + side cards (right 1/3) */}
+        {featured && (
+          <div className="stories-gallery">
+            {/* FEATURED */}
+            <div className="story-gallery-feature" onClick={() => navigate("story-" + featured.docId)}>
+              <StoryBg story={featured} />
+              <div className="story-gallery-overlay" />
+              <div className="story-gallery-feature-body">
+                <div className="story-gallery-cat">{featured.cat}</div>
+                <div className="story-gallery-title-lg">{featured.title}</div>
+                <div className="story-gallery-date">{featured.date}</div>
+                {featured.excerpt && (
+                  <div className="story-gallery-excerpt">{featured.excerpt}</div>
+                )}
+                <div className="story-gallery-read">Read Story →</div>
+              </div>
+            </div>
+
+            {/* SIDE CARDS */}
+            {(second || third) && (
+              <div className="story-gallery-side">
+                {second && (
+                  <div className="story-gallery-small" onClick={() => navigate("story-" + second.docId)}>
+                    <StoryBg story={second} />
+                    <div className="story-gallery-overlay" />
+                    <div className="story-gallery-small-body">
+                      <div className="story-gallery-cat">{second.cat}</div>
+                      <div className="story-gallery-title-sm">{second.title}</div>
+                      <div className="story-gallery-date">{second.date}</div>
+                    </div>
+                  </div>
+                )}
+                {third && (
+                  <div className="story-gallery-small" onClick={() => navigate("story-" + third.docId)}>
+                    <StoryBg story={third} />
+                    <div className="story-gallery-overlay" />
+                    <div className="story-gallery-small-body">
+                      <div className="story-gallery-cat">{third.cat}</div>
+                      <div className="story-gallery-title-sm">{third.title}</div>
+                      <div className="story-gallery-date">{third.date}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* REST — 3-col grid, same bg+overlay style */}
+        {rest.length > 0 && (
           <div style={{
+            marginTop: 2,
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: 40
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: 2
           }}>
-            {stories.map(s => (
-              <div key={s.docId} style={{
-                cursor: "pointer",
-                transition: "all 0.3s ease"
-              }}
+            {rest.map(s => (
+              <div
+                key={s.docId}
+                className="story-gallery-small"
+                style={{ height: 320 }}
                 onClick={() => navigate("story-" + s.docId)}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}>
-                <div style={{
-                  aspectRatio: "4/3",
-                  background: "var(--mid2)",
-                  marginBottom: 24,
-                  position: "relative",
-                  overflow: "hidden",
-                  borderRadius: "4px",
-                  border: "1px solid var(--border)"
-                }}>
-                  {s.imageUrl ? (
-                    <img src={s.imageUrl} alt={s.title} style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      transition: "transform 0.6s cubic-bezier(.25, .46, .45, .94)"
-                    }}
-                      onMouseEnter={(e) => e.target.style.transform = "scale(1.05)"}
-                      onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
-                    />
-                  ) : (
-                    <div style={{
-                      width: "100%",
-                      height: "100%",
-                      background: s.bg,
-                      transition: "transform 0.6s cubic-bezier(.25, .46, .45, .94)"
-                    }}
-                      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
-                    />
-                  )}
+              >
+                <StoryBg story={s} />
+                <div className="story-gallery-overlay" />
+                <div className="story-gallery-small-body">
+                  <div className="story-gallery-cat">{s.cat}</div>
+                  <div className="story-gallery-title-sm">{s.title}</div>
+                  <div className="story-gallery-date">{s.date}</div>
                 </div>
-                <div style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", opacity: 0.5, marginBottom: 12 }}>
-                  {s.cat}
-                </div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "24px", letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 12 }}>
-                  {s.title}
-                </div>
-                <p className="body-txt" style={{ fontSize: "14px" }}>{s.excerpt}</p>
               </div>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* CTA SECTION */}
+      {/* CTA */}
       <section style={{
-        padding: "100px 56px",
+        padding: "clamp(56px, 8vw, 100px) clamp(20px, 5vw, 56px)",
         background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
       }}>
-        <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ color: "var(--green-highlight)" }}>Join the Community</div>
           <div className="heading" style={{ marginBottom: 32 }}>Share Your Story With Us</div>
-          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 48, opacity: 0.95 }}>
+          <p className="body-txt" style={{ fontSize: 18, marginBottom: 48, opacity: 0.95 }}>
             Have an amazing experience at KROSS? We'd love to hear your story and feature it on our platform.
           </p>
           <button className="btn-primary" onClick={() => navigate("contact")}>Get In Touch</button>
