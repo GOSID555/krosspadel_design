@@ -8,6 +8,7 @@ import VenueDetailPage from "./pages/VenueDetailPage";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import StoriesPage from "./pages/StoriesPage";
 import StoryDetailPage from "./pages/StoryDetailPage";
+import ActivityDetailPage from "./pages/ActivityDetailPage";
 import MembershipPage from "./pages/MembershipPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
@@ -78,6 +79,7 @@ function AppInner() {
       {page === "admin-membership" && (user ? <AdminMembershipPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {venueMatch && <VenueDetailPage venue={venueMatch} navigate={navigate} openBook={openBook} />}
       {page.startsWith("story-") && <StoryDetailPage navigate={navigate} />}
+      {page.startsWith("activity-") && <ActivityDetailPage navigate={navigate} />}
     </>
   );
 }
