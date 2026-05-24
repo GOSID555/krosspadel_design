@@ -21,7 +21,7 @@ export default function ActivityDetailPage({ navigate }) {
           pointerEvents: "none"
         }} />
         <div style={{
-          fontFamily: "'Jost', sans-serif",
+          fontFamily: "'Gotham Narrow', sans-serif",
           fontSize: "clamp(100px, 18vw, 180px)",
           lineHeight: 1,
           color: "rgba(255,255,255,0.04)",

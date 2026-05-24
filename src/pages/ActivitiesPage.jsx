@@ -72,7 +72,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
                       {formatDate(a.date)}
                     </div>
                   )}
-                  <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 26, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 10 }}>
+                  <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 26, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 10 }}>
                     {a.name}
                   </div>
                   <p className="body-txt" style={{ fontSize: 13, opacity: 0.75, margin: 0 }}>{a.text}</p>

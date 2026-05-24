@@ -30,7 +30,7 @@ function MembershipPreview({ form }) {
                         </div>
                     )}
                     <div style={{ marginBottom: 20 }}>
-                        <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 28, letterSpacing: "1.5px", marginBottom: 10, lineHeight: 1 }}>
+                        <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 28, letterSpacing: "1.5px", marginBottom: 10, lineHeight: 1 }}>
                             {form.name || "Plan Name"}
                         </div>
                         <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
@@ -63,7 +63,7 @@ function MembershipPreview({ form }) {
                         background: form.featured ? "rgba(45,168,79,0.07)" : "transparent",
                         borderRadius: 2
                     }}>
-                        <div style={{ fontFamily: "'Jost', sans-serif", fontSize: 22, letterSpacing: "1.5px", marginBottom: 4 }}>
+                        <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 22, letterSpacing: "1.5px", marginBottom: 4 }}>
                             {form.name || "Plan Name"}
                         </div>
                         <div style={{ fontSize: 12, opacity: 0.5 }}>From <strong style={{ color: "var(--white)", opacity: 1 }}>{form.price || "฿0"}</strong> / month</div>
