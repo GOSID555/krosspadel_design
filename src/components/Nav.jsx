@@ -6,6 +6,12 @@ export default function Nav({ navigate, scrolled, page }) {
   const isAdmin = page && page.startsWith("admin");
   const go = (p) => { navigate(p); setMenuOpen(false); };
 
+  if (isAdmin) return (
+    <nav className={scrolled ? "scrolled" : ""}>
+      <span className="nav-logo" onClick={() => go("admin")}>KROSS</span>
+    </nav>
+  );
+
   return (
     <>
       <nav className={scrolled ? "scrolled" : ""}>
@@ -15,7 +21,7 @@ export default function Nav({ navigate, scrolled, page }) {
           <a onClick={() => go("activities")}>Club Activities</a>
           <a onClick={() => go("about")}>About</a>
         </div>
-        <span className="nav-logo" onClick={() => go(isAdmin ? "admin" : "home")}>KROSS</span>
+        <span className="nav-logo" onClick={() => go("home")}>KROSS</span>
         <div className="nav-right">
           <a className="desktop-only" onClick={() => go("partner")}>Become a Partner</a>
           <a className="desktop-only" onClick={() => go("membership")}>Membership</a>
