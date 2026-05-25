@@ -98,7 +98,7 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
           {(venue.gallery || []).length > 0 && (
             <div className="venue-gallery">
               <div className="venue-section-heading">Gallery</div>
-              <div className="venue-gallery-strip">
+              <div className="venue-gallery-strip" onWheel={(e) => { e.preventDefault(); e.currentTarget.scrollLeft += e.deltaY; }}>
                 {(venue.gallery || []).map((url, i) => (
                   <img key={i} src={url} alt={`${venue.name} ${i + 1}`} className="venue-gallery-img" />
                 ))}
