@@ -28,7 +28,7 @@ import AdminMembershipPage from "./pages/admin/AdminMembershipPage";
 function AppInner() {
   const { user } = useContext(AuthContext);
   const { venues } = useContext(VenueContext);
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(window.location.hash === "#admin" ? "admin" : "home");
   const [bookOpen, setBookOpen] = useState(false);
   const [notifMsg, setNotifMsg] = useState("");
   const [scrolled, setScrolled] = useState(false);
