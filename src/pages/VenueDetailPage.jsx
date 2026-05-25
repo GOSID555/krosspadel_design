@@ -50,7 +50,7 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
             <button className="btn-primary" onClick={openBook} style={{ width: "100%", textAlign: "center" }}>Book Here</button>
           </div>
         </div>
-        <div>
+        <div style={{ minWidth: 0 }}>
           <p className="venue-intro">{venue.intro}</p>
           {venue.address && (
             <div style={{ marginBottom: 56 }}>
