@@ -310,8 +310,8 @@ nav.scrolled {
 
 .hero-title {
     font-family: 'Gotham Narrow', sans-serif; font-weight: 700; text-transform: uppercase;
-    font-size: clamp(48px, 18vw, 220px);
-    letter-spacing: 10px;
+    font-size: clamp(48px, 10vw, 110px);
+    letter-spacing: 4px;
     line-height: .88;
     animation: fadeUp .9s ease both;
     animation-delay: .5s;
@@ -486,7 +486,7 @@ section {
 
 .heading {
     font-family: 'Gotham Narrow', sans-serif; font-weight: 700; text-transform: uppercase;
-    font-size: clamp(36px, 10vw, 100px);
+    font-size: clamp(36px, 6vw, 80px);
     letter-spacing: 2px;
     line-height: .92;
     margin-bottom: 36px;
