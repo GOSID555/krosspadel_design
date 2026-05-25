@@ -32,7 +32,6 @@ export default function Footer({ navigate }) {
         <span>© 2025 KROSS Padel Club</span>
         <span style={{ display: "flex", gap: 16 }}>
           <span>Privacy Policy · Terms</span>
-          <span onClick={() => navigate("admin-login")} style={{ opacity: 0.1, cursor: "pointer", fontSize: 11 }}>admin</span>
         </span>
       </div>
     </footer>
