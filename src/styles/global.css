@@ -1,51 +1,9 @@
 /* Gotham Narrow — self-hosted font stack */
 @font-face {
     font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-Light.otf') format('opentype');
-    font-weight: 300;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-Regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-SemiBold.otf') format('opentype');
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
     src: url('/fonts/GothamNarrow-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-BoldItalic.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-Black.otf') format('opentype');
-    font-weight: 800;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-Ultra.ttf') format('truetype');
-    font-weight: 900;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Gotham Narrow';
-    src: url('/fonts/GothamNarrow-UltraItalic.otf') format('opentype');
-    font-weight: 900;
-    font-style: italic;
 }
 
 * {
@@ -79,7 +37,7 @@ body {
     background: var(--black);
     color: var(--white);
     font-family: 'Gotham Narrow', sans-serif;
-    font-weight: 300
+    font-weight: 700
 }
 
 #root {
@@ -350,7 +308,7 @@ nav.scrolled {
 
 .hero-title {
     font-family: 'Gotham Narrow', sans-serif; font-weight: 800; text-transform: uppercase;
-    font-size: clamp(90px, 18vw, 220px);
+    font-size: clamp(48px, 18vw, 220px);
     letter-spacing: 10px;
     line-height: .88;
     animation: fadeUp .9s ease both;
@@ -526,7 +484,7 @@ section {
 
 .heading {
     font-family: 'Gotham Narrow', sans-serif; font-weight: 800; text-transform: uppercase;
-    font-size: clamp(54px, 7vw, 100px);
+    font-size: clamp(36px, 10vw, 100px);
     letter-spacing: 2px;
     line-height: .92;
     margin-bottom: 36px;
@@ -1158,8 +1116,9 @@ footer {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 10px;
-    letter-spacing: 2.5px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--green-highlight);
     cursor: pointer;
@@ -1167,7 +1126,7 @@ footer {
     background: none;
     border: none;
     font-family: 'Gotham Narrow', sans-serif;
-    opacity: .75;
+    opacity: 1;
     transition: opacity .2s;
 }
 
@@ -1232,8 +1191,10 @@ footer {
 }
 
 .venue-detail-tag {
-    font-size: 9px;
-    letter-spacing: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Gotham Narrow', sans-serif;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--green-highlight);
     margin-bottom: 12px
@@ -1241,7 +1202,7 @@ footer {
 
 .venue-detail-title {
     font-family: 'Gotham Narrow', sans-serif; font-weight: 800; text-transform: uppercase;
-    font-size: clamp(80px, 12vw, 160px);
+    font-size: clamp(40px, 12vw, 160px);
     letter-spacing: 6px;
     line-height: .88;
     margin-bottom: 16px
@@ -1800,6 +1761,17 @@ footer {
         padding: 0 20px
     }
 
+    section {
+        padding: 80px 20px !important
+    }
+
+    .grid-2col,
+    .grid-contact,
+    .grid-about {
+        grid-template-columns: 1fr !important;
+        gap: 40px !important
+    }
+
     .nav-links,
     .nav-right .desktop-only {
         display: none !important
@@ -1938,7 +1910,14 @@ footer {
     }
 
     section {
-        padding: 64px 16px
+        padding: 64px 16px !important
+    }
+
+    .grid-2col,
+    .grid-contact,
+    .grid-about {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important
     }
 
     .inner-section {

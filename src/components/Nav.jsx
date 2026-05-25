@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export default function Nav({ navigate, scrolled }) {
-  const [lang, setLang] = useState("THAI");
   const [menuOpen, setMenuOpen] = useState(false);
 
   const go = (p) => { navigate(p); setMenuOpen(false); };
@@ -20,7 +19,6 @@ export default function Nav({ navigate, scrolled }) {
           <a className="desktop-only" onClick={() => go("partner")}>Become a Partner</a>
           <a className="desktop-only" onClick={() => go("membership")}>Membership</a>
           <a className="desktop-only" onClick={() => go("contact")}>Contact</a>
-          <button className="lang-toggle desktop-only" onClick={() => setLang(l => l === "THAI" ? "ENG" : "THAI")}>{lang}</button>
           <button className={`hamburger${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
             <span /><span /><span />
           </button>
@@ -34,7 +32,6 @@ export default function Nav({ navigate, scrolled }) {
         <a onClick={() => go("partner")}>Become a Partner</a>
         <a onClick={() => go("membership")}>Membership</a>
         <a onClick={() => go("contact")}>Contact</a>
-        <button className="mobile-menu-lang" onClick={() => setLang(l => l === "THAI" ? "ENG" : "THAI")}>{lang}</button>
       </div>
     </>
   );

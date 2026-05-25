@@ -1,6 +1,32 @@
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import Footer from "../components/Footer";
 
+const EMAILJS_SERVICE_ID  = "service_lgly8kn";
+const EMAILJS_TEMPLATE_ID = "template_vqu96rm";
+const EMAILJS_PUBLIC_KEY  = "R5frBpVFbqBPqGm5K";
+
 export default function ContactPage({ navigate, notify }) {
+  const [sending, setSending] = useState(false);
+  const [form, setForm] = useState({ name: "", last_name: "", email: "", title: "General Enquiry", message: "" });
+
+  const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form, EMAILJS_PUBLIC_KEY);
+      notify("Message sent! We'll reply within 24 hours.");
+      setForm({ name: "", last_name: "", email: "", title: "General Enquiry", message: "" });
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      notify("Failed to send. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div>
       {/* HERO SECTION */}
@@ -18,7 +44,7 @@ export default function ContactPage({ navigate, notify }) {
       {/* CONTACT SECTION */}
       <section style={{ padding: "100px 56px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 100, alignItems: "start" }}>
+          <div className="grid-contact" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 100, alignItems: "start" }}>
             {/* CONTACT INFO */}
             <div>
               <div className="tag">Get In Touch</div>
@@ -37,34 +63,36 @@ export default function ContactPage({ navigate, notify }) {
             </div>
 
             {/* CONTACT FORM */}
-            <div style={{ padding: 40, border: "1px solid var(--border)", background: "var(--mid2)" }}>
+            <form onSubmit={handleSubmit} style={{ padding: 40, border: "1px solid var(--border)", background: "var(--mid2)" }}>
               <div className="tag" style={{ marginBottom: 24 }}>Send Us A Message</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
                 <div>
                   <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>First Name</label>
-                  <input type="text" placeholder="John" style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
+                  <input name="name" type="text" placeholder="John" required value={form.name} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
                 </div>
                 <div>
                   <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>Last Name</label>
-                  <input type="text" placeholder="Doe" style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
+                  <input name="last_name" type="text" placeholder="Doe" value={form.last_name} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
                 </div>
               </div>
               <div style={{ marginBottom: 16 }}>
                 <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>Email</label>
-                <input type="email" placeholder="you@email.com" style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
+                <input name="email" type="email" placeholder="you@email.com" required value={form.email} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }} />
               </div>
               <div style={{ marginBottom: 16 }}>
                 <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>Subject</label>
-                <select style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }}>
+                <select name="title" value={form.title} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14 }}>
                   {["General Enquiry", "Court Booking", "Membership", "Coaching", "Events & Tournaments"].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
               <div style={{ marginBottom: 24 }}>
                 <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>Message</label>
-                <textarea placeholder="Tell us how we can help..." rows={6} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14, resize: "vertical" }} />
+                <textarea name="message" placeholder="Tell us how we can help..." rows={6} required value={form.message} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14, resize: "vertical" }} />
               </div>
-              <button className="btn-primary" onClick={() => notify("Message sent! We'll reply within 24 hours.")} style={{ width: "100%" }}>Send Message</button>
-            </div>
+              <button type="submit" className="btn-primary" disabled={sending} style={{ width: "100%", opacity: sending ? 0.6 : 1 }}>
+                {sending ? "Sending..." : "Send Message"}
+              </button>
+            </form>
           </div>
         </div>
       </section>

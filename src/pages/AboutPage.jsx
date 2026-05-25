@@ -76,7 +76,7 @@ export default function AboutPage({ navigate }) {
                 marginTop: 0
             }}>
                 <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80 }}>
+                    <div className="grid-about" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80 }}>
                         <div>
                             <div className="tag" style={{ color: "var(--green-highlight)" }}>Our Purpose</div>
                             <div className="heading" style={{ marginBottom: 24 }}>Mission</div>
