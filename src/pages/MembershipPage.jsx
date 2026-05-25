@@ -34,7 +34,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="tag">Join The Club</div>
           <div className="heading" style={{ marginBottom: 64 }}>Choose Your Plan</div>
-          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 64, lineHeight: "1.8", opacity: 0.9 }}>
+          <p className="body-txt" style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: 64, lineHeight: "1.8", opacity: 0.9 }}>
             All plans include access to all KROSS venues, priority booking, coaching discounts, and exclusive member events. Whether you're a casual player or competing regularly, we have the perfect plan for you.
           </p>
           <div style={{
@@ -121,7 +121,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
           <div className="heading" style={{ marginBottom: 64 }}>Why Join KROSS</div>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
             gap: 32
           }}>
             {[
@@ -159,7 +159,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
         <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Ready To Join?</div>
           <div className="heading" style={{ marginBottom: 32 }}>Become A Member Today</div>
-          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 48, opacity: 0.9 }}>
+          <p className="body-txt" style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: 48, opacity: 0.9 }}>
             Choose your plan above and start enjoying unlimited access to KROSS venues, priority booking, and exclusive member benefits.
           </p>
           <button className="btn-primary" onClick={openBook}>Book First Court</button>
