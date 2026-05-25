@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-export default function Nav({ navigate, scrolled }) {
+export default function Nav({ navigate, scrolled, page }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const isAdmin = page && page.startsWith("admin");
   const go = (p) => { navigate(p); setMenuOpen(false); };
 
   return (
@@ -14,7 +15,7 @@ export default function Nav({ navigate, scrolled }) {
           <a onClick={() => go("activities")}>Club Activities</a>
           <a onClick={() => go("about")}>About</a>
         </div>
-        <span className="nav-logo" onClick={() => go("home")}>KROSS</span>
+        <span className="nav-logo" onClick={() => go(isAdmin ? "admin" : "home")}>KROSS</span>
         <div className="nav-right">
           <a className="desktop-only" onClick={() => go("partner")}>Become a Partner</a>
           <a className="desktop-only" onClick={() => go("membership")}>Membership</a>

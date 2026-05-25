@@ -55,7 +55,7 @@ function AppInner() {
 
   return (
     <>
-      <Nav navigate={navigate} scrolled={scrolled} />
+      <Nav navigate={navigate} scrolled={scrolled} page={page} />
       <BookModal
         open={bookOpen}
         onClose={() => setBookOpen(false)}
