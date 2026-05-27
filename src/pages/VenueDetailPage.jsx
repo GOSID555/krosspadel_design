@@ -1,6 +1,35 @@
+import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 
 export default function VenueDetailPage({ venue, navigate, openBook }) {
+  const [mapCoords, setMapCoords] = useState(null);
+  const [mapFailed, setMapFailed] = useState(false);
+
+  useEffect(() => {
+    setMapFailed(false);
+    if (venue.mapUrl) return;
+    if (venue.lat && venue.lon) {
+      setMapCoords({ lat: parseFloat(venue.lat), lon: parseFloat(venue.lon) });
+      return;
+    }
+    if (!venue.address) { setMapFailed(true); return; }
+    setMapCoords(null);
+    const simplified = venue.address.replace(/^([\w\s]+floor[^,]*,\s*[^,]+,\s*)/i, "").trim();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => { controller.abort(); setMapFailed(true); }, 5000);
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(simplified + " Bangkok Thailand")}&format=json&limit=1`, {
+      headers: { "User-Agent": "KrossPadel/1.0" },
+      signal: controller.signal
+    })
+      .then(r => r.json())
+      .then(data => {
+        clearTimeout(timeout);
+        if (data[0]) setMapCoords({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) });
+        else setMapFailed(true);
+      })
+      .catch(() => setMapFailed(true));
+    return () => { controller.abort(); clearTimeout(timeout); };
+  }, [venue.address, venue.lat, venue.lon, venue.mapUrl]);
   const courtText = venue.courtText || `Every court at KROSS ${venue.name} is built to World Padel Tour specifications — premium glass walls, artificial grass turf, and professional LED lighting for day and evening play.`;
   const courtText2 = venue.courtText2 || `Court hire is available from opening to close, with online booking up to 7 days in advance. Members receive priority windows and guaranteed slots during peak hours.`;
   const clubText = venue.clubText || `Beyond the courts, KROSS ${venue.name} is a place to stay. The club lounge is designed for post-match recovery and pre-match preparation.`;
@@ -31,9 +60,16 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
               <div className="venue-sidebar-val" style={{ color: venue.status === "Open" ? "var(--green-highlight)" : "var(--white)" }}>{venue.status}</div>
             </div>
             <div className="venue-sidebar-divider" />
-            <div className="venue-sidebar-item">
+            <div className="venue-sidebar-item" style={{ alignItems: "flex-start" }}>
               <div className="venue-sidebar-label">Hours</div>
-              <div className="venue-sidebar-val">{venue.hours}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(day => (
+                  <div key={day} style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
+                    <div style={{ fontSize: 14, opacity: 0.5 }}>{day}</div>
+                    <div className="venue-sidebar-val" style={{ fontSize: 14 }}>{venue.hours || "—"}</div>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="venue-sidebar-divider" />
             <div className="venue-sidebar-item">
@@ -46,6 +82,40 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
               <div className="venue-sidebar-val">{venue.phone}</div>
             </div>
             <div className="venue-sidebar-divider" />
+            {venue.courtsInfo && (
+              <>
+                <div className="venue-sidebar-item">
+                  <div className="venue-sidebar-label">Courts</div>
+                  <div className="venue-sidebar-val" style={{ fontSize: 13, whiteSpace: "pre-line", lineHeight: 1.8 }}>{venue.courtsInfo}</div>
+                </div>
+                <div className="venue-sidebar-divider" />
+              </>
+            )}
+            {venue.coachingInfo && (
+              <>
+                <div className="venue-sidebar-item">
+                  <div className="venue-sidebar-label">Coaching</div>
+                  <div className="venue-sidebar-val" style={{ fontSize: 13, whiteSpace: "pre-line", lineHeight: 1.8 }}>{venue.coachingInfo}</div>
+                </div>
+                <div className="venue-sidebar-divider" />
+              </>
+            )}
+            {(venue.staff || []).length > 0 && (
+              <>
+                <div className="venue-sidebar-item" style={{ alignItems: "flex-start" }}>
+                  <div className="venue-sidebar-label">Staff</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {venue.staff.map((s, i) => (
+                      <div key={i}>
+                        <div className="venue-sidebar-val" style={{ fontSize: 14, marginBottom: 2 }}>{s.name}</div>
+                        <div style={{ fontSize: 11, opacity: 0.45, letterSpacing: 1, textTransform: "uppercase" }}>{s.role}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="venue-sidebar-divider" />
+              </>
+            )}
             <br />
             <button className="btn-primary" onClick={openBook} style={{ width: "100%", textAlign: "center" }}>Book Here</button>
           </div>
@@ -55,49 +125,42 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
           {venue.address && (
             <div style={{ marginBottom: 56 }}>
               <div className="venue-section-heading">Location</div>
-              {venue.mapUrl ? (
-                <iframe
-                  title={`Map – KROSS ${venue.name}`}
-                  src={venue.mapUrl}
-                  width="100%"
-                  height="360"
-                  style={{ border: 0, borderRadius: 4, display: "block", filter: "grayscale(1) invert(1) hue-rotate(180deg) brightness(0.9)" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              ) : (
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("KROSS " + venue.name + " " + venue.address + " Bangkok")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 14,
-                    padding: "20px 24px",
-                    background: "var(--mid2)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 4,
-                    textDecoration: "none",
-                    color: "var(--white)",
-                    transition: "border-color .2s"
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--green-highlight)"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-highlight)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                  </svg>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 3 }}>View on Google Maps</div>
-                    <div style={{ fontSize: 12, opacity: 0.5 }}>{venue.address}</div>
+              {(() => {
+                const src = venue.mapUrl ||
+                  (mapCoords
+                    ? `https://www.openstreetmap.org/export/embed.html?bbox=${mapCoords.lon - 0.005},${mapCoords.lat - 0.005},${mapCoords.lon + 0.005},${mapCoords.lat + 0.005}&layer=mapnik&marker=${mapCoords.lat},${mapCoords.lon}`
+                    : null);
+                return src ? (
+                  <iframe
+                    title={`Map – KROSS ${venue.name}`}
+                    src={src}
+                    width="100%"
+                    height="360"
+                    style={{ border: 0, borderRadius: 4, display: "block", filter: "grayscale(1) invert(1) hue-rotate(180deg) brightness(0.88)" }}
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                ) : mapFailed ? (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("KROSS " + venue.name + " " + venue.address)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ display: "flex", alignItems: "center", gap: 14, padding: "20px 24px", background: "var(--mid2)", border: "1px solid var(--border)", borderRadius: 4, textDecoration: "none", color: "var(--white)" }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-highlight)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 3 }}>View on Google Maps</div>
+                      <div style={{ fontSize: 12, opacity: 0.5 }}>{venue.address}</div>
+                    </div>
+                  </a>
+                ) : (
+                  <div style={{ height: 360, background: "var(--mid2)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.4, fontSize: 13 }}>
+                    Loading map…
                   </div>
-                  <svg style={{ marginLeft: "auto", opacity: 0.4 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                </a>
-              )}
+                );
+              })()}
+              <div style={{ marginTop: 10, fontSize: 12, opacity: 0.45, letterSpacing: 1 }}>{venue.address}</div>
             </div>
           )}
           <div className="venue-img-block"><div className="venue-img-inner" style={{
