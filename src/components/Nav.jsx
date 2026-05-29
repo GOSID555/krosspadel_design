@@ -8,7 +8,7 @@ export default function Nav({ navigate, scrolled, page }) {
 
   if (isAdmin) return (
     <nav className={scrolled ? "scrolled" : ""}>
-      <span className="nav-logo" onClick={() => go("admin")}>KROSS</span>
+      <img src="/image/kross_logo.png" alt="KROSS" onClick={() => go("admin")} style={{ height: 48, cursor: "pointer" }} />
     </nav>
   );
 
@@ -16,15 +16,17 @@ export default function Nav({ navigate, scrolled, page }) {
     <>
       <nav className={scrolled ? "scrolled" : ""}>
         <div className="nav-links">
-          <a onClick={() => go("stories")}>Club Stories</a>
-          <a onClick={() => go("venues")}>Club Venues</a>
-          <a onClick={() => go("activities")}>Club Activities</a>
-          <a onClick={() => go("about")}>About</a>
+          <a onClick={() => go("about")}>We Are Kross</a>
+          <a onClick={() => go("venues")}>We Are Venues</a>
+          <a onClick={() => go("activities")}>We Are Activities</a>
+          <a onClick={() => go("lifestyle")}>We Are Lifestyle</a>
+          <a onClick={() => go("stories")}>We Are Stories</a>
         </div>
-        <span className="nav-logo" onClick={() => go("home")}>KROSS</span>
+        <img src="/image/kross_logo.png" alt="KROSS" onClick={() => go("home")} style={{ height: 48, cursor: "pointer", position: "absolute", left: "50%", transform: "translateX(-50%)" }} />
         <div className="nav-right">
+          <a className="desktop-only" onClick={() => window.open("https://krosspark.com", "_blank", "noopener noreferrer")}>Kross Park</a>
           <a className="desktop-only" onClick={() => go("partner")}>Become a Partner</a>
-          <a className="desktop-only" onClick={() => go("membership")}>Membership</a>
+          <a className="desktop-only" onClick={() => go("membership")}>Book & Pricing</a>
           <a className="desktop-only" onClick={() => go("contact")}>Contact</a>
           <button className={`hamburger${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
             <span /><span /><span />
@@ -32,12 +34,14 @@ export default function Nav({ navigate, scrolled, page }) {
         </div>
       </nav>
       <div className={`mobile-menu${menuOpen ? " open" : ""}`}>
-        <a onClick={() => go("stories")}>Stories</a>
-        <a onClick={() => go("venues")}>Venues</a>
-        <a onClick={() => go("activities")}>Activities</a>
-        <a onClick={() => go("about")}>About</a>
+        <a onClick={() => go("about")}>We Are Kross</a>
+        <a onClick={() => go("venues")}>We Are Venues</a>
+        <a onClick={() => go("activities")}>We Are Activities</a>
+        <a onClick={() => go("lifestyle")}>We Are Lifestyle</a>
+        <a onClick={() => go("stories")}>We Are Stories</a>
+        <a onClick={() => window.open("https://krosspark.com", "_blank", "noopener noreferrer")}>Kross Park</a>
         <a onClick={() => go("partner")}>Become a Partner</a>
-        <a onClick={() => go("membership")}>Membership</a>
+        <a onClick={() => go("membership")}>Book & Pricing</a>
         <a onClick={() => go("contact")}>Contact</a>
       </div>
     </>

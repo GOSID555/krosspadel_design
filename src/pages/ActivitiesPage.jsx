@@ -49,7 +49,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
             gap: 40
           }}>
             {activities.map((a) => (
-              <div key={a.docId || a.name} onClick={() => navigate("activity-" + (a.docId || a.name))} style={{
+              <div key={a.docId || a.name} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activity-" + (a.docId || a.name))} style={{
                 position: "relative", height: 320, overflow: "hidden",
                 cursor: "pointer", border: "1px solid var(--border)", borderRadius: 4,
                 background: a.imageUrl

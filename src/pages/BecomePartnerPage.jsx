@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 const EMPTY_FORM = { name: "", company: "", email: "", phone: "", type: "", message: "" };
 
 export default function BecomePartnerPage({ navigate, notify }) {
-    const [expandedFaq, setExpandedFaq] = useState(null);
     const [form, setForm] = useState(EMPTY_FORM);
     const [sending, setSending] = useState(false);
 
@@ -20,319 +19,161 @@ export default function BecomePartnerPage({ navigate, notify }) {
         notify("Partnership inquiry sent! We'll be in touch within 2 business days.");
     };
 
-    const partnerships = [
-        { icon: "🏢", title: "Franchise Owner", desc: "Own and operate a KROSS venue with full brand support and proven business model" },
-        { icon: "💼", title: "Investment Partner", desc: "Invest in club expansion and share in revenue growth across multiple venues" },
-        { icon: "🏛️", title: "Venue Collaboration", desc: "Partner with existing venues to bring KROSS concept to new markets" },
-        { icon: "🤝", title: "Corporate Partnership", desc: "Collaborate on events, tournaments, and exclusive member benefits" },
+    const packageItems = [
+        { title: "Brand License & Identity Pack", desc: "Logos, color codes, templates, signage guidelines." },
+        { title: "Club Design & Build Support", desc: "Floor plans, lighting schemes, spectator areas, F&B corners." },
+        { title: "Booking App & Tech Setup", desc: "White-label app, user onboarding, data migration." },
+        { title: "Staff Training Program", desc: "Coaching syllabus, customer service scripts, cross protocols." },
+        { title: "Event & Tournament Toolkit", desc: "Branding kits, prize-giving templates, social media calendar." },
+        { title: "Supplier & Sponsor Introductions", desc: "Equipment deals, beverage partnerships, apparel discounts." },
+        { title: "Marketing Launch Campaign", desc: "Press release template, influencer kit, local activations guide." },
     ];
 
-    const benefits = [
-        { title: "Proven Business Model", desc: "Operating system refined across 4+ venues with consistent profitability" },
-        { title: "International Club Concept", desc: "Premium brand identity recognized across Asia" },
-        { title: "Supplier Network Access", desc: "Preferred partnerships for court equipment, technology, and services" },
-        { title: "Staff Training Program", desc: "Comprehensive onboarding and ongoing professional development" },
-        { title: "Launch Support", desc: "Full setup assistance from venue design to community building" },
-        { title: "Ongoing Management Consultation", desc: "Continuous business support and optimization strategies" },
-    ];
-
-    const faqs = [
-        {
-            q: "What investment is required to become a franchise owner?",
-            a: "Investment varies by location and venue size. Typically, initial setup costs range from 2-5M THB, including court construction, equipment, and working capital. We provide detailed financial projections during consultation."
-        },
-        {
-            q: "How long does the setup process take?",
-            a: "From initial inquiry to grand opening typically takes 8-12 months, depending on venue readiness and local regulations. We manage the entire process to minimize delays."
-        },
-        {
-            q: "What kind of location works best?",
-            a: "Ideal locations are in urban areas with high foot traffic, preferably near residential or business districts. The venue should accommodate 4-8 courts with additional amenities."
-        },
-        {
-            q: "Will KROSS provide staff training?",
-            a: "Yes, comprehensive training is provided for all staff including court management, customer service, coaching, and administrative operations. We also offer ongoing support."
-        },
-        {
-            q: "What are the typical revenue projections?",
-            a: "Based on our current venues, a full 6-court facility typically generates 800K-1.2M THB monthly revenue after 12-18 months of operation, with margins of 25-35%."
-        },
-        {
-            q: "Can I operate multiple venues?",
-            a: "Yes, we support multi-venue operators. Additional support is provided for managing multiple locations efficiently."
-        },
-    ];
-
-    const testimonials = [
-        { name: "Partner Name", location: "Bangkok", quote: "Investing in KROSS was the best business decision. The support and community are unmatched." },
-        { name: "Franchise Owner", location: "Venue Location", quote: "The proven model and operations support made launching smooth. Members love the KROSS experience." },
+    const whyItems = [
+        { title: "Brand Power and Recognition", desc: "Instant credibility in competitive markets." },
+        { title: "Turnkey Digital Platform", desc: "Our booking app, CRM and member portal come pre-integrated." },
+        { title: "Preferred Supplier Network", desc: "Guaranteed lead times & volume discounts on courts, balls, racks, apparel." },
+        { title: "Proven Training & Ops", desc: "Comprehensive on-site and remote training modules for staff at every level." },
+        { title: "Event Ecosystem", desc: "Access to our tournament calendar, DJs, sponsors (Corona, PEACHES Active) and community activations." },
     ];
 
     return (
         <div>
-            {/* HERO SECTION */}
+            {/* HERO */}
             <section id="hero" style={{ padding: 0 }}>
                 <div className="hero-video-wrap" style={{
-                    background: "linear-gradient(135deg, var(--green-accent) 0%, var(--green-bright) 100%)"
+                    background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
                 }} />
                 <div className="hero-content">
                     <div className="hero-eyebrow">Business Opportunity</div>
-                    <div className="hero-title">Become a KROSS Partner</div>
+                    <div className="hero-title">Become A Partner</div>
                     <div className="hero-sub">Join Asia's Growing Padel Revolution</div>
                     <div className="hero-actions">
-                        <button className="btn-primary" onClick={() => document.querySelector("#contact-form").scrollIntoView({ behavior: "smooth" })}>Partner With Us</button>
-                        <button className="btn-ghost" onClick={() => navigate("contact")}>Learn More</button>
+                        <button className="btn-primary" onClick={() => document.querySelector("#contact-form").scrollIntoView({ behavior: "smooth" })}>Get In Touch</button>
                     </div>
                 </div>
             </section>
 
-            {/* CONTACT FORM */}
-            <section id="contact-form" className="partner-section">
-                <div style={{ maxWidth: 800, margin: "0 auto" }}>
-                    <div className="tag">Get In Touch</div>
-                    <div className="heading" style={{ marginBottom: 16 }}>Start Your KROSS Journey</div>
-                    <p className="body-txt" style={{ marginBottom: 48 }}>
-                        Ready to become a KROSS partner? Fill in the form below and our partnership team will be in touch within 2 business days.
+            {/* FRANCHISE INTRO */}
+            <section className="partner-section" style={{ background: `url(/image/night_court.png) center/cover no-repeat`, position: "relative" }}>
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.65)" }} />
+                <div className="partner-section-inner" style={{ position: "relative", zIndex: 1 }}>
+                    <div className="tag">Franchise With KROSS</div>
+                    <div className="heading" style={{ fontSize: "clamp(40px, 6vw, 80px)", marginBottom: 32 }}>
+                        Be Part Of Something <span style={{ color: "var(--green-highlight)" }}>Bigger.</span>
+                    </div>
+                    <p className="body-txt" style={{ fontSize: 18, lineHeight: 1.9, maxWidth: 560 }}>
+                        Kross is more than a sports club. It's a community, a lifestyle and a global movement. Now you can bring the Kross experience to your city.
                     </p>
-                    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-                        <div className="partner-form-row">
-                            <div className="form-group">
-                                <label>Full Name *</label>
-                                <input
-                                    value={form.name}
-                                    onChange={e => handleChange("name", e.target.value)}
-                                    placeholder="Your full name"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Company / Organization</label>
-                                <input
-                                    value={form.company}
-                                    onChange={e => handleChange("company", e.target.value)}
-                                    placeholder="Company name"
-                                />
-                            </div>
-                        </div>
-                        <div className="partner-form-row">
-                            <div className="form-group">
-                                <label>Email *</label>
-                                <input
-                                    type="email"
-                                    value={form.email}
-                                    onChange={e => handleChange("email", e.target.value)}
-                                    placeholder="your@email.com"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Phone / LINE</label>
-                                <input
-                                    value={form.phone}
-                                    onChange={e => handleChange("phone", e.target.value)}
-                                    placeholder="+66 or LINE ID"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label>Partnership Type</label>
-                            <select value={form.type} onChange={e => handleChange("type", e.target.value)}>
-                                <option value="">Select partnership type...</option>
-                                <option value="franchise">Franchise Owner</option>
-                                <option value="investment">Investment Partner</option>
-                                <option value="venue">Venue Collaboration</option>
-                                <option value="corporate">Corporate Partnership</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label>Message</label>
-                            <textarea
-                                value={form.message}
-                                onChange={e => handleChange("message", e.target.value)}
-                                placeholder="Tell us about your interest, location, or any questions you have..."
-                                style={{ height: 130 }}
-                            />
-                        </div>
-                        <div>
-                            <button type="submit" className="btn-primary" disabled={sending}>
-                                {sending ? "Sending..." : "Send Partnership Inquiry"}
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </section>
 
-            {/* WHY INVEST IN PADEL */}
-            <section className="partner-section" style={{ background: "var(--mid2)" }}>
+            {/* PHILOSOPHY */}
+            <section className="partner-section">
                 <div className="partner-section-inner">
-                    <div className="tag">Market Opportunity</div>
-                    <div className="heading" style={{ marginBottom: 48 }}>Why Invest in Padel?</div>
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                        gap: 20
-                    }}>
+                    <div className="tag">The KROSS Philosophy</div>
+                    <div className="heading" style={{ marginBottom: 32 }}>Our Team As The Heart<br />Of Our Community</div>
+                    <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 64, maxWidth: 680 }}>
+                        At Kross, we believe that our team is the foundation of our success. Our philosophy is built on three key principles: connection, growth, and long-term commitment.
+                    </p>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 2 }}>
                         {[
-                            { stat: "+200%", label: "Global Growth", desc: "Padel is the fastest growing sport worldwide" },
-                            { stat: "5M+", label: "Active Players", desc: "And growing exponentially in Asia" },
-                            { stat: "35+", label: "Countries", desc: "Padel communities established worldwide" },
-                            { stat: "High ROI", label: "Business Model", desc: "Strong margins and repeat membership revenue" },
+                            { title: "Connection", sub: "Training, playing and engaging with the community" },
+                            { title: "Growth", sub: "Building our team from the ground up" },
+                            { title: "Expanding KROSS", sub: "Beyond Bangkok" },
                         ].map((item, i) => (
-                            <div key={i} style={{
-                                padding: "clamp(20px, 3vw, 32px)",
-                                background: "var(--mid2)",
-                                border: "1px solid var(--border)",
-                                borderRadius: 8,
-                                textAlign: "center"
-                            }}>
-                                <div style={{ fontSize: "clamp(28px, 4vw, 36px)", fontWeight: 600, color: "var(--green-highlight)", marginBottom: 8 }}>{item.stat}</div>
-                                <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>{item.label}</div>
-                                <p className="body-txt">{item.desc}</p>
+                            <div key={i} style={{ padding: "40px 36px", border: "1px solid var(--border)", background: "var(--mid)" }}>
+                                <div style={{ fontSize: 10, letterSpacing: "2px", color: "var(--green-highlight)", textTransform: "uppercase", marginBottom: 12 }}>{item.title}</div>
+                                <div style={{ fontSize: 13, letterSpacing: "1.5px", textTransform: "uppercase", opacity: 0.65, lineHeight: 1.6 }}>{item.sub}</div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* PARTNERSHIP MODELS */}
-            <section className="partner-section" style={{ background: "var(--mid2)" }}>
+            {/* FRANCHISE PACKAGE */}
+            <section className="partner-section" style={{ background: "var(--mid)" }}>
                 <div className="partner-section-inner">
-                    <div className="tag">Partnership Options</div>
-                    <div className="heading" style={{ marginBottom: 48 }}>Different Ways to Partner</div>
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                        gap: 24
-                    }}>
-                        {partnerships.map((p, i) => (
-                            <div key={i} style={{
-                                padding: "clamp(24px, 3vw, 40px)",
-                                border: "1px solid var(--border)",
-                                borderRadius: 8,
-                                background: "var(--black)",
-                                transition: "all 0.3s ease"
-                            }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.borderColor = "var(--green-highlight)";
-                                    e.currentTarget.style.background = "rgba(45, 168, 79, 0.03)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.borderColor = "var(--border)";
-                                    e.currentTarget.style.background = "var(--black)";
-                                }}>
-                                <div style={{ fontSize: 40, marginBottom: 14 }}>{p.icon}</div>
-                                <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 10 }}>{p.title}</div>
-                                <p className="body-txt">{p.desc}</p>
+                    <div className="tag">What You Get</div>
+                    <div className="heading" style={{ marginBottom: 24 }}>A Complete<br />Franchise Package</div>
+                    <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 64, maxWidth: 640 }}>
+                        From day one, we equip you with everything you need to launch confidently. Our package includes brand assets, operational manuals, step-by-step best practices, and live support 24/7 during your first year.
+                    </p>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 2 }}>
+                        {packageItems.map((item, i) => (
+                            <div key={i} style={{ padding: "32px 28px", border: "1px solid var(--border)", background: "var(--dark)" }}
+                                onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--green-highlight)"}
+                                onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}
+                            >
+                                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", marginBottom: 10 }}>{item.title}</div>
+                                <p className="body-txt" style={{ fontSize: 13, margin: 0 }}>{item.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* WHAT YOU GET */}
+            {/* WHY KROSS */}
             <section className="partner-section">
                 <div className="partner-section-inner">
-                    <div className="tag">Your Advantages</div>
-                    <div className="heading" style={{ marginBottom: 48 }}>What You'll Get</div>
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: 32
-                    }}>
-                        {benefits.map((b, i) => (
-                            <div key={i}>
-                                <div style={{
-                                    width: 44,
-                                    height: 44,
-                                    borderRadius: "50%",
-                                    background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-bright) 100%)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: 20,
-                                    marginBottom: 14
-                                }}>✓</div>
-                                <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 8 }}>{b.title}</div>
-                                <p className="body-txt">{b.desc}</p>
+                    <div className="tag">Why KROSS?</div>
+                    <div className="heading" style={{ marginBottom: 64 }}>What Sets Us Apart</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 2 }}>
+                        {whyItems.map((item, i) => (
+                            <div key={i} style={{ padding: "36px 28px", border: "1px solid var(--border)", background: "var(--mid)" }}>
+                                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", marginBottom: 12, color: "var(--green-highlight)" }}>{item.title}</div>
+                                <p className="body-txt" style={{ fontSize: 13, margin: 0 }}>{item.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* TESTIMONIALS */}
-            <section className="partner-section" style={{ background: "var(--mid2)" }}>
-                <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-                    <div className="tag">Success Stories</div>
-                    <div className="heading" style={{ marginBottom: 48 }}>Partner Testimonials</div>
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                        gap: 32
-                    }}>
-                        {testimonials.map((t, i) => (
-                            <div key={i} style={{
-                                padding: "clamp(24px, 3vw, 40px)",
-                                background: "var(--black)",
-                                border: "1px solid var(--border-green)",
-                                borderRadius: 8
-                            }}>
-                                <div style={{ fontSize: 24, marginBottom: 14 }}>⭐⭐⭐⭐⭐</div>
-                                <p className="body-txt" style={{ marginBottom: 20, fontStyle: "italic" }}>"{t.quote}"</p>
-                                <div style={{ fontSize: 16, fontWeight: 600 }}>{t.name}</div>
-                                <div style={{ fontSize: 14, color: "var(--green-highlight)" }}>{t.location}</div>
+            {/* CTA + FORM */}
+            <section id="contact-form" className="partner-section" style={{ background: "var(--mid)" }}>
+                <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+                        <div>
+                            <div className="tag">Let's Build The Next KROSS Together</div>
+                            <div className="heading" style={{ marginBottom: 24 }}>Ready To Get Started?</div>
+                            <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 40 }}>
+                                Join our global network and bring the Kross experience to your community.
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                <div style={{ fontSize: 11, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.45, marginBottom: 4 }}>Get In Touch</div>
+                                <a href="mailto:franchise@krosspadel.com" style={{ color: "var(--white)", textDecoration: "none", fontSize: 14 }}>franchise@krosspadel.com</a>
+                                <a href="tel:+6620260261" style={{ color: "var(--white)", textDecoration: "none", fontSize: 14 }}>+66 2 026 0261</a>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ */}
-            <section className="partner-section">
-                <div style={{ maxWidth: 800, margin: "0 auto" }}>
-                    <div className="tag">Questions?</div>
-                    <div className="heading" style={{ marginBottom: 48 }}>Frequently Asked Questions</div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                        {faqs.map((faq, i) => (
-                            <div key={i} style={{
-                                border: "1px solid var(--border)",
-                                borderRadius: 8,
-                                overflow: "hidden",
-                                background: expandedFaq === i ? "rgba(45, 168, 79, 0.05)" : "transparent"
-                            }}>
-                                <button
-                                    onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                                    style={{
-                                        width: "100%",
-                                        padding: "20px clamp(16px, 3vw, 24px)",
-                                        background: "transparent",
-                                        border: "none",
-                                        color: "var(--white)",
-                                        fontSize: "clamp(14px, 2vw, 16px)",
-                                        fontWeight: 600,
-                                        cursor: "pointer",
-                                        textAlign: "left",
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        gap: 16
-                                    }}>
-                                    <span>{faq.q}</span>
-                                    <span style={{
-                                        flexShrink: 0,
-                                        fontSize: 20,
-                                        transition: "transform 0.3s ease",
-                                        transform: expandedFaq === i ? "rotate(180deg)" : "rotate(0deg)"
-                                    }}>⌄</span>
-                                </button>
-                                {expandedFaq === i && (
-                                    <div style={{ padding: "0 clamp(16px, 3vw, 24px) 20px", borderTop: "1px solid var(--border)" }}>
-                                        <p className="body-txt">{faq.a}</p>
-                                    </div>
-                                )}
+                        </div>
+                        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                            <div className="partner-form-row">
+                                <div className="form-group">
+                                    <label>Full Name *</label>
+                                    <input value={form.name} onChange={e => handleChange("name", e.target.value)} placeholder="Your full name" required />
+                                </div>
+                                <div className="form-group">
+                                    <label>Company</label>
+                                    <input value={form.company} onChange={e => handleChange("company", e.target.value)} placeholder="Company name" />
+                                </div>
                             </div>
-                        ))}
+                            <div className="partner-form-row">
+                                <div className="form-group">
+                                    <label>Email *</label>
+                                    <input type="email" value={form.email} onChange={e => handleChange("email", e.target.value)} placeholder="your@email.com" required />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone / LINE</label>
+                                    <input value={form.phone} onChange={e => handleChange("phone", e.target.value)} placeholder="+66 or LINE ID" />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Message</label>
+                                <textarea value={form.message} onChange={e => handleChange("message", e.target.value)} placeholder="Tell us about your interest, location, or any questions..." style={{ height: 120 }} />
+                            </div>
+                            <button type="submit" className="btn-primary" disabled={sending}>
+                                {sending ? "Sending..." : "Send Inquiry"}
+                            </button>
+                        </form>
                     </div>
                 </div>
             </section>

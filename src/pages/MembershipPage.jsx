@@ -24,7 +24,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
         }} />
         <div className="hero-content">
           <div className="hero-eyebrow">Unlimited Access</div>
-          <div className="hero-title">Membership Plans</div>
+          <div className="hero-title">Book & Pricing</div>
           <div className="hero-sub">Join thousands of players — priority booking, exclusive events & more</div>
         </div>
       </section>

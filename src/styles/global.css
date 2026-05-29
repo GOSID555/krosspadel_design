@@ -794,7 +794,7 @@ section {
 .story-gallery-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .12) 55%, transparent 100%);
+    background: linear-gradient(to top, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .08) 55%, transparent 100%);
 }
 
 .story-gallery-feature-body {
