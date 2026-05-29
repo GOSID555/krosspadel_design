@@ -40,7 +40,7 @@ export default function LifestylePage({ navigate }) {
       </section>
 
       {/* BRANDS SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="tag">The KROSS Universe</div>
           <div className="heading" style={{ marginBottom: 64 }}>Brands & Experiences</div>
@@ -88,7 +88,7 @@ export default function LifestylePage({ navigate }) {
 
       {/* PILLARS SECTION */}
       <section style={{
-        padding: "100px 56px",
+        padding: "100px clamp(24px, 5vw, 72px)",
         background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
       }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -127,7 +127,7 @@ export default function LifestylePage({ navigate }) {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Join The Movement</div>
           <div className="heading" style={{ marginBottom: 32 }}>Be Part Of The Lifestyle</div>

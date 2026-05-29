@@ -18,41 +18,112 @@ export default function VenuesPage({ navigate, openBook }) {
         </div>
       </section>
 
-      {/* VENUES SECTION */}
-      <section style={{ padding: "100px 56px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="tag">Explore KROSS</div>
-          <div className="heading" style={{ marginBottom: 64 }}>World-Class Facilities</div>
-          <p className="body-txt" style={{ fontSize: "18px", marginBottom: 64, lineHeight: "1.8", opacity: 0.9 }}>
-            Each KROSS venue is designed with premium padel in mind. International standard courts, professional coaching, and vibrant community spaces await you.
-          </p>
-          <div className="venues-grid" style={{ marginBottom: 72 }}>
-            {venues.map(v => {
-              const vCourtCount = v.courtsInfo ? v.courtsInfo.match(/\d+/)?.[0] : null;
-              return (
-                <div className="venue-card" key={v.id} onClick={() => navigate("venue-" + v.id)}>
-                  <div className="venue-bg-div" style={{
-                    background: v.bgImage ? `url(${v.bgImage}) center/cover no-repeat` : v.bg
-                  }} />
-                  <div className="venue-card-inner">
-                    <div className="venue-overlay" />
-                    <div className="venue-info">
-                      <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>Est. 2025</div>
-                      <div className="venue-name">{v.name}</div>
-                      <div className="venue-loc">{v.loc}</div>
-                      <div className="venue-cta">View Venue →</div>
-                    </div>
-                    {vCourtCount && (
-                      <div style={{
-                        position: "absolute", bottom: 24, right: 24,
-                        fontSize: 14, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55
-                      }}>{vCourtCount} Courts</div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+      {/* LIFESTYLE BENTO */}
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px) 80px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        {/* Headline */}
+        <div style={{ marginBottom: 48 }}>
+          <div className="tag">Explore Kross</div>
+          <div style={{
+            fontFamily: "'Gotham Narrow', sans-serif",
+            fontSize: "clamp(44px, 8vw, 96px)",
+            lineHeight: 0.92,
+            marginBottom: 24,
+            textTransform: "uppercase"
+          }}>
+            More Than<br />A Padel Club.
           </div>
+          <p className="body-txt" style={{ maxWidth: 520, marginBottom: 20, fontSize: 15, opacity: 0.7 }}>
+            Premium courts, wellness spaces, recovery areas and a vibrant community designed around movement and connection.
+          </p>
+          <div style={{ fontSize: 10, letterSpacing: "2.5px", opacity: 0.28, textTransform: "uppercase" }}>
+            PADEL · WELLNESS · RECOVERY · FOOD · BAR · COMMUNITY · TOURNAMENTS
+          </div>
+        </div>
+
+        {/* Bento grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gridTemplateRows: "300px 190px",
+          gap: 6
+        }}>
+          {[
+            { label: "Padel",     col: "1/3", row: "1",   bg: "linear-gradient(145deg,#0d2b14,#1a4a28)" },
+            { label: "Bar",       col: "3",   row: "1/3", bg: "linear-gradient(145deg,#1a1508,#2e2710)" },
+            { label: "Wellness",  col: "4",   row: "1",   bg: "linear-gradient(145deg,#0d1a28,#1a2e40)" },
+            { label: "Recovery",  col: "1",   row: "2",   bg: "linear-gradient(145deg,#0d1a0d,#152614)" },
+            { label: "Food",      col: "2",   row: "2",   bg: "linear-gradient(145deg,#1a0e08,#2e1a10)" },
+            { label: "Community", col: "4",   row: "2",   bg: "linear-gradient(145deg,#0d0d1a,#1a1a2e)" },
+          ].map((cell, i) => (
+            <div
+              key={i}
+              style={{
+                gridColumn: cell.col,
+                gridRow: cell.row,
+                background: cell.bg,
+                position: "relative",
+                overflow: "hidden",
+                cursor: "default"
+              }}
+            >
+              <div style={{
+                position: "absolute",
+                bottom: 20, left: 20,
+                display: "flex", alignItems: "center", gap: 8,
+                fontSize: 9, letterSpacing: "3px",
+                textTransform: "uppercase", opacity: 0.5
+              }}>
+                <span style={{ width: 14, height: 1, background: "var(--green-highlight)", display: "inline-block", flexShrink: 0 }} />
+                {cell.label}
+              </div>
+            </div>
+          ))}
+        </div>
+        </div>
+      </section>
+
+      {/* VENUES */}
+      <section style={{ padding: "0 clamp(24px, 5vw, 72px) 100px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24, marginBottom: 52 }}>
+          <div>
+            <div className="tag">Our Venues</div>
+            <div className="heading" style={{ marginBottom: 0 }}>Our<br />Locations.</div>
+          </div>
+          <div>
+            <p className="body-txt" style={{ marginBottom: 0, maxWidth: 360, opacity: 0.75 }}>
+              World-class padel across Bangkok — each venue designed for the neighbourhood it serves.
+            </p>
+          </div>
+        </div>
+        <div className="venues-grid">
+          {venues.map(v => {
+            const vCourtCount = v.courtsInfo ? v.courtsInfo.match(/\d+/)?.[0] : null;
+            return (
+              <div className="venue-card" key={v.id} onClick={() => navigate("venue-" + v.id)}>
+                <div className="venue-bg-div" style={{
+                  background: v.bgImage ? `url(${v.bgImage}) center/cover no-repeat` : v.bg
+                }} />
+                <div className="venue-card-inner">
+                  <div className="venue-overlay" />
+                  <div className="venue-info">
+                    <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>Est. 2025</div>
+                    <div className="venue-name">{v.name}</div>
+                    <div className="venue-loc">{v.loc}</div>
+                    <div className="venue-cta">View Venue →</div>
+                  </div>
+                  {vCourtCount && (
+                    <div style={{
+                      position: "absolute", bottom: 24, right: 24,
+                      fontSize: 14, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55
+                    }}>{vCourtCount} Courts</div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         </div>
       </section>
 
@@ -78,7 +149,7 @@ export default function VenuesPage({ navigate, openBook }) {
       </section>
 
       {/* CTA SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Ready to Play?</div>
           <div className="heading" style={{ marginBottom: 32 }}>Book Your Court Today</div>

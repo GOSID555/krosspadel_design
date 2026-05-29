@@ -34,7 +34,15 @@ function AppInner() {
   const [notifMsg, setNotifMsg] = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  const navigate = (p) => { setPage(p); window.scrollTo(0, 0); };
+  const navigate = (p) => { setPage(p); window.scrollTo(0, 0); window.location.hash = ""; };
+
+  useEffect(() => {
+    const onHash = () => {
+      if (window.location.hash === "#admin") { setPage("admin"); window.scrollTo(0, 0); }
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
   const openBook = () => window.open("https://apps.apple.com/kz/app/kross-padel/id6741785490", "_blank");
   const notify = (msg) => { setNotifMsg(msg); setTimeout(() => setNotifMsg(""), 3200); };
 
@@ -80,7 +88,7 @@ function AppInner() {
       {page === "admin-activities" && (user ? <AdminActivitiesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-membership" && (user ? <AdminMembershipPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {venueMatch && <VenueDetailPage venue={venueMatch} navigate={navigate} openBook={openBook} />}
-      {page.startsWith("story-") && <StoryDetailPage navigate={navigate} />}
+      {page.startsWith("story-") && <StoryDetailPage navigate={navigate} page={page} />}
       {page.startsWith("activity-") && <ActivityDetailPage navigate={navigate} />}
     </>
   );

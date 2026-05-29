@@ -30,7 +30,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
       </section>
 
       {/* MEMBERSHIP SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="tag">Join The Club</div>
           <div className="heading" style={{ marginBottom: 64 }}>Choose Your Plan</div>
@@ -39,70 +39,108 @@ export default function MembershipPage({ navigate, notify, openBook }) {
           </p>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 32
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+            gap: 24,
+            alignItems: "stretch"
           }}>
             {plans.map(p => (
-              <div className={`plan-card-lg${p.featured ? " featured" : ""}`} key={p.docId || p.name} style={{
-                padding: 40,
-                border: `1px solid var(--border)`,
-                background: p.featured ? "rgba(45, 168, 79, 0.1)" : "var(--mid2)",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-                position: "relative",
-                borderColor: p.featured ? "var(--green-highlight)" : "var(--border)",
-              }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--green-highlight)";
-                  e.currentTarget.style.background = p.featured ? "rgba(45, 168, 79, 0.15)" : "rgba(45, 168, 79, 0.05)";
-                  e.currentTarget.style.transform = "translateY(-8px)";
+              <div
+                key={p.docId || p.name}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "40px 36px",
+                  border: `1px solid ${p.featured ? "var(--green-highlight)" : "var(--border)"}`,
+                  background: p.featured ? "rgba(45,168,79,0.08)" : "var(--mid2)",
+                  position: "relative",
+                  transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                  cursor: "pointer",
                 }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = p.featured ? "var(--green-highlight)" : "var(--border)";
-                  e.currentTarget.style.background = p.featured ? "rgba(45, 168, 79, 0.1)" : "var(--mid2)";
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = "translateY(-6px)";
+                  e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.4)";
+                }}
+                onMouseLeave={e => {
                   e.currentTarget.style.transform = "translateY(0)";
-                }}>
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
                 {p.featured && (
                   <div style={{
-                    position: "absolute",
-                    top: "-12px",
-                    left: "20px",
-                    background: "var(--green-highlight)",
-                    color: "var(--dark)",
-                    padding: "4px 12px",
-                    borderRadius: "4px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px"
+                    position: "absolute", top: -1, left: 0, right: 0,
+                    height: 3, background: "var(--green-highlight)"
+                  }} />
+                )}
+                {p.featured && (
+                  <div style={{
+                    display: "inline-flex", alignSelf: "flex-start",
+                    background: "var(--green-highlight)", color: "var(--dark)",
+                    fontSize: 9, fontWeight: 700, letterSpacing: "2px",
+                    textTransform: "uppercase", padding: "4px 10px",
+                    marginBottom: 20
                   }}>
-                    POPULAR
+                    MOST POPULAR
                   </div>
                 )}
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{
-                    fontFamily: "'Gotham Narrow', sans-serif",
-                    fontSize: "28px",
-                    letterSpacing: "1.5px",
-                    marginBottom: 12,
-                    lineHeight: 1.1
-                  }}>
-                    {p.name}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                    <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--green-highlight)" }}>
-                      {p.price}
-                    </div>
-                    <div style={{ fontSize: "14px", opacity: 0.6 }}>/month</div>
-                  </div>
+
+                {/* Plan name */}
+                <div style={{
+                  fontFamily: "'Gotham Narrow', sans-serif",
+                  fontSize: "clamp(20px, 2.5vw, 26px)",
+                  letterSpacing: "1.5px",
+                  lineHeight: 1.1,
+                  marginBottom: 4,
+                  marginTop: p.featured ? 0 : 28
+                }}>
+                  {p.name}
                 </div>
-                <p className="body-txt" style={{ fontSize: "14px", marginBottom: 32, lineHeight: "1.6" }}>
-                  {p.perks}
-                </p>
+                {p.priceLabel && (
+                  <div style={{ fontSize: 11, opacity: 0.45, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 24 }}>
+                    {p.priceLabel}
+                  </div>
+                )}
+
+                {/* Divider */}
+                <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 24 }} />
+
+                {/* Price */}
+                <div style={{ marginBottom: 8 }}>
+                  <span style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 13, opacity: 0.5, verticalAlign: "super" }}>฿</span>
+                  <span style={{ fontSize: "clamp(40px, 6vw, 56px)", fontWeight: 700, color: "var(--green-highlight)", letterSpacing: "-1px" }}>
+                    {p.price}
+                  </span>
+                </div>
+                {p.validity && (
+                  <div style={{ fontSize: 11, opacity: 0.38, lineHeight: 1.6, marginBottom: 28 }}>{p.validity}</div>
+                )}
+
+                {/* Perks */}
+                {p.perks && (
+                  <div style={{ flex: 1, marginBottom: 36 }}>
+                    {p.perks.split("\n").filter(l => l.trim()).map((line, i) => (
+                      <div key={i} style={{ display: "flex", gap: 12, marginBottom: 12, alignItems: "flex-start" }}>
+                        <div style={{
+                          width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1,
+                          background: "rgba(45,168,79,0.15)",
+                          border: "1px solid rgba(45,168,79,0.4)",
+                          display: "flex", alignItems: "center", justifyContent: "center"
+                        }}>
+                          <span style={{ color: "var(--green-highlight)", fontSize: 10, lineHeight: 1 }}>✓</span>
+                        </div>
+                        <span style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.75 }}>
+                          {line.replace(/^[-•·]\s*/, "")}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CTA */}
                 <button
                   className={p.featured ? "btn-primary" : "btn-ghost"}
-                  onClick={() => notify(`${p.name} plan — we'll contact you shortly`)}
-                  style={{ width: "100%" }}>
+                  onClick={() => notify(`${p.name} — we'll contact you shortly`)}
+                  style={{ width: "100%", marginTop: "auto" }}
+                >
                   Get Started
                 </button>
               </div>
@@ -113,7 +151,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
 
       {/* BENEFITS SECTION */}
       <section style={{
-        padding: "100px 56px",
+        padding: "100px clamp(24px, 5vw, 72px)",
         background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
       }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -155,7 +193,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
       </section>
 
       {/* CTA SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Ready To Join?</div>
           <div className="heading" style={{ marginBottom: 32 }}>Become A Member Today</div>

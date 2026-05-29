@@ -44,7 +44,7 @@ export default function StoriesPage({ navigate }) {
       </section>
 
       {/* STORIES */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ marginBottom: 40 }}>
           <div className="tag">Community Highlights</div>
@@ -61,7 +61,7 @@ export default function StoriesPage({ navigate }) {
         {featured && (
           <div className="stories-gallery">
             {/* FEATURED */}
-            <div className="story-gallery-feature" onClick={() => featured.url ? window.open(featured.url, "_blank", "noopener noreferrer") : navigate("story-" + featured.docId)}>
+            <div className="story-gallery-feature" onClick={() => navigate("story-" + featured.docId)}>
               <StoryBg story={featured} />
               <div className="story-gallery-overlay" />
               <div className="story-gallery-feature-body">
@@ -79,7 +79,7 @@ export default function StoriesPage({ navigate }) {
             {(second || third) && (
               <div className="story-gallery-side">
                 {second && (
-                  <div className="story-gallery-small" onClick={() => second.url ? window.open(second.url, "_blank", "noopener noreferrer") : navigate("story-" + second.docId)}>
+                  <div className="story-gallery-small" onClick={() => navigate("story-" + second.docId)}>
                     <StoryBg story={second} />
                     <div className="story-gallery-overlay" />
                     <div className="story-gallery-small-body">
@@ -90,7 +90,7 @@ export default function StoriesPage({ navigate }) {
                   </div>
                 )}
                 {third && (
-                  <div className="story-gallery-small" onClick={() => third.url ? window.open(third.url, "_blank", "noopener noreferrer") : navigate("story-" + third.docId)}>
+                  <div className="story-gallery-small" onClick={() => navigate("story-" + third.docId)}>
                     <StoryBg story={third} />
                     <div className="story-gallery-overlay" />
                     <div className="story-gallery-small-body">
@@ -118,7 +118,7 @@ export default function StoriesPage({ navigate }) {
                 key={s.docId}
                 className="story-gallery-small"
                 style={{ height: 320 }}
-                onClick={() => s.url ? window.open(s.url, "_blank", "noopener noreferrer") : navigate("story-" + s.docId)}
+                onClick={() => navigate("story-" + s.docId)}
               >
                 <StoryBg story={s} />
                 <div className="story-gallery-overlay" />
@@ -136,7 +136,7 @@ export default function StoriesPage({ navigate }) {
 
       {/* CTA */}
       <section style={{
-        padding: "clamp(56px, 8vw, 100px) clamp(20px, 5vw, 56px)",
+        padding: "100px clamp(24px, 5vw, 72px)",
         background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
       }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>

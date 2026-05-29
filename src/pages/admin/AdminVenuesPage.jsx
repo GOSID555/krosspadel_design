@@ -147,6 +147,8 @@ export default function AdminVenuesPage({ navigate }) {
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 });
+    const [galleryDragOver, setGalleryDragOver] = useState(false);
     const [colorPickerOpen, setColorPickerOpen] = useState(null);
     const colorPickerRef = useRef(null);
     const dragIdx = useRef(null);
@@ -217,15 +219,33 @@ export default function AdminVenuesPage({ navigate }) {
     const handleFeatureAdd = () => setForm(f => ({ ...f, features: [...(f.features || []), { num: "", label: "" }] }));
     const handleFeatureRemove = (index) => setForm(f => ({ ...f, features: (f.features || []).filter((_, i) => i !== index) }));
 
-    const handleGalleryUpload = async (e) => {
-        const files = Array.from(e.target.files || []);
+    const uploadGalleryFiles = async (files) => {
         if (!files.length) return;
-        setUploading(true);
         const docId = editing === "new" ? "temp" : editing;
-        const urls = await Promise.all(files.map(f => uploadImage(f, "venues", docId)));
+        setUploading(true);
+        setUploadProgress({ done: 0, total: files.length });
+        const urls = [];
+        for (const file of files) {
+            const url = await uploadImage(file, "venues", docId);
+            urls.push(url);
+            setUploadProgress(p => ({ ...p, done: p.done + 1 }));
+        }
         setForm(f => ({ ...f, gallery: [...(f.gallery || []), ...urls] }));
         setUploading(false);
+        setUploadProgress({ done: 0, total: 0 });
+    };
+
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files || []);
         e.target.value = "";
+        await uploadGalleryFiles(files);
+    };
+
+    const handleGalleryDrop = async (e) => {
+        e.preventDefault();
+        setGalleryDragOver(false);
+        const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+        await uploadGalleryFiles(files);
     };
 
     const handleGalleryRemove = (index) => {
@@ -529,45 +549,77 @@ export default function AdminVenuesPage({ navigate }) {
                             <div className="tag">Gallery</div>
                             <div style={{ opacity: 0.7, fontSize: 13 }}>รูปภาพ gallery ที่แสดงด้านล่างของหน้า venue</div>
                         </div>
-                        <label style={{ cursor: "pointer" }}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={handleGalleryUpload}
-                                disabled={uploading}
-                                style={{ display: "none" }}
-                            />
-                            <button
-                                type="button"
-                                className="btn-ghost"
-                                disabled={uploading}
-                                onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}
-                                style={{ fontSize: 13 }}
-                            >
-                                {uploading ? "Uploading..." : "+ Add Photos"}
-                            </button>
-                        </label>
-                    </div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                        {(form.gallery || []).map((url, i) => (
-                            <div key={i} style={{ position: "relative", width: 110, height: 75 }}>
-                                <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
-                                <button
-                                    onClick={() => handleGalleryRemove(i)}
-                                    style={{
-                                        position: "absolute", top: 4, right: 4,
-                                        background: "rgba(0,0,0,0.75)", border: "none", color: "white",
-                                        width: 22, height: 22, borderRadius: "50%", cursor: "pointer",
-                                        fontSize: 14, lineHeight: 1, padding: 0
-                                    }}
-                                >×</button>
-                            </div>
-                        ))}
-                        {(form.gallery || []).length === 0 && (
-                            <div style={{ opacity: 0.35, fontSize: 13 }}>ยังไม่มีรูป</div>
+                        {(form.gallery || []).length > 0 && !uploading && (
+                            <label style={{ cursor: "pointer" }}>
+                                <input type="file" accept="image/*" multiple onChange={handleGalleryUpload} style={{ display: "none" }} />
+                                <button type="button" className="btn-ghost" style={{ fontSize: 12 }}
+                                    onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}>
+                                    + Add More
+                                </button>
+                            </label>
                         )}
                     </div>
+
+                    {/* Drop zone */}
+                    <label
+                        onDragOver={(e) => { e.preventDefault(); setGalleryDragOver(true); }}
+                        onDragLeave={() => setGalleryDragOver(false)}
+                        onDrop={handleGalleryDrop}
+                        style={{
+                            display: "block",
+                            border: `2px dashed ${galleryDragOver ? "var(--green-highlight)" : "rgba(255,255,255,0.15)"}`,
+                            borderRadius: 8,
+                            padding: "28px 20px",
+                            textAlign: "center",
+                            cursor: uploading ? "default" : "pointer",
+                            background: galleryDragOver ? "rgba(45,168,79,0.06)" : "transparent",
+                            transition: "border-color 0.15s, background 0.15s",
+                            marginBottom: 16
+                        }}
+                    >
+                        <input type="file" accept="image/*" multiple onChange={handleGalleryUpload} disabled={uploading} style={{ display: "none" }} />
+                        {uploading ? (
+                            <div>
+                                <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 6 }}>
+                                    Uploading {uploadProgress.done}/{uploadProgress.total}...
+                                </div>
+                                <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
+                                    <div style={{
+                                        height: "100%",
+                                        width: `${uploadProgress.total ? (uploadProgress.done / uploadProgress.total) * 100 : 0}%`,
+                                        background: "var(--green-highlight)",
+                                        transition: "width 0.2s"
+                                    }} />
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <div style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }}>⬆</div>
+                                <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 4 }}>ลากรูปมาวางที่นี่ หรือคลิกเพื่อเลือก</div>
+                                <div style={{ fontSize: 11, opacity: 0.35 }}>เลือกหลายรูปพร้อมกันได้</div>
+                            </>
+                        )}
+                    </label>
+
+                    {/* Thumbnails */}
+                    {(form.gallery || []).length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                            {(form.gallery || []).map((url, i) => (
+                                <div key={i} style={{ position: "relative", width: 100, height: 70 }}>
+                                    <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
+                                    <button
+                                        onClick={() => handleGalleryRemove(i)}
+                                        style={{
+                                            position: "absolute", top: 3, right: 3,
+                                            background: "rgba(0,0,0,0.75)", border: "none", color: "white",
+                                            width: 20, height: 20, borderRadius: "50%", cursor: "pointer",
+                                            fontSize: 13, lineHeight: 1, padding: 0
+                                        }}
+                                    >×</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <button className="btn-primary" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save Venue"}

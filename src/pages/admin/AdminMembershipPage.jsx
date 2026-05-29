@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
-const EMPTY = { name: "", price: "", perks: "", featured: false };
+const EMPTY = { name: "", price: "", priceLabel: "", validity: "", perks: "", featured: false };
 
 function MembershipPreview({ form }) {
     return (
@@ -29,19 +29,25 @@ function MembershipPreview({ form }) {
                             POPULAR
                         </div>
                     )}
-                    <div style={{ marginBottom: 20 }}>
+                    <div style={{ marginBottom: 16 }}>
                         <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 28, letterSpacing: "1.5px", marginBottom: 10, lineHeight: 1 }}>
                             {form.name || "Plan Name"}
                         </div>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                             <div style={{ fontSize: 30, fontWeight: 700, color: "var(--green-highlight)" }}>
-                                {form.price || "฿0"}
+                                ฿{form.price || "0"}
                             </div>
-                            <div style={{ fontSize: 12, opacity: 0.5 }}>/month</div>
+                            {form.priceLabel && <div style={{ fontSize: 11, opacity: 0.5 }}>{form.priceLabel}</div>}
                         </div>
+                        {form.validity && <div style={{ fontSize: 11, opacity: 0.4, marginTop: 6 }}>{form.validity}</div>}
                     </div>
-                    <div style={{ fontSize: 12, opacity: 0.55, lineHeight: 1.9, marginBottom: 20, whiteSpace: "pre-line" }}>
-                        {form.perks || "Perks will appear here..."}
+                    <div style={{ fontSize: 12, opacity: 0.55, lineHeight: 1.9, marginBottom: 20 }}>
+                        {(form.perks || "Perks will appear here...").split("\n").filter(l => l.trim()).map((line, i) => (
+                            <div key={i} style={{ display: "flex", gap: 8, marginBottom: 4 }}>
+                                <span style={{ color: "var(--green-highlight)", flexShrink: 0 }}>·</span>
+                                <span>{line.replace(/^[-•·]\s*/, "")}</span>
+                            </div>
+                        ))}
                     </div>
                     <div style={{
                         padding: "12px 20px", textAlign: "center", fontSize: 10, letterSpacing: "2px",
@@ -66,7 +72,7 @@ function MembershipPreview({ form }) {
                         <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 22, letterSpacing: "1.5px", marginBottom: 4 }}>
                             {form.name || "Plan Name"}
                         </div>
-                        <div style={{ fontSize: 12, opacity: 0.5 }}>From <strong style={{ color: "var(--white)", opacity: 1 }}>{form.price || "฿0"}</strong> / month</div>
+                        <div style={{ fontSize: 12, opacity: 0.5 }}>฿<strong style={{ color: "var(--white)", opacity: 1 }}>{form.price || "0"}</strong>{form.priceLabel ? ` · ${form.priceLabel}` : ""}</div>
                     </div>
                 </div>
             </div>
@@ -161,23 +167,46 @@ export default function AdminMembershipPage({ navigate }) {
                         />
                     </div>
                     {/* Price */}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                        <div>
+                            <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Package Price (THB)</div>
+                            <input
+                                value={form.price || ""}
+                                onChange={e => handleChange("price", e.target.value)}
+                                placeholder="e.g. 9,200"
+                                style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                            />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Price Label</div>
+                            <input
+                                value={form.priceLabel || ""}
+                                onChange={e => handleChange("priceLabel", e.target.value)}
+                                placeholder="e.g. All Kross Clubs"
+                                style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                            />
+                        </div>
+                    </div>
+                    {/* Validity */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Price (e.g. ฿2,500)</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Conditions / Validity</div>
                         <input
-                            value={form.price || ""}
-                            onChange={e => handleChange("price", e.target.value)}
+                            value={form.validity || ""}
+                            onChange={e => handleChange("validity", e.target.value)}
+                            placeholder="e.g. Valid 3 months, Non-transferable. Use for regular booking."
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
                         />
                     </div>
                     {/* Perks */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Perks / Description</div>
-                        <div style={{ fontSize: 11, opacity: 0.4, marginBottom: 8 }}>กด Enter เพื่อขึ้นบรรทัดใหม่</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Key Perks (bullet list)</div>
+                        <div style={{ fontSize: 11, opacity: 0.4, marginBottom: 8 }}>แต่ละบรรทัด = 1 bullet · กด Enter ขึ้นบรรทัดใหม่</div>
                         <textarea
                             value={form.perks || ""}
                             onChange={e => handleChange("perks", e.target.value)}
-                            rows={6}
-                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
+                            rows={7}
+                            placeholder={"Kross Pass: 20 hrs 17,400 B\nKross Pass: 30 hrs 25,600 B\n50/100 hours none expired date."}
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical", lineHeight: 1.7 }}
                         />
                     </div>
                     {/* Featured toggle */}

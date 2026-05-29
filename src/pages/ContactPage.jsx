@@ -42,7 +42,7 @@ export default function ContactPage({ navigate, notify }) {
       </section>
 
       {/* CONTACT SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="grid-contact" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 100, alignItems: "start" }}>
             {/* CONTACT INFO */}
@@ -98,7 +98,7 @@ export default function ContactPage({ navigate, notify }) {
       </section>
 
       {/* VENUE CONTACTS SECTION */}
-      <section style={{ padding: "100px 56px", background: "var(--mid2)" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)", background: "var(--mid2)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="tag">Venues</div>
           <div className="heading" style={{ marginBottom: 56 }}>Find Us</div>

@@ -36,7 +36,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
       </section>
 
       {/* ACTIVITIES SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="tag">Our Programs</div>
           <div className="heading" style={{ marginBottom: 64 }}>Activities & Programs</div>
@@ -85,7 +85,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
 
       {/* BENEFITS SECTION */}
       <section style={{
-        padding: "100px 56px",
+        padding: "100px clamp(24px, 5vw, 72px)",
         background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
       }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -127,7 +127,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
       </section>
 
       {/* CTA SECTION */}
-      <section style={{ padding: "100px 56px" }}>
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
           <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Start Your Journey</div>
           <div className="heading" style={{ marginBottom: 32 }}>Find Your Perfect Activity</div>

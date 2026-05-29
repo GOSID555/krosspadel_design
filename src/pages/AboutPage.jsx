@@ -38,7 +38,7 @@ export default function AboutPage({ navigate }) {
             </section>
 
             {/* OUR STORY TIMELINE */}
-            <section style={{ padding: "100px 56px" }}>
+            <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
                 <div style={{ maxWidth: "800px", margin: "0 auto" }}>
                     <div className="tag">Our Journey</div>
                     <div className="heading" style={{ marginBottom: 64 }}>Our Story</div>
@@ -71,7 +71,7 @@ export default function AboutPage({ navigate }) {
 
             {/* MISSION & VISION */}
             <section style={{
-                padding: "100px 56px",
+                padding: "100px clamp(24px, 5vw, 72px)",
                 background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)",
                 marginTop: 0
             }}>
@@ -96,7 +96,7 @@ export default function AboutPage({ navigate }) {
             </section>
 
             {/* WHY KROSS */}
-            <section style={{ padding: "100px 56px" }}>
+            <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
                 <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                     <div className="tag">The KROSS Difference</div>
                     <div className="heading" style={{ marginBottom: 64 }}>Why Choose KROSS?</div>
@@ -130,7 +130,7 @@ export default function AboutPage({ navigate }) {
             </section>
 
             {/* TEAM SECTION */}
-            <section style={{ padding: "100px 56px" }}>
+            <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
                 <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                     <div className="tag">Meet The Team</div>
                     <div className="heading" style={{ marginBottom: 64 }}>Our Founders & Leadership</div>
@@ -167,7 +167,7 @@ export default function AboutPage({ navigate }) {
 
             {/* FINAL CTA */}
             <section style={{
-                padding: "100px 56px",
+                padding: "100px clamp(24px, 5vw, 72px)",
                 background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
             }}>
                 <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>

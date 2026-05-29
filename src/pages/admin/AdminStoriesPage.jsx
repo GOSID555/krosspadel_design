@@ -3,7 +3,7 @@ import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { uploadImage } from "../../supabaseClient";
 
-const EMPTY = { title: "", excerpt: "", date: "", cat: "", bg: "", imageUrl: "" };
+const EMPTY = { title: "", author: "", excerpt: "", content: "", date: "", cat: "", bg: "", imageUrl: "", gallery: [] };
 
 function parseGradientColors(bg) {
     const matches = bg?.match(/#[0-9a-fA-F]{3,6}/g);
@@ -69,6 +69,8 @@ export default function AdminStoriesPage({ navigate }) {
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 });
+    const [dragOver, setDragOver] = useState(false);
     const [gradColors, setGradColors] = useState(["#0a1a0d", "#1a3d1a"]);
 
     const load = async () => {
@@ -123,6 +125,39 @@ export default function AdminStoriesPage({ navigate }) {
         }
     };
 
+    const uploadGalleryFiles = async (files) => {
+        if (!files.length) return;
+        const docId = editing === "new" ? "temp" : editing;
+        setUploading(true);
+        setUploadProgress({ done: 0, total: files.length });
+        const urls = [];
+        for (const file of files) {
+            const url = await uploadImage(file, "stories", docId);
+            urls.push(url);
+            setUploadProgress(p => ({ ...p, done: p.done + 1 }));
+        }
+        setForm(f => ({ ...f, gallery: [...(f.gallery || []), ...urls] }));
+        setUploading(false);
+        setUploadProgress({ done: 0, total: 0 });
+    };
+
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files || []);
+        e.target.value = "";
+        await uploadGalleryFiles(files);
+    };
+
+    const handleGalleryDrop = async (e) => {
+        e.preventDefault();
+        setDragOver(false);
+        const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+        await uploadGalleryFiles(files);
+    };
+
+    const handleGalleryRemove = (index) => {
+        setForm(f => ({ ...f, gallery: (f.gallery || []).filter((_, i) => i !== index) }));
+    };
+
     // LIST
     if (!editing) return (
         <div style={{ minHeight: "100vh", background: "var(--dark)", padding: "120px 40px 40px" }}>
@@ -154,11 +189,8 @@ export default function AdminStoriesPage({ navigate }) {
     );
 
     // FORM
-    const fields = [
-        ["title", "Title"],
-        ["cat", "Category (e.g. Community, Tournament)"],
-        ["excerpt", "Excerpt"],
-    ];
+    const inputStyle = { width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 };
+    const labelStyle = { fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" };
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--dark)", padding: "120px 40px 40px" }}>
@@ -169,24 +201,42 @@ export default function AdminStoriesPage({ navigate }) {
             <div className="heading" style={{ fontSize: 32, marginBottom: 32 }}>{editing === "new" ? "New Story" : "Edit Story"}</div>
             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 560px) minmax(280px, 1fr)", gap: 48, alignItems: "start" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    {fields.map(([key, label]) => (
-                        <div key={key}>
-                            <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>{label}</div>
-                            {key === "excerpt"
-                                ? <textarea
-                                    value={form[key] || ""}
-                                    onChange={e => handleChange(key, e.target.value)}
-                                    rows={4}
-                                    style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
-                                />
-                                : <input
-                                    value={form[key] || ""}
-                                    onChange={e => handleChange(key, e.target.value)}
-                                    style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
-                                />
-                            }
-                        </div>
-                    ))}
+                    {/* Title */}
+                    <div>
+                        <div style={labelStyle}>Title</div>
+                        <input value={form.title || ""} onChange={e => handleChange("title", e.target.value)} style={inputStyle} />
+                    </div>
+                    {/* Author */}
+                    <div>
+                        <div style={labelStyle}>Author</div>
+                        <input value={form.author || ""} onChange={e => handleChange("author", e.target.value)} placeholder="e.g. John Smith" style={inputStyle} />
+                    </div>
+                    {/* Category */}
+                    <div>
+                        <div style={labelStyle}>Category (e.g. Community, Tournament)</div>
+                        <input value={form.cat || ""} onChange={e => handleChange("cat", e.target.value)} style={inputStyle} />
+                    </div>
+                    {/* Excerpt */}
+                    <div>
+                        <div style={labelStyle}>Excerpt (shown on cards & as lead paragraph)</div>
+                        <textarea
+                            value={form.excerpt || ""}
+                            onChange={e => handleChange("excerpt", e.target.value)}
+                            rows={3}
+                            style={{ ...inputStyle, resize: "vertical" }}
+                        />
+                    </div>
+                    {/* Content / Body */}
+                    <div>
+                        <div style={labelStyle}>Content (body text — use blank lines between paragraphs)</div>
+                        <textarea
+                            value={form.content || ""}
+                            onChange={e => handleChange("content", e.target.value)}
+                            rows={10}
+                            style={{ ...inputStyle, resize: "vertical", lineHeight: 1.7 }}
+                            placeholder={"Write the full story here...\n\nEach blank line becomes a new paragraph."}
+                        />
+                    </div>
                     {/* BG Gradient Color Picker */}
                     <div>
                         <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 10, textTransform: "uppercase" }}>BG Gradient (fallback if no image)</div>
@@ -260,6 +310,86 @@ export default function AdminStoriesPage({ navigate }) {
                             </div>
                         )}
                     </div>
+                    {/* Gallery */}
+                    <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <div>
+                                <div className="tag">Gallery</div>
+                                <div style={{ opacity: 0.7, fontSize: 13 }}>รูปภาพ gallery แสดงด้านล่างของหน้า story</div>
+                            </div>
+                            {(form.gallery || []).length > 0 && !uploading && (
+                                <label style={{ cursor: "pointer" }}>
+                                    <input type="file" accept="image/*" multiple onChange={handleGalleryUpload} style={{ display: "none" }} />
+                                    <button type="button" className="btn-ghost" style={{ fontSize: 12 }}
+                                        onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}>
+                                        + Add More
+                                    </button>
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Drop zone */}
+                        <label
+                            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                            onDragLeave={() => setDragOver(false)}
+                            onDrop={handleGalleryDrop}
+                            style={{
+                                display: "block",
+                                border: `2px dashed ${dragOver ? "var(--green-highlight)" : "rgba(255,255,255,0.15)"}`,
+                                borderRadius: 8,
+                                padding: "28px 20px",
+                                textAlign: "center",
+                                cursor: uploading ? "default" : "pointer",
+                                background: dragOver ? "rgba(45,168,79,0.06)" : "transparent",
+                                transition: "border-color 0.15s, background 0.15s",
+                                marginBottom: 16
+                            }}
+                        >
+                            <input type="file" accept="image/*" multiple onChange={handleGalleryUpload} disabled={uploading} style={{ display: "none" }} />
+                            {uploading ? (
+                                <div>
+                                    <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 6 }}>
+                                        Uploading {uploadProgress.done}/{uploadProgress.total}...
+                                    </div>
+                                    <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
+                                        <div style={{
+                                            height: "100%",
+                                            width: `${uploadProgress.total ? (uploadProgress.done / uploadProgress.total) * 100 : 0}%`,
+                                            background: "var(--green-highlight)",
+                                            transition: "width 0.2s"
+                                        }} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }}>⬆</div>
+                                    <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 4 }}>ลากรูปมาวางที่นี่ หรือคลิกเพื่อเลือก</div>
+                                    <div style={{ fontSize: 11, opacity: 0.35 }}>เลือกหลายรูปพร้อมกันได้</div>
+                                </>
+                            )}
+                        </label>
+
+                        {/* Thumbnails */}
+                        {(form.gallery || []).length > 0 && (
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                                {(form.gallery || []).map((url, i) => (
+                                    <div key={i} style={{ position: "relative", width: 100, height: 70 }}>
+                                        <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
+                                        <button
+                                            onClick={() => handleGalleryRemove(i)}
+                                            style={{
+                                                position: "absolute", top: 3, right: 3,
+                                                background: "rgba(0,0,0,0.75)", border: "none", color: "white",
+                                                width: 20, height: 20, borderRadius: "50%", cursor: "pointer",
+                                                fontSize: 13, lineHeight: 1, padding: 0
+                                            }}
+                                        >×</button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
                     <button className="btn-primary" onClick={handleSave} disabled={saving}>
                         {saving ? "Saving..." : "Save Story"}
                     </button>

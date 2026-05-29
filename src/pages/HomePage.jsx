@@ -70,8 +70,8 @@ export default function HomePage({ navigate, openBook }) {
             </section>
 
             {/* VENUES */}
-            <section style={{ padding: "100px 0 0" }}>
-                <div style={{ padding: "0 56px 52px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
+            <section style={{ padding: "100px clamp(24px, 5vw, 72px) 0" }}>
+                <div style={{ padding: "0 0 52px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
                     <div>
                         <div className="tag">Our Venues</div>
                         <div className="heading" style={{ marginBottom: 0 }}>{venueWord}<br />Locations.</div>
@@ -112,8 +112,8 @@ export default function HomePage({ navigate, openBook }) {
 
             {/* ACTIVITIES CAROUSEL */}
             {activities.length > 0 && (
-                <section style={{ padding: "100px 0 0" }}>
-                    <div style={{ padding: "0 56px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
+                <section style={{ padding: "100px clamp(24px, 5vw, 72px) 0" }}>
+                    <div style={{ padding: "0", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
                         <div>
                             <div className="tag">What We Offer</div>
                             <div className="heading" style={{ marginBottom: 0 }}>Activities.</div>
@@ -164,8 +164,8 @@ export default function HomePage({ navigate, openBook }) {
             )}
 
             {/* STORIES */}
-            <section style={{ background: "var(--mid)", padding: "100px 0 0" }}>
-                <div style={{ padding: "0 56px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
+            <section style={{ background: "var(--mid)", padding: "100px clamp(24px, 5vw, 72px) 0" }}>
+                <div style={{ padding: "0", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
                     <div>
                         <div className="tag">Our Stories</div>
                         <div className="heading" style={{ marginBottom: 0 }}>Latest<br />News.</div>
@@ -210,42 +210,40 @@ export default function HomePage({ navigate, openBook }) {
                         </div>
                     </div>
                 ) : (
-                    <div style={{ padding: "80px 56px", opacity: .3, fontSize: 12, letterSpacing: 3, textTransform: "uppercase" }}>No stories yet</div>
+                    <div style={{ padding: "80px 0", opacity: .3, fontSize: 12, letterSpacing: 3, textTransform: "uppercase" }}>No stories yet</div>
                 )}
 
             </section>
 
             {/* APP SHOWCASE */}
-            <section style={{ padding: "100px 56px", background: "linear-gradient(145deg, var(--green-dark) 0%, #0a0f0a 100%)" }}>
-                <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
-                    <div>
-                        <div className="tag">The App</div>
-                        <div className="heading">Join The<br />Kross App.</div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "32px 0 40px" }}>
-                            {[
-                                { title: "Profile & Level", desc: "Track your profile, stats and player level in one place." },
-                                { title: "Book Courts & Coaches", desc: "Easily book courts and coaching sessions anytime." },
-                                { title: "Open Matches", desc: "Join open matches and play with the community." },
-                                { title: "Activities & Lessons", desc: "Discover events, classes and training activities." },
-                            ].map((item, i) => (
-                                <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--green-highlight)", marginTop: 7, flexShrink: 0 }} />
-                                    <p className="body-txt" style={{ margin: 0, fontSize: 14 }}>
-                                        <strong style={{ color: "var(--white)" }}>{item.title}</strong> — {item.desc}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                        <a href="https://apps.apple.com/kz/app/kross-padel/id6741785490" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none", display: "inline-block" }}>Download on App Store</a>
+            <section style={{ background: "linear-gradient(145deg, var(--green-dark) 0%, #0a0f0a 100%)", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "stretch", minHeight: 600 }}>
+                <div style={{ padding: "100px clamp(24px, 5vw, 72px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <div className="tag">The App</div>
+                    <div className="heading">Join The<br />Kross App.</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "32px 0 40px" }}>
+                        {[
+                            { title: "Profile & Level", desc: "Track your profile, stats and player level in one place." },
+                            { title: "Book Courts & Coaches", desc: "Easily book courts and coaching sessions anytime." },
+                            { title: "Open Matches", desc: "Join open matches and play with the community." },
+                            { title: "Activities & Lessons", desc: "Discover events, classes and training activities." },
+                        ].map((item, i) => (
+                            <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--green-highlight)", marginTop: 7, flexShrink: 0 }} />
+                                <p className="body-txt" style={{ margin: 0, fontSize: 14 }}>
+                                    <strong style={{ color: "var(--white)" }}>{item.title}</strong> — {item.desc}
+                                </p>
+                            </div>
+                        ))}
                     </div>
-                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <img src="/image/kross_app.png" alt="Kross App" style={{ maxHeight: 520, maxWidth: "100%", objectFit: "contain" }}
-                            onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextSibling.style.display = "flex"; }}
-                        />
-                        <div style={{ display: "none", width: 260, height: 520, border: "2px solid var(--border)", borderRadius: 32, alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12, opacity: 0.3 }}>
-                            <div style={{ fontSize: 11, letterSpacing: "2px", textTransform: "uppercase" }}>App Image</div>
-                            <div style={{ fontSize: 10, opacity: 0.6 }}>Drop app_mockup.png in /public</div>
-                        </div>
+                    <a href="https://apps.apple.com/kz/app/kross-padel/id6741785490" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none", display: "inline-block", alignSelf: "flex-start" }}>Download on App Store</a>
+                </div>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", overflow: "hidden" }}>
+                    <img src="/image/kross_app.png" alt="Kross App" style={{ maxHeight: 620, maxWidth: "100%", objectFit: "contain", display: "block" }}
+                        onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextSibling.style.display = "flex"; }}
+                    />
+                    <div style={{ display: "none", width: 260, height: 520, border: "2px solid var(--border)", borderRadius: 32, alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12, opacity: 0.3 }}>
+                        <div style={{ fontSize: 11, letterSpacing: "2px", textTransform: "uppercase" }}>App Image</div>
+                        <div style={{ fontSize: 10, opacity: 0.6 }}>Drop app_mockup.png in /public</div>
                     </div>
                 </div>
             </section>
