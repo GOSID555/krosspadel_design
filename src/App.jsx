@@ -14,6 +14,7 @@ import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import BecomePartnerPage from "./pages/BecomePartnerPage";
 import LifestylePage from "./pages/LifestylePage";
+import ComingSoonPage from "./pages/ComingSoonPage";
 import { VenueProvider } from "./context/VenueProvider";
 import { VenueContext } from "./context/VenueContext";
 import { AuthProvider } from "./context/AuthProvider";
@@ -24,7 +25,6 @@ import AdminVenuesPage from "./pages/admin/AdminVenuesPage";
 import AdminStoriesPage from "./pages/admin/AdminStoriesPage";
 import AdminActivitiesPage from "./pages/admin/AdminActivitiesPage";
 import AdminMembershipPage from "./pages/admin/AdminMembershipPage";
-
 
 function AppInner() {
   const { user } = useContext(AuthContext);
@@ -76,11 +76,12 @@ function AppInner() {
       {page === "venues" && <VenuesPage navigate={navigate} openBook={openBook} />}
       {page === "activities" && <ActivitiesPage navigate={navigate} openBook={openBook} />}
       {page === "stories" && <StoriesPage navigate={navigate} />}
-      {page === "membership" && <MembershipPage navigate={navigate} notify={notify} />}
+      {page === "membership" && <MembershipPage navigate={navigate} notify={notify} openBook={openBook} />}
       {page === "contact" && <ContactPage navigate={navigate} notify={notify} />}
       {page === "about" && <AboutPage navigate={navigate} />}
       {page === "lifestyle" && <LifestylePage navigate={navigate} />}
       {page === "partner" && <BecomePartnerPage navigate={navigate} notify={notify} />}
+      {page === "whatsapp" && <ComingSoonPage navigate={navigate} title="WhatsApp" icon="💬" />}
       {page === "admin-login" && <AdminLoginPage navigate={navigate} />}
       {page === "admin" && (user ? <AdminDashboard navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-venues" && (user ? <AdminVenuesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}

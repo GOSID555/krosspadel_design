@@ -177,8 +177,8 @@ export default function AboutPage({ navigate }) {
                         Ready to experience premium padel? Become part of our thriving community today.
                     </p>
                     <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-                        <button className="btn-primary" onClick={() => navigate("membership")}>View Membership</button>
-                        <button className="btn-ghost" onClick={() => navigate("contact")}>Contact Us</button>
+                        <a href="https://line.me/ti/p/~@krosspadel" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>LINE</a>
+                        <button className="btn-ghost" onClick={() => navigate("whatsapp")}>WhatsApp</button>
                     </div>
                 </div>
             </section>
