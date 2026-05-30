@@ -15,6 +15,9 @@ import AboutPage from "./pages/AboutPage";
 import BecomePartnerPage from "./pages/BecomePartnerPage";
 import LifestylePage from "./pages/LifestylePage";
 import ComingSoonPage from "./pages/ComingSoonPage";
+import BePartOfKrossPage from "./pages/BePartOfKrossPage";
+import FranchiseesPage from "./pages/FranchiseesPage";
+import BrandsCollabsPage from "./pages/BrandsCollabsPage";
 import { VenueProvider } from "./context/VenueProvider";
 import { VenueContext } from "./context/VenueContext";
 import { AuthProvider } from "./context/AuthProvider";
@@ -80,7 +83,10 @@ function AppInner() {
       {page === "contact" && <ContactPage navigate={navigate} notify={notify} />}
       {page === "about" && <AboutPage navigate={navigate} />}
       {page === "lifestyle" && <LifestylePage navigate={navigate} />}
-      {page === "partner" && <BecomePartnerPage navigate={navigate} notify={notify} />}
+      {page === "partner" && <BecomePartnerPage navigate={navigate} />}
+      {page === "partner-be-part" && <BePartOfKrossPage navigate={navigate} />}
+      {page === "partner-franchisees" && <FranchiseesPage navigate={navigate} notify={notify} />}
+      {page === "partner-brands" && <BrandsCollabsPage navigate={navigate} />}
       {page === "whatsapp" && <ComingSoonPage navigate={navigate} title="WhatsApp" icon="💬" />}
       {page === "admin-login" && <AdminLoginPage navigate={navigate} />}
       {page === "admin" && (user ? <AdminDashboard navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}

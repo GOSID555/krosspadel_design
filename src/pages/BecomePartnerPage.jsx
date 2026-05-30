@@ -1,184 +1,94 @@
-import { useState } from "react";
 import Footer from "../components/Footer";
 
-const EMPTY_FORM = { name: "", company: "", email: "", phone: "", type: "", message: "" };
+const CARDS = [
+  {
+    id: "partner-be-part",
+    label: "Be Part Of Kross",
+  },
+  {
+    id: "partner-franchisees",
+    label: "Kross Franchisees",
+  },
+  {
+    id: "partner-brands",
+    label: "Brands Collabs",
+  },
+];
 
-export default function BecomePartnerPage({ navigate, notify }) {
-    const [form, setForm] = useState(EMPTY_FORM);
-    const [sending, setSending] = useState(false);
-
-    const handleChange = (key, val) => setForm(f => ({ ...f, [key]: val }));
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!form.name || !form.email) return;
-        setSending(true);
-        await new Promise(r => setTimeout(r, 800));
-        setSending(false);
-        setForm(EMPTY_FORM);
-        notify("Partnership inquiry sent! We'll be in touch within 2 business days.");
-    };
-
-    const packageItems = [
-        { title: "Brand License & Identity Pack", desc: "Logos, color codes, templates, signage guidelines." },
-        { title: "Club Design & Build Support", desc: "Floor plans, lighting schemes, spectator areas, F&B corners." },
-        { title: "Booking App & Tech Setup", desc: "White-label app, user onboarding, data migration." },
-        { title: "Staff Training Program", desc: "Coaching syllabus, customer service scripts, cross protocols." },
-        { title: "Event & Tournament Toolkit", desc: "Branding kits, prize-giving templates, social media calendar." },
-        { title: "Supplier & Sponsor Introductions", desc: "Equipment deals, beverage partnerships, apparel discounts." },
-        { title: "Marketing Launch Campaign", desc: "Press release template, influencer kit, local activations guide." },
-    ];
-
-    const whyItems = [
-        { title: "Brand Power and Recognition", desc: "Instant credibility in competitive markets." },
-        { title: "Turnkey Digital Platform", desc: "Our booking app, CRM and member portal come pre-integrated." },
-        { title: "Preferred Supplier Network", desc: "Guaranteed lead times & volume discounts on courts, balls, racks, apparel." },
-        { title: "Proven Training & Ops", desc: "Comprehensive on-site and remote training modules for staff at every level." },
-        { title: "Event Ecosystem", desc: "Access to our tournament calendar, DJs, sponsors (Corona, PEACHES Active) and community activations." },
-    ];
-
-    return (
-        <div>
-            {/* HERO */}
-            <section id="hero" style={{ padding: 0 }}>
-                <div className="hero-video-wrap" style={{
-                    background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-                }} />
-                <div className="hero-content">
-                    <div className="hero-eyebrow">Business Opportunity</div>
-                    <div className="hero-title">Become A Partner</div>
-                    <div className="hero-sub">Join Asia's Growing Padel Revolution</div>
-                    <div className="hero-actions">
-                        <button className="btn-primary" onClick={() => document.querySelector("#contact-form").scrollIntoView({ behavior: "smooth" })}>Get In Touch</button>
-                    </div>
-                </div>
-            </section>
-
-            {/* FRANCHISE INTRO */}
-            <section className="partner-section" style={{ background: `url(/image/night_court.png) center/cover no-repeat`, position: "relative" }}>
-                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.65)" }} />
-                <div className="partner-section-inner" style={{ position: "relative", zIndex: 1 }}>
-                    <div className="tag">Franchise With KROSS</div>
-                    <div className="heading" style={{ fontSize: "clamp(40px, 6vw, 80px)", marginBottom: 32 }}>
-                        Be Part Of Something <span style={{ color: "var(--green-highlight)" }}>Bigger.</span>
-                    </div>
-                    <p className="body-txt" style={{ fontSize: 18, lineHeight: 1.9, maxWidth: 560 }}>
-                        Kross is more than a sports club. It's a community, a lifestyle and a global movement. Now you can bring the Kross experience to your city.
-                    </p>
-                </div>
-            </section>
-
-            {/* PHILOSOPHY */}
-            <section className="partner-section">
-                <div className="partner-section-inner">
-                    <div className="tag">The KROSS Philosophy</div>
-                    <div className="heading" style={{ marginBottom: 32 }}>Our Team As The Heart<br />Of Our Community</div>
-                    <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 64, maxWidth: 680 }}>
-                        At Kross, we believe that our team is the foundation of our success. Our philosophy is built on three key principles: connection, growth, and long-term commitment.
-                    </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 2 }}>
-                        {[
-                            { title: "Connection", sub: "Training, playing and engaging with the community" },
-                            { title: "Growth", sub: "Building our team from the ground up" },
-                            { title: "Expanding KROSS", sub: "Beyond Bangkok" },
-                        ].map((item, i) => (
-                            <div key={i} style={{ padding: "40px 36px", border: "1px solid var(--border)", background: "var(--mid)" }}>
-                                <div style={{ fontSize: 10, letterSpacing: "2px", color: "var(--green-highlight)", textTransform: "uppercase", marginBottom: 12 }}>{item.title}</div>
-                                <div style={{ fontSize: 13, letterSpacing: "1.5px", textTransform: "uppercase", opacity: 0.65, lineHeight: 1.6 }}>{item.sub}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* FRANCHISE PACKAGE */}
-            <section className="partner-section" style={{ background: "var(--mid)" }}>
-                <div className="partner-section-inner">
-                    <div className="tag">What You Get</div>
-                    <div className="heading" style={{ marginBottom: 24 }}>A Complete<br />Franchise Package</div>
-                    <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 64, maxWidth: 640 }}>
-                        From day one, we equip you with everything you need to launch confidently. Our package includes brand assets, operational manuals, step-by-step best practices, and live support 24/7 during your first year.
-                    </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 2 }}>
-                        {packageItems.map((item, i) => (
-                            <div key={i} style={{ padding: "32px 28px", border: "1px solid var(--border)", background: "var(--dark)" }}
-                                onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--green-highlight)"}
-                                onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}
-                            >
-                                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", marginBottom: 10 }}>{item.title}</div>
-                                <p className="body-txt" style={{ fontSize: 13, margin: 0 }}>{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* WHY KROSS */}
-            <section className="partner-section">
-                <div className="partner-section-inner">
-                    <div className="tag">Why KROSS?</div>
-                    <div className="heading" style={{ marginBottom: 64 }}>What Sets Us Apart</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 2 }}>
-                        {whyItems.map((item, i) => (
-                            <div key={i} style={{ padding: "36px 28px", border: "1px solid var(--border)", background: "var(--mid)" }}>
-                                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", marginBottom: 12, color: "var(--green-highlight)" }}>{item.title}</div>
-                                <p className="body-txt" style={{ fontSize: 13, margin: 0 }}>{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA + FORM */}
-            <section id="contact-form" className="partner-section" style={{ background: "var(--mid)" }}>
-                <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
-                        <div>
-                            <div className="tag">Let's Build The Next KROSS Together</div>
-                            <div className="heading" style={{ marginBottom: 24 }}>Ready To Get Started?</div>
-                            <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 40 }}>
-                                Join our global network and bring the Kross experience to your community.
-                            </p>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                                <div style={{ fontSize: 11, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.45, marginBottom: 4 }}>Get In Touch</div>
-                                <a href="mailto:franchise@krosspadel.com" style={{ color: "var(--white)", textDecoration: "none", fontSize: 14 }}>franchise@krosspadel.com</a>
-                                <a href="tel:+6620260261" style={{ color: "var(--white)", textDecoration: "none", fontSize: 14 }}>+66 2 026 0261</a>
-                            </div>
-                        </div>
-                        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                            <div className="partner-form-row">
-                                <div className="form-group">
-                                    <label>Full Name *</label>
-                                    <input value={form.name} onChange={e => handleChange("name", e.target.value)} placeholder="Your full name" required />
-                                </div>
-                                <div className="form-group">
-                                    <label>Company</label>
-                                    <input value={form.company} onChange={e => handleChange("company", e.target.value)} placeholder="Company name" />
-                                </div>
-                            </div>
-                            <div className="partner-form-row">
-                                <div className="form-group">
-                                    <label>Email *</label>
-                                    <input type="email" value={form.email} onChange={e => handleChange("email", e.target.value)} placeholder="your@email.com" required />
-                                </div>
-                                <div className="form-group">
-                                    <label>Phone / LINE</label>
-                                    <input value={form.phone} onChange={e => handleChange("phone", e.target.value)} placeholder="+66 or LINE ID" />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Message</label>
-                                <textarea value={form.message} onChange={e => handleChange("message", e.target.value)} placeholder="Tell us about your interest, location, or any questions..." style={{ height: 120 }} />
-                            </div>
-                            <button type="submit" className="btn-primary" disabled={sending}>
-                                {sending ? "Sending..." : "Send Inquiry"}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <Footer navigate={navigate} />
+export default function BecomePartnerPage({ navigate }) {
+  return (
+    <div>
+      {/* HERO */}
+      <section id="hero" style={{ padding: 0 }}>
+        <div className="hero-video-wrap" style={{
+          background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
+        }} />
+        <div className="hero-content">
+          <div className="hero-eyebrow">Business Opportunity</div>
+          <div className="hero-title">Become A Partner</div>
+          <div className="hero-sub">Join Asia's Growing Padel Revolution</div>
+          <div className="hero-actions">
+            <button className="btn-primary" onClick={() => navigate("partner-franchisees")}>Partner With Us</button>
+            <button className="btn-ghost" onClick={() => navigate("about")}>Learn More</button>
+          </div>
         </div>
-    );
+      </section>
+
+      {/* 3 CARDS */}
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 6 }}>
+            {CARDS.map((card) => (
+              <div
+                key={card.id}
+                onClick={() => navigate(card.id)}
+                style={{
+                  position: "relative",
+                  height: 260,
+                  background: "var(--green-dark)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  transition: "background .3s, border-color .3s",
+                  overflow: "hidden",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = "var(--green-mid)";
+                  e.currentTarget.style.borderColor = "var(--green-highlight)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "var(--green-dark)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                }}
+              >
+                <div style={{
+                  fontFamily: "'Gotham Narrow', sans-serif",
+                  fontSize: "clamp(22px, 3vw, 32px)",
+                  fontWeight: 800,
+                  letterSpacing: "2px",
+                  textTransform: "uppercase",
+                  textAlign: "center",
+                  lineHeight: 1.2,
+                  padding: "0 24px",
+                  color: "var(--white)",
+                }}>
+                  {card.label}
+                </div>
+                <div style={{
+                  position: "absolute",
+                  bottom: 20, right: 20,
+                  fontSize: 20,
+                  opacity: 0.3,
+                }}>→</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Footer navigate={navigate} />
+    </div>
+  );
 }
