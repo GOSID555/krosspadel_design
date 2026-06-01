@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 import { formatDate } from "../utils/venueUtils";
+import { MOCKUP_ACTIVITIES } from "../data/mockActivities";
 
 export default function ActivitiesPage({ navigate, openBook }) {
   const [activities, setActivities] = useState([]);
@@ -15,6 +16,8 @@ export default function ActivitiesPage({ navigate, openBook }) {
     };
     load();
   }, []);
+
+  const displayActivities = MOCKUP_ACTIVITIES;
 
   return (
     <div>
@@ -43,7 +46,7 @@ export default function ActivitiesPage({ navigate, openBook }) {
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 40
           }}>
-            {activities.map((a) => (
+            {displayActivities.map((a) => (
               <div key={a.docId || a.name} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activity-" + (a.docId || a.name))} style={{
                 position: "relative", height: 320, overflow: "hidden",
                 cursor: "pointer", border: "1px solid var(--border)", borderRadius: 4,
@@ -61,6 +64,17 @@ export default function ActivitiesPage({ navigate, openBook }) {
                   e.currentTarget.style.borderColor = "var(--border)";
                 }}>
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 55%, transparent 100%)" }} />
+                {a.level && (
+                  <div style={{
+                    position: "absolute", top: 16, right: 16,
+                    background: "rgba(0,0,0,0.55)", backdropFilter: "blur(8px)",
+                    border: "1px solid rgba(45,168,79,0.5)",
+                    color: "var(--green-highlight)",
+                    fontSize: 10, fontWeight: 700, letterSpacing: "1.5px",
+                    textTransform: "uppercase", padding: "5px 10px",
+                    borderRadius: 2
+                  }}>{a.level}</div>
+                )}
                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "24px 28px" }}>
                   {a.date && (
                     <div style={{ fontSize: 11, opacity: 0.55, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 8 }}>

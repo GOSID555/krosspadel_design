@@ -2043,3 +2043,4 @@ footer {
         right: 20px
     }
 }
+.price-tabs::-webkit-scrollbar { display: none; }

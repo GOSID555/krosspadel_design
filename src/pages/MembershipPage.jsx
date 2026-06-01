@@ -3,21 +3,44 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
+const PRICE_TABS = [
+  { key: "court_rental", label: "Court Rental" },
+  { key: "coaching", label: "Coaching" },
+  { key: "activities", label: "Activities" },
+  { key: "racket_rental", label: "Racket Rental" },
+];
+
+function parseRows(rows) {
+  if (Array.isArray(rows)) return rows;
+  try { return JSON.parse(rows); } catch { return []; }
+}
+
 export default function MembershipPage({ navigate, notify, openBook }) {
   const [plans, setPlans] = useState([]);
+  const [pricing, setPricing] = useState([]);
+  const [tab, setTab] = useState("court_rental");
 
   useEffect(() => {
-    const load = async () => {
-      const snap = await getDocs(collection(db, "plans"));
-      const docs = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-      if (docs.length > 0) setPlans(docs);
-    };
-    load();
+    let cancelled = false;
+    Promise.all([
+      getDocs(collection(db, "plans")),
+      getDocs(collection(db, "pricing")),
+    ]).then(([plansSnap, pricingSnap]) => {
+      if (cancelled) return;
+      if (plansSnap.docs.length > 0)
+        setPlans(plansSnap.docs.map(d => ({ docId: d.id, ...d.data() })));
+      setPricing(pricingSnap.docs.map(d => ({ docId: d.id, ...d.data() })));
+    });
+    return () => { cancelled = true; };
   }, []);
+
+  const tabItems = pricing
+    .filter(p => p.category === tab)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   return (
     <div>
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section id="hero" style={{ padding: 0 }}>
         <div className="hero-video-wrap" style={{
           background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
@@ -29,178 +52,253 @@ export default function MembershipPage({ navigate, notify, openBook }) {
         </div>
       </section>
 
-      {/* MEMBERSHIP SECTION */}
+      {/* ── SECTION 1: APP INFO ── */}
       <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="tag">Join The Club</div>
-          <div className="heading" style={{ marginBottom: 64 }}>Choose Your Plan</div>
-          <p className="body-txt" style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: 64, lineHeight: "1.8", opacity: 0.9 }}>
-            All plans include access to all KROSS venues, priority booking, coaching discounts, and exclusive member events. Whether you're a casual player or competing regularly, we have the perfect plan for you.
-          </p>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
-            gap: 24,
-            alignItems: "stretch"
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
+            gap: "72px",
+            alignItems: "center"
           }}>
-            {plans.map(p => (
-              <div
-                key={p.docId || p.name}
+            <div>
+              <div className="tag">How To Book</div>
+              <div className="heading" style={{ marginBottom: 24 }}>The KROSS App</div>
+              <p className="body-txt" style={{ marginBottom: 48, lineHeight: 1.8, opacity: 0.75 }}>
+                Book courts, track sessions, and manage your membership — all from the KROSS Padel app. Available on iOS.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 28, marginBottom: 48 }}>
+                {[
+                  { num: "01", title: "Select Venue", desc: "Choose from all KROSS locations across Bangkok" },
+                  { num: "02", title: "Pick Your Time", desc: "Browse available slots and book up to 7 days in advance" },
+                  { num: "03", title: "Confirm & Play", desc: "Get instant confirmation and head to the court" },
+                ].map(step => (
+                  <div key={step.num} style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+                    <div style={{
+                      fontFamily: "'Gotham Narrow', sans-serif",
+                      fontSize: 12, fontWeight: 700, letterSpacing: "2px",
+                      color: "var(--green-highlight)", opacity: 0.7,
+                      paddingTop: 3, minWidth: 24, flexShrink: 0
+                    }}>{step.num}</div>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{step.title}</div>
+                      <div style={{ fontSize: 13, opacity: 0.55, lineHeight: 1.6 }}>{step.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button className="btn-primary" onClick={openBook}>
+                Download on App Store
+              </button>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <img
+                src="/image/kross_app.png"
+                alt="KROSS Padel App"
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: "40px 36px",
-                  border: `1px solid ${p.featured ? "var(--green-highlight)" : "var(--border)"}`,
-                  background: p.featured ? "rgba(45,168,79,0.08)" : "var(--mid2)",
-                  position: "relative",
-                  transition: "transform 0.25s ease, box-shadow 0.25s ease",
-                  cursor: "pointer",
+                  maxWidth: "100%",
+                  maxHeight: 520,
+                  objectFit: "contain",
+                  borderRadius: 12,
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.4)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 2: ALL PRICES ── */}
+      <section style={{ padding: "100px clamp(24px, 5vw, 72px)", background: "var(--mid2)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="tag">Transparent Pricing</div>
+          <div className="heading" style={{ marginBottom: 56 }}>Rates & Services</div>
+
+          {/* Tab bar */}
+          <div className="price-tabs" style={{
+            display: "flex",
+            borderBottom: "1px solid var(--border)",
+            marginBottom: 56,
+            overflowX: "auto",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            gap: 0
+          }}>
+            {PRICE_TABS.map(t => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                style={{
+                  padding: "14px 28px",
+                  background: "none",
+                  border: "none",
+                  borderBottom: tab === t.key ? "2px solid var(--green-highlight)" : "2px solid transparent",
+                  color: tab === t.key ? "var(--white)" : "rgba(255,255,255,0.4)",
+                  fontSize: 12, fontWeight: 700, letterSpacing: "1.5px",
+                  textTransform: "uppercase", cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  transition: "color 0.2s",
+                  marginBottom: -1
                 }}
               >
-                {p.featured && (
-                  <div style={{
-                    position: "absolute", top: -1, left: 0, right: 0,
-                    height: 3, background: "var(--green-highlight)"
-                  }} />
-                )}
-                {p.featured && (
-                  <div style={{
-                    display: "inline-flex", alignSelf: "flex-start",
-                    background: "var(--green-highlight)", color: "var(--dark)",
-                    fontSize: 9, fontWeight: 700, letterSpacing: "2px",
-                    textTransform: "uppercase", padding: "4px 10px",
-                    marginBottom: 20
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {tabItems.length === 0 ? (
+            <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+              Pricing coming soon
+            </div>
+          ) : (
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+              gap: 24
+            }}>
+              {tabItems.map(item => {
+                const rows = parseRows(item.rows);
+                return (
+                  <div key={item.docId} style={{
+                    background: "var(--mid)",
+                    border: "1px solid var(--border)",
+                    padding: "28px 32px"
                   }}>
-                    MOST POPULAR
-                  </div>
-                )}
-
-                {/* Plan name */}
-                <div style={{
-                  fontFamily: "'Gotham Narrow', sans-serif",
-                  fontSize: "clamp(20px, 2.5vw, 26px)",
-                  letterSpacing: "1.5px",
-                  lineHeight: 1.1,
-                  marginBottom: 4,
-                  marginTop: p.featured ? 0 : 28
-                }}>
-                  {p.name}
-                </div>
-                {p.priceLabel && (
-                  <div style={{ fontSize: 11, opacity: 0.45, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 24 }}>
-                    {p.priceLabel}
-                  </div>
-                )}
-
-                {/* Divider */}
-                <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 24 }} />
-
-                {/* Price */}
-                <div style={{ marginBottom: 8 }}>
-                  <span style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 13, opacity: 0.5, verticalAlign: "super" }}>฿</span>
-                  <span style={{ fontSize: "clamp(40px, 6vw, 56px)", fontWeight: 700, color: "var(--green-highlight)", letterSpacing: "-1px" }}>
-                    {p.price}
-                  </span>
-                </div>
-                {p.validity && (
-                  <div style={{ fontSize: 11, opacity: 0.38, lineHeight: 1.6, marginBottom: 28 }}>{p.validity}</div>
-                )}
-
-                {/* Perks */}
-                {p.perks && (
-                  <div style={{ flex: 1, marginBottom: 36 }}>
-                    {p.perks.split("\n").filter(l => l.trim()).map((line, i) => (
-                      <div key={i} style={{ display: "flex", gap: 12, marginBottom: 12, alignItems: "flex-start" }}>
-                        <div style={{
-                          width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1,
-                          background: "rgba(45,168,79,0.15)",
-                          border: "1px solid rgba(45,168,79,0.4)",
-                          display: "flex", alignItems: "center", justifyContent: "center"
+                    <div style={{
+                      fontFamily: "'Gotham Narrow', sans-serif",
+                      fontSize: 14, letterSpacing: "2px",
+                      textTransform: "uppercase", marginBottom: 20,
+                      color: "var(--white)"
+                    }}>{item.name}</div>
+                    <div>
+                      {rows.map((row, i) => (
+                        <div key={i} style={{
+                          display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                          padding: "12px 0",
+                          borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
                         }}>
-                          <span style={{ color: "var(--green-highlight)", fontSize: 10, lineHeight: 1 }}>✓</span>
+                          <div>
+                            <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
+                            {row.note && (
+                              <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
+                            )}
+                          </div>
+                          <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                            <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
+                            {row.unit && (
+                              <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
+                            )}
+                          </div>
                         </div>
-                        <span style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.75 }}>
-                          {line.replace(/^[-•·]\s*/, "")}
-                        </span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                )}
-
-                {/* CTA */}
-                <button
-                  className={p.featured ? "btn-primary" : "btn-ghost"}
-                  onClick={() => notify(`${p.name} — we'll contact you shortly`)}
-                  style={{ width: "100%", marginTop: "auto" }}
-                >
-                  Get Started
-                </button>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* BENEFITS SECTION */}
-      <section style={{
-        padding: "100px clamp(24px, 5vw, 72px)",
-        background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-      }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="tag" style={{ color: "var(--green-highlight)" }}>Member Benefits</div>
-          <div className="heading" style={{ marginBottom: 64 }}>Why Join KROSS</div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
-            gap: 32
-          }}>
-            {[
-              { title: "Unlimited Court Access", desc: "Play as much as you want at any of our venues" },
-              { title: "Priority Booking", desc: "Secure your preferred time slots before general members" },
-              { title: "Coaching Discounts", desc: "Get 25-50% off all training sessions and clinics" },
-              { title: "Member Events", desc: "Exclusive tournaments and social events throughout the year" },
-              { title: "Progress Tracking", desc: "Monitor your performance and skill development" },
-              { title: "Community", desc: "Join a thriving community of passionate padel players" }
-            ].map((item, i) => (
-              <div key={i} style={{
-                padding: 32,
-                border: `1px solid rgba(45, 168, 79, 0.3)`,
-                background: "rgba(45, 168, 79, 0.05)",
-                transition: "all 0.3s ease"
-              }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--green-highlight)";
-                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(45, 168, 79, 0.3)";
-                  e.currentTarget.style.background = "rgba(45, 168, 79, 0.05)";
-                }}>
-                <div style={{ fontSize: "16px", fontWeight: 600, marginBottom: 8 }}>{item.title}</div>
-                <p className="body-txt">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA SECTION */}
+      {/* ── SECTION 3: PACKAGES ── */}
       <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
-        <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
-          <div className="tag" style={{ textAlign: "center", marginBottom: 16 }}>Ready To Join?</div>
-          <div className="heading" style={{ marginBottom: 32 }}>Become A Member Today</div>
-          <p className="body-txt" style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: 48, opacity: 0.9 }}>
-            Choose your plan above and start enjoying unlimited access to KROSS venues, priority booking, and exclusive member benefits.
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="tag">Membership</div>
+          <div className="heading" style={{ marginBottom: 24 }}>Packages</div>
+          <p className="body-txt" style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: 64, lineHeight: "1.8", opacity: 0.75 }}>
+            All plans include access to all KROSS venues, priority booking, coaching discounts, and exclusive member events.
           </p>
-          <button className="btn-primary" onClick={openBook}>Book First Court</button>
+
+          {plans.length === 0 ? (
+            <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+              Packages coming soon
+            </div>
+          ) : (
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+              gap: 24, alignItems: "stretch"
+            }}>
+              {plans.map(p => (
+                <div
+                  key={p.docId || p.name}
+                  style={{
+                    display: "flex", flexDirection: "column",
+                    padding: "40px 36px",
+                    border: `1px solid ${p.featured ? "var(--green-highlight)" : "var(--border)"}`,
+                    background: p.featured ? "rgba(45,168,79,0.08)" : "var(--mid2)",
+                    position: "relative",
+                    transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.4)";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  {p.featured && (
+                    <div style={{
+                      position: "absolute", top: -1, left: 0, right: 0,
+                      height: 3, background: "var(--green-highlight)"
+                    }} />
+                  )}
+                  {p.featured && (
+                    <div style={{
+                      display: "inline-flex", alignSelf: "flex-start",
+                      background: "var(--green-highlight)", color: "var(--dark)",
+                      fontSize: 9, fontWeight: 700, letterSpacing: "2px",
+                      textTransform: "uppercase", padding: "4px 10px", marginBottom: 20
+                    }}>MOST POPULAR</div>
+                  )}
+                  <div style={{
+                    fontFamily: "'Gotham Narrow', sans-serif",
+                    fontSize: "clamp(20px, 2.5vw, 26px)", letterSpacing: "1.5px",
+                    lineHeight: 1.1, marginBottom: 4, marginTop: p.featured ? 0 : 28
+                  }}>{p.name}</div>
+                  {p.priceLabel && (
+                    <div style={{ fontSize: 11, opacity: 0.45, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 24 }}>{p.priceLabel}</div>
+                  )}
+                  <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 24 }} />
+                  <div style={{ marginBottom: 8 }}>
+                    <span style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 13, opacity: 0.5, verticalAlign: "super" }}>฿</span>
+                    <span style={{ fontSize: "clamp(40px, 6vw, 56px)", fontWeight: 700, color: "var(--green-highlight)", letterSpacing: "-1px" }}>
+                      {p.price}
+                    </span>
+                  </div>
+                  {p.validity && (
+                    <div style={{ fontSize: 11, opacity: 0.38, lineHeight: 1.6, marginBottom: 28 }}>{p.validity}</div>
+                  )}
+                  {p.perks && (
+                    <div style={{ flex: 1, marginBottom: 36 }}>
+                      {p.perks.split("\n").filter(l => l.trim()).map((line, i) => (
+                        <div key={i} style={{ display: "flex", gap: 12, marginBottom: 12, alignItems: "flex-start" }}>
+                          <div style={{
+                            width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1,
+                            background: "rgba(45,168,79,0.15)", border: "1px solid rgba(45,168,79,0.4)",
+                            display: "flex", alignItems: "center", justifyContent: "center"
+                          }}>
+                            <span style={{ color: "var(--green-highlight)", fontSize: 10, lineHeight: 1 }}>✓</span>
+                          </div>
+                          <span style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.75 }}>
+                            {line.replace(/^[-•·]\s*/, "")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    className={p.featured ? "btn-primary" : "btn-ghost"}
+                    onClick={() => notify(`${p.name} — we'll contact you shortly`)}
+                    style={{ width: "100%", marginTop: "auto" }}
+                  >Get Started</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

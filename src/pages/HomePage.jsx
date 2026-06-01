@@ -1,28 +1,24 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import Footer from "../components/Footer";
 import { VenueContext } from "../context/VenueContext";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { locationWord, formatDate } from "../utils/venueUtils";
+import { MOCKUP_ACTIVITIES } from "../data/mockActivities";
 
 export default function HomePage({ navigate, openBook }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
-    const [activities, setActivities] = useState([]);
+    const [bookPopup, setBookPopup] = useState(false);
 
     const venueWord = locationWord(venues.length);
-    const carouselRef = useRef(null);
 
     useEffect(() => {
         let cancelled = false;
         const mapDocs = (snap) => snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-        Promise.all([
-            getDocs(collection(db, "stories")),
-            getDocs(collection(db, "activities")),
-        ]).then(([storiesSnap, activitiesSnap]) => {
+        getDocs(collection(db, "stories")).then(snap => {
             if (cancelled) return;
-            setStories(mapDocs(storiesSnap));
-            setActivities(mapDocs(activitiesSnap));
+            setStories(mapDocs(snap));
         });
         return () => { cancelled = true; };
     }, []);
@@ -50,7 +46,51 @@ export default function HomePage({ navigate, openBook }) {
                     <div className="hero-title">KROSS</div>
                     <div className="hero-sub">Onnut · Asoke · Thonglor · Rama IV</div>
                     <div className="hero-actions">
-                        <button className="btn-primary" onClick={openBook}>Book Padel</button>
+                        <div style={{ position: "relative", display: "inline-block" }}>
+                            <button className="btn-primary" onClick={() => setBookPopup(o => !o)}>Book Padel</button>
+                            {bookPopup && (
+                                <>
+                                    <div onClick={() => setBookPopup(false)} style={{ position: "fixed", inset: 0, zIndex: 98 }} />
+                                    <div style={{
+                                        position: "absolute", top: "calc(100% + 10px)", left: 0,
+                                        background: "var(--mid)", border: "1px solid var(--border)",
+                                        zIndex: 99, minWidth: 220, padding: "8px 0",
+                                        boxShadow: "0 16px 48px rgba(0,0,0,0.6)"
+                                    }}>
+                                        <a
+                                            href="https://apps.apple.com/kz/app/kross-padel/id6741785490"
+                                            target="_blank" rel="noreferrer"
+                                            onClick={() => setBookPopup(false)}
+                                            style={{
+                                                display: "flex", alignItems: "center", gap: 12,
+                                                padding: "12px 20px", textDecoration: "none",
+                                                color: "var(--white)", fontSize: 13, fontWeight: 600,
+                                                letterSpacing: "0.5px", transition: "background 0.15s"
+                                            }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                                        >
+                                            <span style={{ fontSize: 18 }}>📱</span> KROSS App
+                                        </a>
+                                        <a
+                                            href="https://line.me/ti/p/~@krosspadel"
+                                            target="_blank" rel="noreferrer"
+                                            onClick={() => setBookPopup(false)}
+                                            style={{
+                                                display: "flex", alignItems: "center", gap: 12,
+                                                padding: "12px 20px", textDecoration: "none",
+                                                color: "var(--white)", fontSize: 13, fontWeight: 600,
+                                                letterSpacing: "0.5px", transition: "background 0.15s"
+                                            }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                                        >
+                                            <span style={{ fontSize: 18 }}>💬</span> LINE Official
+                                        </a>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                         <button className="btn-ghost" onClick={() => navigate("venues")}>Our Venues</button>
                     </div>
                 </div>
@@ -98,55 +138,46 @@ export default function HomePage({ navigate, openBook }) {
                 </div>
             </section>
 
-            {/* ACTIVITIES CAROUSEL */}
-            {activities.length > 0 && (
+            {/* ACTIVITIES */}
+            {MOCKUP_ACTIVITIES.length > 0 && (
                 <section style={{ padding: "100px clamp(24px, 5vw, 72px) 0" }}>
-                    <div style={{ padding: "0", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
+                    <div style={{ padding: "0 0 52px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
                         <div>
                             <div className="tag">What We Offer</div>
                             <div className="heading" style={{ marginBottom: 0 }}>Activities.</div>
                         </div>
                         <button className="btn-ghost" onClick={() => navigate("activities")}>All Activities</button>
                     </div>
-                    <div style={{ position: "relative" }}>
-                        {/* Left arrow */}
-                        <button onClick={() => carouselRef.current?.scrollBy({ left: -340, behavior: "smooth" })} style={{
-                            position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
-                            zIndex: 10, width: 48, height: 48,
-                            border: "1px solid rgba(255,255,255,0.3)", background: "rgba(0,0,0,0.5)",
-                            backdropFilter: "blur(8px)", color: "var(--white)",
-                            cursor: "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center"
-                        }}>‹</button>
-                        {/* Right arrow */}
-                        <button onClick={() => carouselRef.current?.scrollBy({ left: 340, behavior: "smooth" })} style={{
-                            position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-                            zIndex: 10, width: 48, height: 48,
-                            border: "1px solid rgba(255,255,255,0.3)", background: "rgba(0,0,0,0.5)",
-                            backdropFilter: "blur(8px)", color: "var(--white)",
-                            cursor: "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center"
-                        }}>›</button>
-                        <div ref={carouselRef} style={{ display: "flex", gap: 2, overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
-                            {activities.map((a) => (
-                                <div key={a.docId} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activities")} style={{
-                                    position: "relative", height: 580, minWidth: 480, flexShrink: 0,
-                                    scrollSnapAlign: "start", overflow: "hidden", cursor: "pointer",
+                    <div className="venues-grid">
+                        {MOCKUP_ACTIVITIES.map((a) => (
+                            <div className="venue-card" key={a.docId} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activities")}>
+                                <div className="venue-bg-div" style={{
                                     background: a.imageUrl
                                         ? `url(${a.imageUrl}) center/cover no-repeat`
-                                        : "linear-gradient(135deg, var(--green-dark), var(--green-mid))",
-                                    transition: "transform .4s ease"
-                                }}
-                                    onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
-                                    onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
-                                >
-                                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 60%, transparent 100%)" }} />
-                                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "28px 32px" }}>
-                                        {a.date && <div style={{ fontSize: 10, opacity: 0.55, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 8 }}>{formatDate(a.date)}</div>}
-                                        <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 28, letterSpacing: "1.5px", lineHeight: 1.1, marginBottom: 8 }}>{a.name}</div>
-                                        <p className="body-txt" style={{ fontSize: 13, opacity: 0.7, margin: 0 }}>{a.text}</p>
+                                        : "linear-gradient(135deg, var(--green-dark), var(--green-mid))"
+                                }} />
+                                <div className="venue-card-inner">
+                                    <div className="venue-overlay" />
+                                    {a.level && (
+                                        <div style={{
+                                            position: "absolute", top: 20, right: 20,
+                                            background: "rgba(0,0,0,0.55)", backdropFilter: "blur(8px)",
+                                            border: "1px solid rgba(45,168,79,0.5)",
+                                            color: "var(--green-highlight)",
+                                            fontSize: 10, fontWeight: 700, letterSpacing: "1.5px",
+                                            textTransform: "uppercase", padding: "5px 10px",
+                                            borderRadius: 2
+                                        }}>{a.level}</div>
+                                    )}
+                                    <div className="venue-info">
+                                        {a.date && <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>{formatDate(a.date)}</div>}
+                                        <div className="venue-name">{a.name}</div>
+                                        <div className="venue-loc">{a.club}</div>
+                                        <div className="venue-cta">View Activity →</div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </section>
             )}
@@ -248,7 +279,7 @@ export default function HomePage({ navigate, openBook }) {
                     <div className="book-title">Ready To Play?</div>
                     <div style={{ fontSize: 26, letterSpacing: "4px", textTransform: "uppercase", opacity: 0.55, marginBottom: 40 }}>Join Our Community</div>
                     <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-                        <button className="book-cta-btn" onClick={() => navigate("whatsapp")} style={{ background: "transparent", border: "2px solid var(--white)", color: "var(--white)" }}>WhatsApp</button>
+                        <button className="book-cta-btn" onClick={() => window.open("https://wa.me/66XXXXXXXXX", "_blank")} style={{ background: "transparent", border: "2px solid var(--white)", color: "var(--white)" }}>WhatsApp</button>
                         <a href="https://line.me/ti/p/~@krosspadel" target="_blank" rel="noreferrer" className="book-cta-btn" style={{ textDecoration: "none" }}>LINE</a>
                     </div>
                 </div>

@@ -179,7 +179,7 @@ export default function AboutPage({ navigate }) {
                     </p>
                     <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
                         <a href="https://line.me/ti/p/~@krosspadel" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none" }}>LINE</a>
-                        <button className="btn-ghost" onClick={() => navigate("whatsapp")}>WhatsApp</button>
+                        <button className="btn-ghost" onClick={() => window.open("https://wa.me/66XXXXXXXXX", "_blank")}>WhatsApp</button>
                     </div>
                 </div>
             </section>
