@@ -6,7 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { locationWord, formatDate } from "../utils/venueUtils";
 import { MOCKUP_ACTIVITIES } from "../data/mockActivities";
 
-export default function HomePage({ navigate, openBook }) {
+export default function HomePage({ navigate }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
     const [bookPopup, setBookPopup] = useState(false);

@@ -1955,20 +1955,49 @@ footer {
 
 @media(max-width:600px) {
     .venues-grid {
-        grid-template-columns: 1fr
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        gap: 12px;
+        grid-template-columns: unset;
+    }
+    .venues-grid::-webkit-scrollbar { display: none; }
+    .venues-grid .venue-card {
+        min-width: 80vw;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
+
+    .stories-gallery {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        grid-template-columns: unset;
+        grid-template-rows: unset;
+        height: auto;
+        gap: 12px;
+    }
+    .stories-gallery::-webkit-scrollbar { display: none; }
+    .story-gallery-feature {
+        min-width: 82vw;
+        height: 440px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
+    .story-gallery-side {
+        display: contents;
+    }
+    .story-gallery-small {
+        min-width: 82vw;
+        height: 280px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
     }
 
     .stories-grid {
         grid-template-columns: 1fr
-    }
-
-    .story-gallery-side {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .story-gallery-small {
-        height: 220px;
     }
 
     .hero-actions {
