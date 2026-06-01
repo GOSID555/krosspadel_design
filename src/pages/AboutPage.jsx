@@ -1,11 +1,21 @@
+import { useState, useEffect } from "react";
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
 export default function AboutPage({ navigate }) {
-    const team = [
-        { name: "Founder Name", role: "Founder & CEO", bio: "Passionate padel enthusiast with 15+ years in sports industry" },
-        { name: "Co-Founder", role: "Co-Founder & Director", bio: "Expert in club management and community building" },
-        { name: "Operations Lead", role: "Operations Manager", bio: "Dedicated to delivering world-class padel experience" },
-    ];
+    const [team, setTeam] = useState([]);
+
+    useEffect(() => {
+        let cancelled = false;
+        getDocs(collection(db, "team")).then(snap => {
+            if (cancelled) return;
+            const list = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+            list.sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+            setTeam(list);
+        });
+        return () => { cancelled = true; };
+    }, []);
 
     const milestones = [
         { year: "2020", title: "The Vision", desc: "Founded KROSS with the mission to revolutionize padel in Asia" },
@@ -130,40 +140,31 @@ export default function AboutPage({ navigate }) {
             </section>
 
             {/* TEAM SECTION */}
+            {team.length > 0 && (
             <section style={{ padding: "100px clamp(24px, 5vw, 72px)" }}>
                 <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                     <div className="tag">Meet The Team</div>
                     <div className="heading" style={{ marginBottom: 64 }}>Our Founders & Leadership</div>
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
                         gap: 48
                     }}>
-                        {team.map((member, i) => (
-                            <div key={i} style={{
-                                textAlign: "center",
-                                padding: "32px 0"
-                            }}>
-                                <div style={{
-                                    width: "120px",
-                                    height: "120px",
-                                    borderRadius: "50%",
-                                    background: `linear-gradient(135deg, var(--green-dark) 0%, var(--green-bright) 100%)`,
-                                    margin: "0 auto 24px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: "48px"
-                                }}>👨‍💼</div>
-                                <div style={{ fontSize: "18px", fontWeight: 600, marginBottom: 4 }}>{member.name}</div>
-                                <div style={{ fontSize: "14px", color: "var(--green-highlight)", marginBottom: 12 }}>{member.role}</div>
+                        {team.map((member) => (
+                            <div key={member.docId} style={{ textAlign: "center", padding: "32px 0" }}>
+                                {member.imageUrl
+                                    ? <img src={member.imageUrl} alt={member.name} style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", margin: "0 auto 24px", display: "block", border: "2px solid var(--border)" }} />
+                                    : <div style={{ width: 120, height: 120, borderRadius: "50%", background: "linear-gradient(135deg, var(--green-dark), var(--green-bright))", margin: "0 auto 24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48 }}>👤</div>
+                                }
+                                <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>{member.name}</div>
+                                <div style={{ fontSize: 13, color: "var(--green-highlight)", marginBottom: 12, letterSpacing: "1px" }}>{member.role}</div>
                                 <p className="body-txt">{member.bio}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-
+            )}
 
             {/* FINAL CTA */}
             <section style={{

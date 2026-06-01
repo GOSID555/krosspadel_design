@@ -28,6 +28,7 @@ import AdminVenuesPage from "./pages/admin/AdminVenuesPage";
 import AdminStoriesPage from "./pages/admin/AdminStoriesPage";
 import AdminActivitiesPage from "./pages/admin/AdminActivitiesPage";
 import AdminMembershipPage from "./pages/admin/AdminMembershipPage";
+import AdminTeamPage from "./pages/admin/AdminTeamPage";
 
 function AppInner() {
   const { user } = useContext(AuthContext);
@@ -95,6 +96,7 @@ function AppInner() {
       {page === "admin-stories" && (user ? <AdminStoriesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-activities" && (user ? <AdminActivitiesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-membership" && (user ? <AdminMembershipPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
+      {page === "admin-team" && (user ? <AdminTeamPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {venueMatch && <VenueDetailPage venue={venueMatch} navigate={navigate} openBook={openBook} />}
       {page.startsWith("story-") && <StoryDetailPage navigate={navigate} page={page} />}
       {page.startsWith("activity-") && <ActivityDetailPage navigate={navigate} activityId={page.replace("activity-", "")} />}

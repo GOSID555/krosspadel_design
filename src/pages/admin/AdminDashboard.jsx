@@ -54,6 +54,14 @@ export default function AdminDashboard({ navigate }) {
                     <div className="venue-name">Membership</div>
                     <div style={{ opacity: 0.5, fontSize: 13, marginTop: 8 }}>Edit membership plans and pricing</div>
                 </div>
+                <div
+                    onClick={() => navigate("admin-team")}
+                    style={{ padding: 32, background: "var(--mid)", borderRadius: 8, cursor: "pointer" }}
+                >
+                    <div style={{ fontSize: 32, marginBottom: 12 }}>👥</div>
+                    <div className="venue-name">Team</div>
+                    <div style={{ opacity: 0.5, fontSize: 13, marginTop: 8 }}>Add / Edit founders and leadership team</div>
+                </div>
             </div>
         </div>
     );
