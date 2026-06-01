@@ -2,14 +2,9 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { uploadImage } from "../../supabaseClient";
+import { formatDate } from "../../utils/venueUtils";
 
 const EMPTY = { num: "", name: "", text: "", imageUrl: "", date: "" };
-
-function formatDate(iso) {
-    if (!iso) return "";
-    const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-}
 
 function ActivityPreview({ form }) {
     return (
@@ -56,7 +51,13 @@ export default function AdminActivitiesPage({ navigate }) {
         setActivities(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
     };
 
-    useEffect(() => { load(); }, []);
+    useEffect(() => {
+        let cancelled = false;
+        getDocs(collection(db, "activities")).then(snap => {
+            if (!cancelled) setActivities(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
+        });
+        return () => { cancelled = true; };
+    }, []);
 
     const handleEdit = (item) => { setForm(item); setEditing(item.docId); };
     const handleNew = () => { setForm(EMPTY); setEditing("new"); };
@@ -86,7 +87,7 @@ export default function AdminActivitiesPage({ navigate }) {
         if (!file) return;
         setUploading(true);
         try {
-            const docId = editing === "new" ? `temp_${Date.now()}` : editing;
+            const docId = editing === "new" ? "temp" : editing;
             const imageUrl = await uploadImage(file, "activities", docId);
             setForm(f => ({ ...f, imageUrl }));
         } catch (error) {

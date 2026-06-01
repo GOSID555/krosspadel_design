@@ -10,13 +10,11 @@ export const uploadImage = async (file: File, collection: string, docId: string)
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `${collection}/${docId}/${fileName}`;
 
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
         .from('kross_backend')
         .upload(filePath, file);
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     const { data: publicUrlData } = supabase.storage
         .from('kross_backend')

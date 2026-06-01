@@ -3,40 +3,28 @@ import Footer from "../components/Footer";
 import { VenueContext } from "../context/VenueContext";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { locationWord } from "../utils/venueUtils";
-
-function formatDate(val) {
-    if (!val) return "";
-    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
-        const d = new Date(val + "T00:00:00");
-        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-    }
-    return val;
-}
+import { locationWord, formatDate } from "../utils/venueUtils";
 
 export default function HomePage({ navigate, openBook }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
-
     const [activities, setActivities] = useState([]);
 
     const venueWord = locationWord(venues.length);
     const carouselRef = useRef(null);
 
     useEffect(() => {
-        const load = async () => {
-            const snap = await getDocs(collection(db, "stories"));
-            setStories(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
-        };
-        load();
-    }, []);
-
-    useEffect(() => {
-        const load = async () => {
-            const snap = await getDocs(collection(db, "activities"));
-            setActivities(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
-        };
-        load();
+        let cancelled = false;
+        const mapDocs = (snap) => snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+        Promise.all([
+            getDocs(collection(db, "stories")),
+            getDocs(collection(db, "activities")),
+        ]).then(([storiesSnap, activitiesSnap]) => {
+            if (cancelled) return;
+            setStories(mapDocs(storiesSnap));
+            setActivities(mapDocs(activitiesSnap));
+        });
+        return () => { cancelled = true; };
     }, []);
 
 

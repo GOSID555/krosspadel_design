@@ -151,7 +151,7 @@ export default function AdminVenuesPage({ navigate }) {
     const [galleryDragOver, setGalleryDragOver] = useState(false);
     const [colorPickerOpen, setColorPickerOpen] = useState(null);
     const colorPickerRef = useRef(null);
-    const dragIdx = useRef(null);
+    const [dragIdx, setDragIdx] = useState(null);
     const [dragOverIdx, setDragOverIdx] = useState(null);
 
     useEffect(() => {
@@ -173,23 +173,35 @@ export default function AdminVenuesPage({ navigate }) {
         setVenues(list);
     };
 
-    useEffect(() => { load(); }, []);
+    useEffect(() => {
+        let cancelled = false;
+        getDocs(collection(db, "venues")).then(snap => {
+            if (cancelled) return;
+            const list = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+            list.sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+            setVenues(list);
+        });
+        return () => { cancelled = true; };
+    }, []);
 
-    const handleDragStart = (i) => { dragIdx.current = i; };
+    const handleDragStart = (i) => { setDragIdx(i); };
     const handleDragOver = (e, i) => { e.preventDefault(); setDragOverIdx(i); };
     const handleDrop = async (i) => {
         setDragOverIdx(null);
-        const from = dragIdx.current;
-        if (from === null || from === i) return;
+        const from = dragIdx;
+        if (from === null || from === i) {
+            setDragIdx(null);
+            return;
+        }
         const reordered = [...venues];
         const [moved] = reordered.splice(from, 1);
         reordered.splice(i, 0, moved);
         setVenues(reordered);
+        setDragIdx(null);
         await Promise.all(
             reordered.map((v, idx) => updateDoc(doc(db, "venues", v.docId), { displayOrder: idx }))
         );
         await refreshVenues();
-        dragIdx.current = null;
     };
 
     const handleEdit = (v) => { setForm(v); setEditing(v.docId); };
@@ -313,12 +325,12 @@ export default function AdminVenuesPage({ navigate }) {
                         onDragStart={() => handleDragStart(i)}
                         onDragOver={(e) => handleDragOver(e, i)}
                         onDrop={() => handleDrop(i)}
-                        onDragEnd={() => setDragOverIdx(null)}
+                        onDragEnd={() => { setDragOverIdx(null); setDragIdx(null); }}
                         style={{
                             display: "flex", justifyContent: "space-between", alignItems: "center",
                             padding: "18px 20px", background: "var(--mid)", borderRadius: 6,
                             border: dragOverIdx === i ? "1px solid var(--green-highlight)" : "1px solid transparent",
-                            opacity: dragIdx.current === i ? 0.45 : 1,
+                            opacity: dragIdx === i ? 0.45 : 1,
                             transition: "border-color 0.15s, opacity 0.15s",
                             cursor: "grab",
                             userSelect: "none",

@@ -78,7 +78,13 @@ export default function AdminStoriesPage({ navigate }) {
         setStories(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
     };
 
-    useEffect(() => { load(); }, []);
+    useEffect(() => {
+        let cancelled = false;
+        getDocs(collection(db, "stories")).then(snap => {
+            if (!cancelled) setStories(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
+        });
+        return () => { cancelled = true; };
+    }, []);
 
     const handleBack = () => { setEditing(null); load(); };
     const handleEdit = (s) => { setForm(s); setEditing(s.docId); setGradColors(parseGradientColors(s.bg)); };

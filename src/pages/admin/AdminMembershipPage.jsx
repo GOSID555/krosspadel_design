@@ -91,7 +91,13 @@ export default function AdminMembershipPage({ navigate }) {
         setPlans(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
     };
 
-    useEffect(() => { load(); }, []);
+    useEffect(() => {
+        let cancelled = false;
+        getDocs(collection(db, "plans")).then(snap => {
+            if (!cancelled) setPlans(snap.docs.map(d => ({ docId: d.id, ...d.data() })));
+        });
+        return () => { cancelled = true; };
+    }, []);
 
     const handleEdit = (item) => { setForm(item); setEditing(item.docId); };
     const handleNew = () => { setForm(EMPTY); setEditing("new"); };

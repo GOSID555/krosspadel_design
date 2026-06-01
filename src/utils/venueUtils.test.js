@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { locationWord, totalCourts } from "./venueUtils";
+import { locationWord, formatDate } from "./venueUtils";
 
-// -------------------------------------------------------
-// locationWord
-// -------------------------------------------------------
 describe("locationWord", () => {
     it("แปลง 0–10 เป็นคำภาษาอังกฤษ", () => {
         expect(locationWord(0)).toBe("Zero");
@@ -18,28 +15,19 @@ describe("locationWord", () => {
     });
 });
 
-// -------------------------------------------------------
-// totalCourts
-// -------------------------------------------------------
-describe("totalCourts", () => {
-    it("บวกจำนวน courts ทั้งหมด", () => {
-        expect(totalCourts([{ courts: 6 }, { courts: 4 }])).toBe(10);
+describe("formatDate", () => {
+    it("คืน empty string เมื่อไม่มีค่า", () => {
+        expect(formatDate("")).toBe("");
+        expect(formatDate(null)).toBe("");
+        expect(formatDate(undefined)).toBe("");
     });
 
-    it("ข้าม venue ที่ courts เป็น undefined หรือว่าง", () => {
-        expect(totalCourts([{ courts: 6 }, { courts: undefined }])).toBe(6);
-        expect(totalCourts([{ courts: 6 }, { courts: "" }])).toBe(6);
+    it("คืนค่าเดิมเมื่อไม่ใช่ ISO date", () => {
+        expect(formatDate("not a date")).toBe("not a date");
     });
 
-    it("รับ string ตัวเลขได้", () => {
-        expect(totalCourts([{ courts: "8" }, { courts: "5" }])).toBe(13);
-    });
-
-    it("venues ว่างคืน 0", () => {
-        expect(totalCourts([])).toBe(0);
-    });
-
-    it("ทุก venue ไม่มีตัวเลข คืน 0", () => {
-        expect(totalCourts([{ courts: "" }, { courts: undefined }])).toBe(0);
+    it("ฟอร์แมต ISO date เป็น en-GB", () => {
+        expect(formatDate("2025-01-15")).toBe("15 Jan 2025");
+        expect(formatDate("2025-12-31")).toBe("31 Dec 2025");
     });
 });

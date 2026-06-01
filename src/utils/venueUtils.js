@@ -4,9 +4,8 @@ export function locationWord(count) {
     return WORDS[count] ?? count.toString();
 }
 
-export function totalCourts(venues) {
-    return venues.reduce((sum, v) => {
-        const n = parseInt(v.courts);
-        return sum + (isNaN(n) ? 0 : n);
-    }, 0);
+export function formatDate(val) {
+    if (!val) return "";
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+    return new Date(val + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }

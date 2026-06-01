@@ -2,21 +2,16 @@ import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 
 export default function VenueDetailPage({ venue, navigate, openBook }) {
-  const [mapCoords, setMapCoords] = useState(null);
-  const [mapFailed, setMapFailed] = useState(false);
+  const [geocoded, setGeocoded] = useState(null);
+  const [geocodeFailed, setGeocodeFailed] = useState(false);
+
+  const needsGeocode = !venue.mapUrl && !(venue.lat && venue.lon) && !!venue.address;
 
   useEffect(() => {
-    setMapFailed(false);
-    if (venue.mapUrl) return;
-    if (venue.lat && venue.lon) {
-      setMapCoords({ lat: parseFloat(venue.lat), lon: parseFloat(venue.lon) });
-      return;
-    }
-    if (!venue.address) { setMapFailed(true); return; }
-    setMapCoords(null);
+    if (!needsGeocode) return;
     const simplified = venue.address.replace(/^([\w\s]+floor[^,]*,\s*[^,]+,\s*)/i, "").trim();
     const controller = new AbortController();
-    const timeout = setTimeout(() => { controller.abort(); setMapFailed(true); }, 5000);
+    const timeout = setTimeout(() => { controller.abort(); setGeocodeFailed(true); }, 5000);
     fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(simplified + " Bangkok Thailand")}&format=json&limit=1`, {
       headers: { "User-Agent": "KrossPadel/1.0" },
       signal: controller.signal
@@ -24,12 +19,17 @@ export default function VenueDetailPage({ venue, navigate, openBook }) {
       .then(r => r.json())
       .then(data => {
         clearTimeout(timeout);
-        if (data[0]) setMapCoords({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) });
-        else setMapFailed(true);
+        if (data[0]) setGeocoded({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) });
+        else setGeocodeFailed(true);
       })
-      .catch(() => setMapFailed(true));
+      .catch(() => setGeocodeFailed(true));
     return () => { controller.abort(); clearTimeout(timeout); };
-  }, [venue.address, venue.lat, venue.lon, venue.mapUrl]);
+  }, [needsGeocode, venue.address]);
+
+  const mapCoords = venue.lat && venue.lon
+    ? { lat: parseFloat(venue.lat), lon: parseFloat(venue.lon) }
+    : geocoded;
+  const mapFailed = !venue.mapUrl && !mapCoords && (geocodeFailed || !venue.address);
   const courtText = venue.courtText || `Every court at KROSS ${venue.name} is built to World Padel Tour specifications — premium glass walls, artificial grass turf, and professional LED lighting for day and evening play.`;
   const courtText2 = venue.courtText2 || `Court hire is available from opening to close, with online booking up to 7 days in advance. Members receive priority windows and guaranteed slots during peak hours.`;
   const clubText = venue.clubText || `Beyond the courts, KROSS ${venue.name} is a place to stay. The club lounge is designed for post-match recovery and pre-match preparation.`;
