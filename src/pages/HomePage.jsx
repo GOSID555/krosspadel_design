@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import Footer from "../components/Footer";
+import MobileCarousel from "../components/MobileCarousel";
 import { VenueContext } from "../context/VenueContext";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -109,7 +110,8 @@ export default function HomePage({ navigate }) {
                         <button className="btn-ghost" onClick={() => navigate("venues")}>Explore All Venues</button>
                     </div>
                 </div>
-                <div className="venues-grid">
+                <MobileCarousel>
+                <div className="venues-grid" data-scroll>
                     {venues.map(v => {
                         const courtCount = v.courts || (v.courtsInfo ? v.courtsInfo.match(/\d+/)?.[0] : null);
                         return (
@@ -136,6 +138,7 @@ export default function HomePage({ navigate }) {
                         );
                     })}
                 </div>
+                </MobileCarousel>
             </section>
 
             {/* ACTIVITIES */}
@@ -148,7 +151,8 @@ export default function HomePage({ navigate }) {
                         </div>
                         <button className="btn-ghost" onClick={() => navigate("activities")}>All Activities</button>
                     </div>
-                    <div className="venues-grid">
+                    <MobileCarousel>
+                    <div className="venues-grid" data-scroll>
                         {MOCKUP_ACTIVITIES.map((a) => (
                             <div className="venue-card" key={a.docId} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activities")}>
                                 <div className="venue-bg-div" style={{
@@ -179,6 +183,7 @@ export default function HomePage({ navigate }) {
                             </div>
                         ))}
                     </div>
+                    </MobileCarousel>
                 </section>
             )}
 
@@ -192,7 +197,8 @@ export default function HomePage({ navigate }) {
                     <button className="btn-ghost" onClick={() => navigate("stories")}>All Stories</button>
                 </div>
                 {stories.length > 0 ? (
-                    <div className="stories-gallery">
+                    <MobileCarousel>
+                    <div className="stories-gallery" data-scroll>
                         {/* Featured — large left */}
                         <div className="story-gallery-feature" onClick={() => navigate("stories")}>
                             <div className="story-gallery-bg" style={{
@@ -228,6 +234,7 @@ export default function HomePage({ navigate }) {
                             ))}
                         </div>
                     </div>
+                    </MobileCarousel>
                 ) : (
                     <div style={{ padding: "80px 0", opacity: .3, fontSize: 12, letterSpacing: 3, textTransform: "uppercase" }}>No stories yet</div>
                 )}
