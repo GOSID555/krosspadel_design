@@ -152,7 +152,7 @@ export default function HomePage({ navigate }) {
                         <button className="btn-ghost" onClick={() => navigate("activities")}>All Activities</button>
                     </div>
                     <MobileCarousel>
-                    <div className="venues-grid" data-scroll>
+                    <div className="venues-grid activities-mob-scroll" data-scroll>
                         {MOCKUP_ACTIVITIES.map((a) => (
                             <div className="venue-card" key={a.docId} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activities")}>
                                 <div className="venue-bg-div" style={{

@@ -1993,9 +1993,13 @@ footer {
     }
     .venues-grid::-webkit-scrollbar { display: none; }
     .venues-grid .venue-card {
-        min-width: 80vw;
+        min-width: 85vw;
         flex-shrink: 0;
         scroll-snap-align: start;
+    }
+
+    .activities-mob-scroll .venue-card {
+        min-width: 85vw;
     }
 
     .stories-gallery {
@@ -2011,13 +2015,10 @@ footer {
     .stories-gallery::-webkit-scrollbar { display: none; }
     .story-gallery-feature,
     .story-gallery-small {
-        min-width: 82vw;
+        min-width: 85vw;
         height: 400px;
         flex-shrink: 0;
         scroll-snap-align: start;
-    }
-    .story-gallery-feature-body {
-        padding: 24px 20px;
     }
     .story-gallery-side {
         display: contents;
