@@ -71,7 +71,7 @@ export default function HomePage({ navigate, openBook }) {
                 </div>
                 <div className="venues-grid">
                     {venues.map(v => {
-                        const courtCount = v.courtsInfo ? v.courtsInfo.match(/\d+/)?.[0] : null;
+                        const courtCount = v.courts || (v.courtsInfo ? v.courtsInfo.match(/\d+/)?.[0] : null);
                         return (
                             <div className="venue-card" key={v.id} onClick={() => navigate("venue-" + v.id)}>
                                 <div className="venue-bg-div" style={{
@@ -80,7 +80,7 @@ export default function HomePage({ navigate, openBook }) {
                                 <div className="venue-card-inner">
                                     <div className="venue-overlay" />
                                     <div className="venue-info">
-                                        <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>Est. 2025</div>
+                                        <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>Est. {v.est || "2025"}</div>
                                         <div className="venue-name">{v.name}</div>
                                         <div className="venue-loc">{v.loc}</div>
                                         <div className="venue-cta">View Venue →</div>
@@ -204,10 +204,14 @@ export default function HomePage({ navigate, openBook }) {
             </section>
 
             {/* APP SHOWCASE */}
-            <section style={{ background: "linear-gradient(145deg, var(--green-dark) 0%, #0a0f0a 100%)", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "stretch", minHeight: 600 }}>
-                <div style={{ padding: "100px clamp(24px, 5vw, 72px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <section className="app-showcase-grid" style={{ background: "linear-gradient(145deg, var(--green-dark) 0%, #0a0f0a 100%)" }}>
+                {/* Header — tag + heading */}
+                <div className="app-header" style={{ padding: "80px clamp(24px, 5vw, 72px) 0" }}>
                     <div className="tag">The App</div>
                     <div className="heading">Join The<br />Kross App.</div>
+                </div>
+                {/* Details — features + CTA */}
+                <div className="app-details" style={{ padding: "0 clamp(24px, 5vw, 72px) 80px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
                     <div style={{ display: "flex", flexDirection: "column", gap: 16, margin: "32px 0 40px" }}>
                         {[
                             { title: "Profile & Level", desc: "Track your profile, stats and player level in one place." },
@@ -225,7 +229,8 @@ export default function HomePage({ navigate, openBook }) {
                     </div>
                     <a href="https://apps.apple.com/kz/app/kross-padel/id6741785490" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none", display: "inline-block", alignSelf: "flex-start" }}>Download on App Store</a>
                 </div>
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", overflow: "hidden" }}>
+                {/* Image */}
+                <div className="app-img-col" style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", overflow: "hidden" }}>
                     <img src="/image/kross_app.png" alt="Kross App" style={{ maxHeight: 620, maxWidth: "100%", objectFit: "contain", display: "block" }}
                         onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextSibling.style.display = "flex"; }}
                     />
@@ -237,12 +242,15 @@ export default function HomePage({ navigate, openBook }) {
             </section>
 
             {/* BOOK CTA */}
-            <div id="book-cta" onClick={openBook}>
+            <div id="book-cta">
                 <div className="book-bg-text">BOOK PADEL BOOK PADEL BOOK PADEL BOOK PADEL &nbsp;BOOK PADEL BOOK PADEL BOOK PADEL BOOK PADEL &nbsp;</div>
                 <div className="book-content">
                     <div className="book-title">Ready To Play?</div>
-                    <div style={{ fontSize: 13, letterSpacing: "3px", textTransform: "uppercase", opacity: 0.5, marginBottom: 32 }}>Join Our Community</div>
-                    <button className="book-cta-btn">Book A Court</button>
+                    <div style={{ fontSize: 26, letterSpacing: "4px", textTransform: "uppercase", opacity: 0.55, marginBottom: 40 }}>Join Our Community</div>
+                    <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+                        <button className="book-cta-btn" onClick={() => navigate("whatsapp")} style={{ background: "transparent", border: "2px solid var(--white)", color: "var(--white)" }}>WhatsApp</button>
+                        <a href="https://line.me/ti/p/~@krosspadel" target="_blank" rel="noreferrer" className="book-cta-btn" style={{ textDecoration: "none" }}>LINE</a>
+                    </div>
                 </div>
             </div>
 

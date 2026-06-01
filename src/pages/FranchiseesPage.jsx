@@ -61,7 +61,7 @@ export default function FranchiseesPage({ navigate, notify }) {
         <div className="partner-section-inner">
           <div className="tag">Franchise With KROSS</div>
           <div className="heading" style={{ fontSize: "clamp(40px, 6vw, 80px)", marginBottom: 32 }}>
-            Be Part Of Something <span style={{ color: "var(--green-highlight)" }}>Bigger.</span>
+            Be Part Of Something Bigger.
           </div>
           <p className="body-txt" style={{ fontSize: 18, lineHeight: 1.9, maxWidth: 560 }}>
             Kross is more than a sports club. It's a community, a lifestyle and a global movement. Now you can bring the Kross experience to your city.
@@ -133,7 +133,7 @@ export default function FranchiseesPage({ navigate, notify }) {
       {/* CTA + FORM */}
       <section id="contact-form" className="partner-section">
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+          <div className="form-contact-grid">
             <div>
               <div className="tag">Let's Build The Next KROSS Together</div>
               <div className="heading" style={{ marginBottom: 24 }}>Ready To Get Started?</div>

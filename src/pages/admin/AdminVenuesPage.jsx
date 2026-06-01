@@ -6,7 +6,7 @@ import { uploadImage } from "../../supabaseClient";
 import { ChromePicker } from "react-color";
 
 const EMPTY = {
-    name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", intro: "", lat: "", lon: "", mapUrl: "",
+    name: "", loc: "", region: "", num: "", status: "Open", hours: "", address: "", phone: "", courts: "", est: "", courtsInfo: "", intro: "", lat: "", lon: "", mapUrl: "",
     bg: "", bg1: "", bgImage: "", bg1Image: "", courtsImageBg: "", clubImageBg: "", courtsImageBgImage: "", clubImageBgImage: "", courtsImageCaption: "", clubImageCaption: "",
     courtText: "", courtText2: "", clubText: "", clubText2: "", features: [], imageUrl: "", gallery: []
 };
@@ -368,6 +368,7 @@ export default function AdminVenuesPage({ navigate }) {
         ["name", "Name"], ["loc", "Location"], ["region", "Region"],
         ["num", "Number (01)"], ["status", "Status"], ["hours", "Hours"],
         ["address", "Address"], ["phone", "Phone"], ["courts", "Number of Courts"],
+        ["est", "Est. Year (เช่น 2025)"], ["courtsInfo", "Courts Info (เช่น 4 Courts · International Standard)"],
         ["intro", "Intro"], ["lat", "Latitude (เช่น 13.7381)"], ["lon", "Longitude (เช่น 100.5601)"],
         ["mapUrl", "Google Maps Embed URL (optional — แทน lat/lon)"], ["bg", "BG Gradient"], ["bg1", "Hero BG"],
         ["courtsImageBg", "Courts Section Image"], ["clubImageBg", "Club Section Image"],

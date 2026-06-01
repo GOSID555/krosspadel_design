@@ -88,6 +88,7 @@ function AppInner() {
       {page === "partner-franchisees" && <FranchiseesPage navigate={navigate} notify={notify} />}
       {page === "partner-brands" && <BrandsCollabsPage navigate={navigate} />}
       {page === "whatsapp" && <ComingSoonPage navigate={navigate} title="WhatsApp" icon="💬" />}
+      {page === "krosspark" && <ComingSoonPage navigate={navigate} title="Kross Park" icon="🏟️" />}
       {page === "admin-login" && <AdminLoginPage navigate={navigate} />}
       {page === "admin" && (user ? <AdminDashboard navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {page === "admin-venues" && (user ? <AdminVenuesPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
