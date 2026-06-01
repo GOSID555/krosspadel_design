@@ -97,7 +97,7 @@ function AppInner() {
       {page === "admin-membership" && (user ? <AdminMembershipPage navigate={navigate} /> : <AdminLoginPage navigate={navigate} />)}
       {venueMatch && <VenueDetailPage venue={venueMatch} navigate={navigate} openBook={openBook} />}
       {page.startsWith("story-") && <StoryDetailPage navigate={navigate} page={page} />}
-      {page.startsWith("activity-") && <ActivityDetailPage navigate={navigate} />}
+      {page.startsWith("activity-") && <ActivityDetailPage navigate={navigate} activityId={page.replace("activity-", "")} />}
     </>
   );
 }

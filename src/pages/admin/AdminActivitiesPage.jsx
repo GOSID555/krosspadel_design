@@ -4,7 +4,7 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase
 import { uploadImage } from "../../supabaseClient";
 import { formatDate } from "../../utils/venueUtils";
 
-const EMPTY = { num: "", name: "", text: "", imageUrl: "", date: "" };
+const EMPTY = { num: "", name: "", text: "", imageUrl: "", date: "", time: "", club: "", level: "", url: "" };
 
 function ActivityPreview({ form }) {
     return (
@@ -165,6 +165,36 @@ export default function AdminActivitiesPage({ navigate }) {
                             value={form.date || ""}
                             onChange={e => handleChange("date", e.target.value)}
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, colorScheme: "dark" }}
+                        />
+                    </div>
+                    {/* Time */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Time (e.g. 18:00 – 20:00)</div>
+                        <input
+                            value={form.time || ""}
+                            onChange={e => handleChange("time", e.target.value)}
+                            placeholder="e.g. 18:00 – 20:00"
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                        />
+                    </div>
+                    {/* Club */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Club / Venue</div>
+                        <input
+                            value={form.club || ""}
+                            onChange={e => handleChange("club", e.target.value)}
+                            placeholder="e.g. KROSS Onnut"
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
+                        />
+                    </div>
+                    {/* Level */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Level (e.g. All Levels / Intermediate+)</div>
+                        <input
+                            value={form.level || ""}
+                            onChange={e => handleChange("level", e.target.value)}
+                            placeholder="e.g. All Levels"
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
                         />
                     </div>
                     {/* Description */}

@@ -10,7 +10,7 @@ export default function ComingSoonPage({ navigate, title = "WhatsApp", icon = "�
         <div className="hero-content">
           <div className="hero-eyebrow">Coming Soon</div>
           <div className="hero-title">{title}</div>
-          <div className="hero-sub">กำลังพัฒนา — อยู่ระหว่างการดำเนินการ</div>
+          <div className="hero-sub">Coming Soon — Currently Under Development</div>
         </div>
       </section>
 
@@ -19,7 +19,7 @@ export default function ComingSoonPage({ navigate, title = "WhatsApp", icon = "�
           <div style={{ fontSize: 72, marginBottom: 32 }}>{icon}</div>
           <div className="heading" style={{ marginBottom: 24 }}>Under Development</div>
           <p className="body-txt" style={{ fontSize: 18, opacity: 0.75, marginBottom: 48, lineHeight: 1.8 }}>
-            ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา เร็วๆ นี้จะพร้อมใช้งาน
+            This feature is currently under development. It will be available soon.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <button className="btn-primary" onClick={() => navigate("home")}>Back to Home</button>
