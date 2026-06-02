@@ -92,15 +92,15 @@ export default function MembershipPage({ navigate, notify, openBook }) {
               </button>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
               <img
                 src="/image/kross_app.png"
                 alt="KROSS Padel App"
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: 520,
-                  objectFit: "contain",
+                  width: "100%",
+                  height: "auto",
                   borderRadius: 12,
+                  display: "block",
                 }}
               />
             </div>
