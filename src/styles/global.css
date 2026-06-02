@@ -1999,10 +1999,6 @@ footer {
         scroll-snap-align: start;
     }
 
-    .activities-mob-scroll .venue-card {
-        aspect-ratio: unset;
-        height: 320px;
-    }
 
     .stories-gallery {
         display: flex;
