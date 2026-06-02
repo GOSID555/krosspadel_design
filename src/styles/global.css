@@ -2000,6 +2000,8 @@ footer {
 
     .activities-mob-scroll .venue-card {
         min-width: 100%;
+        aspect-ratio: unset;
+        height: 320px;
     }
 
     .stories-gallery {
