@@ -38,8 +38,11 @@ export default function BecomePartnerPage({ navigate }) {
           <div className="hero-title">Become A Partner</div>
           <div className="hero-sub">Join Asia's Growing Padel Revolution</div>
           <div className="hero-actions">
-            <button className="btn-primary" onClick={() => navigate("partner-franchisees")}>Partner With Us</button>
-            <button className="btn-ghost" onClick={() => navigate("about")}>Learn More</button>
+            {CARDS.map(card => (
+              <button key={card.id} className="btn-ghost" onClick={() => navigate(card.id)}>
+                {card.label}
+              </button>
+            ))}
           </div>
         </div>
       </section>
