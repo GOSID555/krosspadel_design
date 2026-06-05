@@ -3,6 +3,49 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
+const MOCKUP_PLANS = [
+  {
+    docId: "mock-plan-1",
+    name: "Kross Pass 20 hrs",
+    price: "16,000",
+    priceLabel: "20 hours",
+    validity: "Valid 3 months · Non-transferable · Use for regular booking",
+    perks: "20 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
+    featured: false,
+    hidden: false,
+  },
+  {
+    docId: "mock-plan-2",
+    name: "Kross Pass 30 hrs",
+    price: "24,000",
+    priceLabel: "30 hours",
+    validity: "Valid 3 months · Non-transferable · Use for regular booking",
+    perks: "30 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
+    featured: true,
+    hidden: false,
+  },
+  {
+    docId: "mock-plan-3",
+    name: "Kross Pass 50 hrs",
+    price: "37,000",
+    priceLabel: "50 hours",
+    validity: "",
+    perks: "50 hours court time\nAll KROSS venues\nNo expiry date\nOnline booking via app",
+    featured: false,
+    hidden: true,
+  },
+  {
+    docId: "mock-plan-4",
+    name: "Kross Pass 100 hrs",
+    price: "70,000",
+    priceLabel: "100 hours",
+    validity: "",
+    perks: "100 hours court time\nAll KROSS venues\nNo expiry date\nOnline booking via app",
+    featured: false,
+    hidden: true,
+  },
+];
+
 const PRICE_TABS = [
   { key: "court_rental", label: "Court Rental" },
   { key: "coaching", label: "Coaching" },
@@ -28,7 +71,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
     ]).then(([plansSnap, pricingSnap]) => {
       if (cancelled) return;
       if (plansSnap.docs.length > 0)
-        setPlans(plansSnap.docs.map(d => ({ docId: d.id, ...d.data() })));
+        setPlans(plansSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(p => !p.hidden));
       setPricing(pricingSnap.docs.map(d => ({ docId: d.id, ...d.data() })));
     });
     return () => { cancelled = true; };
@@ -210,17 +253,19 @@ export default function MembershipPage({ navigate, notify, openBook }) {
             All plans include access to all KROSS venues, priority booking, coaching discounts, and exclusive member events.
           </p>
 
-          {plans.length === 0 ? (
-            <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
-              Packages coming soon
-            </div>
-          ) : (
+          {(() => {
+            const displayPlans = plans.length > 0 ? plans : MOCKUP_PLANS.filter(p => !p.hidden);
+            return displayPlans.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Packages coming soon
+              </div>
+            ) : (
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
               gap: 24, alignItems: "stretch"
             }}>
-              {plans.map(p => (
+              {displayPlans.map(p => (
                 <div
                   key={p.docId || p.name}
                   style={{
@@ -299,7 +344,8 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                 </div>
               ))}
             </div>
-          )}
+            );
+          })()}
         </div>
       </section>
 

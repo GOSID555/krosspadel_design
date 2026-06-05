@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
-const EMPTY = { name: "", price: "", priceLabel: "", validity: "", perks: "", featured: false };
+const EMPTY = { name: "", price: "", priceLabel: "", validity: "", perks: "", featured: false, hidden: false };
 
 function MembershipPreview({ form }) {
     return (
@@ -140,6 +140,7 @@ export default function AdminMembershipPage({ navigate }) {
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                 <div className="venue-name" style={{ fontSize: 18 }}>{item.name}</div>
                                 {item.featured && <span style={{ fontSize: 8, letterSpacing: "2px", background: "var(--green-highlight)", color: "#fff", padding: "2px 8px", fontWeight: 600 }}>POPULAR</span>}
+                                {item.hidden && <span style={{ fontSize: 8, letterSpacing: "2px", background: "#555", color: "#fff", padding: "2px 8px", fontWeight: 600 }}>HIDDEN</span>}
                             </div>
                             <div style={{ opacity: 0.5, fontSize: 13 }}>{item.price} · {item.perks?.slice(0, 60)}...</div>
                         </div>
@@ -236,6 +237,29 @@ export default function AdminMembershipPage({ navigate }) {
                         <div>
                             <div style={{ fontSize: 13, marginBottom: 2 }}>Mark as Popular / Featured</div>
                             <div style={{ fontSize: 11, opacity: 0.45 }}>แสดง badge "POPULAR" และ highlight สีเขียว</div>
+                        </div>
+                    </div>
+                    {/* Hidden toggle */}
+                    <div
+                        onClick={() => handleChange("hidden", !form.hidden)}
+                        style={{
+                            display: "flex", alignItems: "center", gap: 14, padding: "16px 20px",
+                            background: form.hidden ? "rgba(255,100,100,0.07)" : "var(--mid)",
+                            border: `1px solid ${form.hidden ? "rgba(255,100,100,0.4)" : "rgba(255,255,255,0.1)"}`,
+                            borderRadius: 4, cursor: "pointer", transition: "all .2s"
+                        }}
+                    >
+                        <div style={{
+                            width: 20, height: 20, borderRadius: 4, flexShrink: 0,
+                            background: form.hidden ? "#ff6464" : "none",
+                            border: `2px solid ${form.hidden ? "#ff6464" : "rgba(255,255,255,0.3)"}`,
+                            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12
+                        }}>
+                            {form.hidden ? "✓" : ""}
+                        </div>
+                        <div>
+                            <div style={{ fontSize: 13, marginBottom: 2 }}>Hide from customers</div>
+                            <div style={{ fontSize: 11, opacity: 0.45 }}>ไม่โชว์ให้ลูกค้าเห็นในหน้า Book & Pricing</div>
                         </div>
                     </div>
                     <button className="btn-primary" onClick={handleSave} disabled={saving}>
