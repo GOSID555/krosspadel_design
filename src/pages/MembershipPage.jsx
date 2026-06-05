@@ -265,60 +265,22 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                   }}
                 >
                   {p.featured && (
-                    <div style={{
-                      position: "absolute", top: -1, left: 0, right: 0,
-                      height: 3, background: "var(--green-highlight)"
-                    }} />
-                  )}
-                  {p.featured && (
-                    <div style={{
-                      display: "inline-flex", alignSelf: "flex-start",
-                      background: "var(--green-highlight)", color: "var(--dark)",
-                      fontSize: 9, fontWeight: 700, letterSpacing: "2px",
-                      textTransform: "uppercase", padding: "4px 10px", marginBottom: 20
-                    }}>MOST POPULAR</div>
+                    <div style={{ position: "absolute", top: -1, left: 0, right: 0, height: 3, background: "var(--green-highlight)" }} />
                   )}
                   <div style={{
                     fontFamily: "'Gotham Narrow', sans-serif",
-                    fontSize: "clamp(20px, 2.5vw, 26px)", letterSpacing: "1.5px",
-                    lineHeight: 1.1, marginBottom: 4, marginTop: p.featured ? 0 : 28
+                    fontSize: "clamp(18px, 2vw, 22px)", letterSpacing: "1.5px",
+                    lineHeight: 1.1, marginBottom: 16, opacity: 0.85
                   }}>{p.name}</div>
-                  {p.priceLabel && (
-                    <div style={{ fontSize: 11, opacity: 0.45, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 24 }}>{p.priceLabel}</div>
-                  )}
-                  <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 24 }} />
-                  <div style={{ marginBottom: 8 }}>
+                  <div>
                     <span style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 13, opacity: 0.5, verticalAlign: "super" }}>฿</span>
-                    <span style={{ fontSize: "clamp(40px, 6vw, 56px)", fontWeight: 700, color: "var(--green-highlight)", letterSpacing: "-1px" }}>
+                    <span style={{ fontSize: "clamp(36px, 5vw, 52px)", fontWeight: 700, color: "var(--green-highlight)", letterSpacing: "-1px" }}>
                       {p.price}
                     </span>
                   </div>
                   {p.validity && (
-                    <div style={{ fontSize: 11, opacity: 0.38, lineHeight: 1.6, marginBottom: 28 }}>{p.validity}</div>
+                    <div style={{ fontSize: 11, opacity: 0.38, lineHeight: 1.6, marginTop: 10 }}>{p.validity}</div>
                   )}
-                  {p.perks && (
-                    <div style={{ flex: 1, marginBottom: 36 }}>
-                      {p.perks.split("\n").filter(l => l.trim()).map((line, i) => (
-                        <div key={i} style={{ display: "flex", gap: 12, marginBottom: 12, alignItems: "flex-start" }}>
-                          <div style={{
-                            width: 18, height: 18, borderRadius: "50%", flexShrink: 0, marginTop: 1,
-                            background: "rgba(45,168,79,0.15)", border: "1px solid rgba(45,168,79,0.4)",
-                            display: "flex", alignItems: "center", justifyContent: "center"
-                          }}>
-                            <span style={{ color: "var(--green-highlight)", fontSize: 10, lineHeight: 1 }}>✓</span>
-                          </div>
-                          <span style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.75 }}>
-                            {line.replace(/^[-•·]\s*/, "")}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <button
-                    className={p.featured ? "btn-primary" : "btn-ghost"}
-                    onClick={() => notify(`${p.name} — we'll contact you shortly`)}
-                    style={{ width: "100%", marginTop: "auto" }}
-                  >Get Started</button>
                 </div>
               ))}
             </div>
