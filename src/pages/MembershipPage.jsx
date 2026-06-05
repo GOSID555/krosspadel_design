@@ -12,7 +12,6 @@ const MOCKUP_PLANS = [
     validity: "Valid 3 months · Non-transferable · Use for regular booking",
     perks: "20 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
     featured: false,
-    hidden: false,
   },
   {
     docId: "mock-plan-2",
@@ -22,27 +21,6 @@ const MOCKUP_PLANS = [
     validity: "Valid 3 months · Non-transferable · Use for regular booking",
     perks: "30 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
     featured: true,
-    hidden: false,
-  },
-  {
-    docId: "mock-plan-3",
-    name: "Kross Pass 50 hrs",
-    price: "37,000",
-    priceLabel: "50 hours",
-    validity: "",
-    perks: "50 hours court time\nAll KROSS venues\nNo expiry date\nOnline booking via app",
-    featured: false,
-    hidden: true,
-  },
-  {
-    docId: "mock-plan-4",
-    name: "Kross Pass 100 hrs",
-    price: "70,000",
-    priceLabel: "100 hours",
-    validity: "",
-    perks: "100 hours court time\nAll KROSS venues\nNo expiry date\nOnline booking via app",
-    featured: false,
-    hidden: true,
   },
 ];
 
@@ -254,7 +232,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
           </p>
 
           {(() => {
-            const displayPlans = plans.length > 0 ? plans : MOCKUP_PLANS.filter(p => !p.hidden);
+            const displayPlans = plans.length > 0 ? plans : MOCKUP_PLANS;
             return displayPlans.length === 0 ? (
               <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
                 Packages coming soon
