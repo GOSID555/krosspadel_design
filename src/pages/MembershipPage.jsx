@@ -248,7 +248,8 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                   key={p.docId || p.name}
                   style={{
                     display: "flex", flexDirection: "column",
-                    padding: "40px 36px",
+                    padding: "56px 40px",
+                    minHeight: 260,
                     border: `1px solid ${p.featured ? "var(--green-highlight)" : "var(--border)"}`,
                     background: p.featured ? "rgba(45,168,79,0.08)" : "var(--mid2)",
                     position: "relative",
