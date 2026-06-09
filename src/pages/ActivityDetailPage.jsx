@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { formatDate } from "../utils/venueUtils";
+import { MOCKUP_ACTIVITIES } from "../data/mockActivities";
 import Footer from "../components/Footer";
 
 export default function ActivityDetailPage({ navigate, activityId }) {
@@ -10,6 +11,8 @@ export default function ActivityDetailPage({ navigate, activityId }) {
 
   useEffect(() => {
     if (!activityId) { setLoading(false); return; }
+    const mock = MOCKUP_ACTIVITIES.find(a => (a.docId || a.name) === activityId);
+    if (mock) { setActivity(mock); setLoading(false); return; }
     getDoc(doc(db, "activities", activityId)).then(d => {
       setActivity(d.exists() ? { docId: d.id, ...d.data() } : null);
       setLoading(false);
