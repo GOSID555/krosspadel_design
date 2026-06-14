@@ -1,13 +1,16 @@
 import Footer from "../components/Footer";
 
 const BRAND_PARTNERS = [
-  { name: "Corona", category: "Beverage" },
-  { name: "airasia", category: "Aviation" },
-  { name: "alo", category: "Apparel" },
-  { name: "Wilson", category: "Equipment" },
-  { name: "Electrolit", category: "Hydration" },
-  { name: "Red Bull", category: "Energy" },
-  { name: "HYPERICE", category: "Recovery" },
+  { name: "Corona",         category: "Beverage",    logo: "" },
+  { name: "Brew Yoga",      category: "Wellness",    logo: "" },
+  { name: "Meliã",          category: "Hospitality", logo: "" },
+  { name: "Marriott",       category: "Hospitality", logo: "" },
+  { name: "White Claw",     category: "Beverage",    logo: "" },
+  { name: "Hilton",         category: "Hospitality", logo: "" },
+  { name: "Lancôme",        category: "Beauty",      logo: "" },
+  { name: "Fliquid",        category: "Hydration",   logo: "" },
+  { name: "Espresso",       category: "Coffee",      logo: "" },
+  { name: "Monte Carlo/AP", category: "Sports",      logo: "" },
 ];
 
 const CARDS = [
@@ -58,27 +61,61 @@ export default function BecomePartnerPage({ navigate }) {
             We team up with global brands that share our passion for sport, lifestyle and community. Together, we create unique experiences on and off the court.
           </p>
 
-          {/* Partner logos row */}
-          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 0, borderTop: "1px solid var(--border)", borderLeft: "1px solid var(--border)" }}>
-            {BRAND_PARTNERS.map((b, i) => (
-              <div key={i} style={{
-                flex: "1 1 120px",
-                minWidth: 120,
-                padding: "36px 28px",
-                borderRight: "1px solid var(--border)",
-                borderBottom: "1px solid var(--border)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background .25s",
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = "var(--mid)"}
-                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-              >
-                <span style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: "clamp(14px, 2vw, 20px)", fontWeight: 800, letterSpacing: "1px", textTransform: "uppercase", whiteSpace: "nowrap" }}>{b.name}</span>
-              </div>
-            ))}
-          </div>
+          {/* Partner logos grid */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+              borderTop: "1px solid rgba(255,255,255,0.15)",
+              borderLeft: "1px solid rgba(255,255,255,0.15)",
+            }}>
+              {BRAND_PARTNERS.map((b, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: "clamp(16px, 3vw, 32px) clamp(12px, 2vw, 20px)",
+                    borderRight: "1px solid rgba(255,255,255,0.15)",
+                    borderBottom: "1px solid rgba(255,255,255,0.15)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "80px",
+                    transition: "background .25s",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.07)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                >
+                  {b.logo ? (
+                    <img
+                      src={b.logo}
+                      alt={b.name}
+                      style={{
+                        maxWidth: "clamp(60px, 10vw, 110px)",
+                        maxHeight: "clamp(28px, 4vw, 44px)",
+                        objectFit: "contain",
+                        display: "block",
+                      }}
+                      onError={e => {
+                        e.currentTarget.style.display = "none";
+                        e.currentTarget.insertAdjacentHTML("afterend",
+                          `<span style="font-size:clamp(10px,1.5vw,14px);font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;text-align:center;">${b.name}</span>`
+                        );
+                      }}
+                    />
+                  ) : (
+                    <span style={{
+                      fontSize: "clamp(10px, 1.5vw, 14px)",
+                      fontWeight: 800,
+                      letterSpacing: "1px",
+                      textTransform: "uppercase",
+                      color: "#fff",
+                      textAlign: "center",
+                    }}>
+                      {b.name}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
 
           <button
             onClick={() => navigate("partner-brands")}

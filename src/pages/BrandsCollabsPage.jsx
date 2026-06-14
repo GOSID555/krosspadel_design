@@ -1,10 +1,10 @@
 import Footer from "../components/Footer";
 
 const WHY_ITEMS = [
-  { num: "01", title: "Premium Audience", desc: "Reach an active, affluent community of 10,000+ players and lifestyle enthusiasts across Bangkok's most sought-after neighbourhoods." },
-  { num: "02", title: "High Engagement", desc: "Our members are loyal, passionate and spend time at our venues regularly — giving your brand consistent, meaningful exposure." },
-  { num: "03", title: "Lifestyle Alignment", desc: "KROSS sits at the intersection of sport, wellness and social life — the perfect platform for brands that value health and community." },
-  { num: "04", title: "Multi-Channel Reach", desc: "From in-venue branding and events to digital content, app integrations and social media — we amplify your brand across every touchpoint." },
+  { num: "01", title: "Premium Audience", desc: "Connect with a highly engaged community of professionals, entrepreneurs, executives, expatriates, and active lifestyle consumers across Bangkok’s most desirable districts. Our audience values premium experiences, wellness, sport, and community." },
+  { num: "02", title: "YEAR-ROUND ENGAGEMENT", desc: "Through clubs, tournaments, leagues, coaching programs, community events, and digital platforms, KROSS delivers consistent brand exposure throughout the year, creating deeper engagement than traditional sponsorship opportunities." },
+  { num: "03", title: "INTEGRATED ECOSYSTEM", desc: "KROSS combines sport, fitness, technology, events, hospitality, and community into a single platform. This creates multiple touchpoints where brands can engage authentically with our audience both on and off the court." },
+  { num: "04", title: "SCALABLE PARTNERSHIPS", desc: "From venue branding and product sampling to digital campaigns, tournaments, corporate experiences, and strategic collaborations, KROSS offers flexible partnership solutions designed to support a wide range of marketing and business objectives." },
 ];
 
 const ACTIVATION_TYPES = [
@@ -45,7 +45,7 @@ export default function BrandsCollabsPage({ navigate }) {
           <div className="tag">Why Partner With Us</div>
           <div className="heading" style={{ marginBottom: 20 }}>Why Collab<br />With Kross.</div>
           <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.9, maxWidth: 560, marginBottom: 64 }}>
-            KROSS connects brands with a premium audience across 4 Bangkok venues, our digital platforms and an active community of 10,000+ players and lifestyle enthusiasts.
+            KROSS provides brands with direct access to one of Southeast Asia’s fastest-growing sports communities through a unique ecosystem of venues, events, technology, and lifestyle experiences. More than a padel operator, KROSS is a rapidly growing racquet sports platform connecting brands with an affluent, active, and highly engaged audience across Bangkok and beyond.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 2 }}>
             {WHY_ITEMS.map((item, i) => (
@@ -73,7 +73,12 @@ export default function BrandsCollabsPage({ navigate }) {
           <div className="tag">Activations</div>
           <div className="heading" style={{ marginBottom: 20 }}>Brand Event<br />&amp; Activation.</div>
           <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.9, maxWidth: 560, marginBottom: 64 }}>
-            From court-side branding to full experiential campaigns — we design activations that put your brand at the heart of the KROSS community.
+            <p>
+            From premium tournaments and venue takeovers to product launches and corporate experiences, KROSS creates impactful activations that connect brands with one of Southeast Asia’s most engaged sports communities.
+            </p>
+            <p>
+            Whether your objective is brand awareness, customer acquisition, product launches, hospitality, or community engagement, we design tailored experiences that deliver measurable results and meaningful connections.
+            </p>
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 2 }}>
             {ACTIVATION_TYPES.map((item, i) => (
