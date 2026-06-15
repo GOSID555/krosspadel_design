@@ -1,10 +1,10 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
 import Footer from "../components/Footer";
 
-const EMAILJS_SERVICE_ID  = "service_lgly8kn";
-const EMAILJS_TEMPLATE_ID = "template_vqu96rm";
-const EMAILJS_PUBLIC_KEY  = "R5frBpVFbqBPqGm5K";
+// Web3Forms — submissions are delivered to whichever inbox the access key is
+// registered to. Sign up at https://web3forms.com using the KROSS "krossinfo"
+// inbox so customer messages land there, then paste the access key below.
+const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
 
 export default function ContactPage({ navigate, notify }) {
   const [sending, setSending] = useState(false);
@@ -16,11 +16,22 @@ export default function ContactPage({ navigate, notify }) {
     e.preventDefault();
     setSending(true);
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form, EMAILJS_PUBLIC_KEY);
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `[KROSS Contact] ${form.title} — ${form.name} ${form.last_name}`.trim(),
+          from_name: `${form.name} ${form.last_name}`.trim(),
+          ...form,
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || "Submit failed");
       notify("Message sent! We'll reply within 24 hours.");
       setForm({ name: "", last_name: "", email: "", title: "General Enquiry", message: "" });
     } catch (err) {
-      console.error("EmailJS error:", err);
+      console.error("Web3Forms error:", err);
       notify("Failed to send. Please try again.");
     } finally {
       setSending(false);
