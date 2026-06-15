@@ -92,10 +92,9 @@ export default function BecomePartnerPage({ navigate }) {
                       src={b.image}
                       alt={b.name}
                       style={{
-                        maxWidth: "clamp(60px, 10vw, 110px)",
-                        maxHeight: "clamp(28px, 4vw, 44px)",
-                        objectFit: "contain",
-                        display: "block",
+                      maxWidth: "clamp(120px, 12vw, 180px)",
+                      maxHeight: "clamp(50px, 6vw, 80px)",
+                      objectFit: "contain",
                       }}
                       onError={e => {
                         e.currentTarget.style.display = "none";
