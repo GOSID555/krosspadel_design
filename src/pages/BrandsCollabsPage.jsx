@@ -8,17 +8,27 @@ const WHY_ITEMS = [
 ];
 
 const ACTIVATION_TYPES = [
-  { title: "Tournament Title Sponsorship", desc: "Full naming rights, branding across courts, digital and social amplification for our signature KROSS tournaments." },
-  { title: "Court Branding", desc: "Branded court panels, net posts and facility signage across all 4 Bangkok venues." },
-  { title: "Pop-Up & Experiential", desc: "Exclusive pop-up activations, product launches and experiential campaigns integrated into our events calendar." },
-  { title: "Content & Social", desc: "Native content creation, influencer partnerships and social takeovers reaching our engaged community." },
-  { title: "F&B Partnership", desc: "Exclusive pouring rights, co-branded menus and bar activations for tournaments and community events." },
-  { title: "Apparel Collaboration", desc: "Co-branded gear, limited-edition collections and kit partnerships worn on every court at every KROSS venue." },
+  { title: "TOURNAMENT TITLE SPONSORSHIP", desc: "Secure naming rights and premium visibility across KROSS tournaments, including venue branding, digital promotion, social media amplification, player communications, media exposure, and event content. Position your brand at the center of some of Thailand's largest padel events and connect directly with an active and affluent audience." },
+  { title: "VENUE & COURT BRANDING", desc: "Showcase your brand across the KROSS ecosystem through court branding, net branding, venue signage, player areas, LED displays, digital screens, and high-visibility touchpoints throughout the customer journey. Create year-round exposure across multiple venues and thousands of player interactions." },
+  { title: "POP-UP & EXPERIENTIAL ACTIVATIONS", desc: "Launch products, engage consumers, and create memorable experiences through bespoke activations integrated into tournaments, community events, and venue experiences.From sampling campaigns and test-drive experiences to wellness activations and product showcases, KROSS provides a unique platform for direct customer engagement." },
+  { title: "CONTENT & DIGITAL CAMPAIGNS", desc: "Extend your reach beyond the venue through branded content, social media collaborations, event coverage, influencer partnerships, video production, and digital storytelling.Leverage the KROSS community and content ecosystem to create authentic engagement both online and offline." },
+  { title: "F&B PARTNERSHIPS", desc: "Integrate your brand through exclusive pouring rights, product sampling, co-branded menus, hospitality experiences, VIP lounges, and event activations.Perfect for beverage, hospitality, and lifestyle brands looking to build meaningful consumer connections." },
+  { title: "MERCHANDISE & APPAREL COLLABORATIONS", desc: "Develop co-branded collections, limited-edition products, player kits, tournament merchandise, and lifestyle apparel that authentically connect your brand with our community.Create products that become part of the everyday experience of players and fans." },
+  { title: "CORPORATE EVENTS & HOSPITALITY", desc: "Host client events, team-building activities, executive networking sessions, product launches, and VIP experiences within the KROSS ecosystem.Our venues provide a unique setting where sport, business, lifestyle, and community naturally come together." },
+  { title: "CUSTOM PARTNERSHIPS", desc: "Every brand is different. Our team works closely with partners to design bespoke collaborations aligned with their objectives, audience, and marketing strategy.From local activations to long-term strategic partnerships, we create opportunities that generate real value for both brands and the KROSS community." },
 ];
 
 const BRAND_PARTNERS = [
-  { name: "Corona", category: "Beverage" },
-  { name: "PEACHES Active", category: "Apparel" },
+  { name: "Corona",         category: "Beverage",    image:  "/image/logos/1.png" },
+  { name: "Brew Yoga",      category: "Wellness",    image:  "/image/logos/2.png" },
+  { name: "Meliã",          category: "Hospitality", image:  "/image/logos/3.png" },
+  { name: "Marriott",       category: "Hospitality", image:  "/image/logos/4.png" },
+  { name: "White Claw",     category: "Beverage",    image:  "/image/logos/5.png" },
+  { name: "Hilton",         category: "Hospitality", image:  "/image/logos/6.png" },
+  { name: "Lancôme",        category: "Beauty",      image:  "/image/logos/7.png" },
+  { name: "Fliquid",        category: "Hydration",   image:  "/image/logos/8.png" },
+  { name: "Espresso",       category: "Coffee",      image:  "/image/logos/9.png" },
+  { name: "Monte Carlo/AP", category: "Sports",      image:  "/image/logos/10.png" },
 ];
 
 export default function BrandsCollabsPage({ navigate }) {
@@ -27,7 +37,11 @@ export default function BrandsCollabsPage({ navigate }) {
       {/* HERO */}
       <section id="hero" style={{ padding: 0 }}>
         <div className="hero-video-wrap" style={{
-          background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
+          backgroundImage: " linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),url('/image/backgrounds/Partner2.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
         }} />
         <div className="hero-content">
           <div className="hero-eyebrow">Partnerships</div>
@@ -74,10 +88,10 @@ export default function BrandsCollabsPage({ navigate }) {
           <div className="heading" style={{ marginBottom: 20 }}>Brand Event<br />&amp; Activation.</div>
           <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.9, maxWidth: 560, marginBottom: 64 }}>
             <p>
-            From premium tournaments and venue takeovers to product launches and corporate experiences, KROSS creates impactful activations that connect brands with one of Southeast Asia’s most engaged sports communities.
+              From premium tournaments and venue takeovers to product launches and corporate experiences, KROSS creates impactful activations that connect brands with one of Southeast Asia’s most engaged sports communities.
             </p>
             <p>
-            Whether your objective is brand awareness, customer acquisition, product launches, hospitality, or community engagement, we design tailored experiences that deliver measurable results and meaningful connections.
+              Whether your objective is brand awareness, customer acquisition, product launches, hospitality, or community engagement, we design tailored experiences that deliver measurable results and meaningful connections.
             </p>
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 2 }}>
@@ -107,11 +121,15 @@ export default function BrandsCollabsPage({ navigate }) {
           <p className="body-txt" style={{ fontSize: 16, lineHeight: 1.9, maxWidth: 560, marginBottom: 64 }}>
             We work with brands that share our values — premium quality, active lifestyle and community connection.
           </p>
-          <div style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          <div style={{ 
+            display: "grid",
+            gridTemplateColumns: "repeat(5, 1fr)",
+            gap: 20,
+          }}>
             {BRAND_PARTNERS.map((b, i) => (
               <div key={i} style={{
                 padding: "48px 56px",
-                background: "var(--mid)",
+                background: "var(--low)",
                 border: "1px solid var(--border)",
                 minWidth: 220,
                 display: "flex",
@@ -120,7 +138,15 @@ export default function BrandsCollabsPage({ navigate }) {
                 justifyContent: "center",
                 gap: 10,
               }}>
-                <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 28, letterSpacing: "3px", textTransform: "uppercase" }}>{b.name}</div>
+                <img
+                  src={b.image}
+                  alt={b.name}
+                  style={{
+                    maxWidth: "240px",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                  }}
+                />
                 <div style={{ fontSize: 9, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.35 }}>{b.category}</div>
               </div>
             ))}
