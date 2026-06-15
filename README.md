@@ -1,18 +1,265 @@
-# React + Vite
+# KROSS Padel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+เว็บไซต์สำหรับ **KROSS Padel** แบรนด์สนามพาเดิลในไทย — เป็นทั้ง marketing site สำหรับลูกค้า และมี admin panel จัดการข้อมูลหลังบ้าน
 
-Currently, two official plugins are available:
+> สำหรับ **ฟอร์มเก็บคอนเทนต์จากลูกค้า** (venues / activities / membership ฯลฯ) ดูที่ [`CLIENT_CONTENT_FORM.md`](./CLIENT_CONTENT_FORM.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## สารบัญ
+- [Tech Stack](#tech-stack)
+- [เริ่มใช้งาน](#เริ่มใช้งาน)
+- [โครงสร้างไฟล์](#โครงสร้างไฟล์)
+- [Routing](#routing)
+- [Data Model — Venue](#data-model--venue-firestore)
+- [Admin Panel](#admin-panel)
+- [Design System](#design-system)
+- [Firebase & Supabase](#firebase--supabase)
+- [Contact Form Email (Web3Forms)](#contact-form-email-web3forms)
+- [Testing](#testing)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|---|---|
+| Framework | React 19 + Vite 8 |
+| Routing | Custom SPA routing ผ่าน `page` state ใน App.jsx (ไม่ใช้ React Router) |
+| Database | Firebase Firestore (Realtime data) |
+| Auth | Firebase Auth |
+| Image Storage | Supabase Storage (bucket: `kross_backend`) |
+| Styling | CSS Variables ใน `global.css` (dark theme) |
+| Color Picker | `react-color` (ChromePicker) |
+| Contact form | Web3Forms (ส่งอีเมลจาก frontend ตรงๆ) |
+| Testing | Vitest + @testing-library/react + jsdom |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# krosspadel_design
-# krosspadel_design
+---
+
+## เริ่มใช้งาน
+
+```bash
+npm install
+npm run dev      # dev server (Vite + HMR) ที่ http://localhost:5173
+npm run build    # production build → dist/
+npm run preview  # preview production build
+npm run lint     # eslint
+```
+
+---
+
+## โครงสร้างไฟล์
+
+```
+src/
+├── App.jsx                    # Root — routing logic, providers wrap
+├── main.jsx
+├── firebase.js                # Firebase config (db, auth)
+├── supabaseClient.ts          # Supabase client + uploadImage()
+│
+├── context/
+│   ├── AuthContext.js         # Context สำหรับ user state
+│   ├── AuthProvider.jsx       # Firebase onAuthStateChanged
+│   ├── VenueContext.jsx       # Context สำหรับ venues
+│   └── VenueProvider.jsx      # โหลด venues จาก Firestore ผ่าน venueService
+│
+├── service/
+│   └── venueService.js        # getVenues() — query Firestore collection "venues"
+│
+├── components/
+│   ├── Nav.jsx                # Navbar (รับ scrolled state จาก App)
+│   ├── Footer.jsx
+│   ├── BookModal.jsx          # Modal จองคอร์ท
+│   └── Notif.jsx              # Toast notification
+│
+├── pages/
+│   ├── HomePage.jsx
+│   ├── VenuesPage.jsx         # รายการ venues ทั้งหมด
+│   ├── VenueDetailPage.jsx    # หน้า detail ของ venue แต่ละอัน
+│   ├── ActivitiesPage.jsx
+│   ├── StoriesPage.jsx
+│   ├── MembershipPage.jsx
+│   ├── ContactPage.jsx
+│   ├── AboutPage.jsx
+│   ├── BecomePartnerPage.jsx
+│   └── admin/
+│       ├── AdminLoginPage.jsx
+│       ├── AdminDashboard.jsx         # เมนูหลัก admin
+│       ├── AdminVenuesPage.jsx        # CRUD venues
+│       ├── AdminStoriesPage.jsx       # CRUD stories
+│       ├── AdminActivitiesPage.jsx    # CRUD activities
+│       └── AdminMembershipPage.jsx    # จัดการ membership plans
+│
+├── data/
+│   └── index.js               # Static data fallback (ถ้ามี)
+│
+├── test/
+│   └── setup.js               # import @testing-library/jest-dom
+│
+├── utils/
+│   ├── venueUtils.js          # pure functions
+│   └── venueUtils.test.js     # unit tests
+│
+└── styles/
+    └── global.css             # Design system — CSS variables, utility classes
+```
+
+---
+
+## Routing
+
+ใช้ `page` state string แทน URL routing:
+
+```
+"home" | "venues" | "venue-{id}" | "activities" | "stories"
+"membership" | "contact" | "about" | "partner"
+"admin-login" | "admin" | "admin-venues" | "admin-stories"
+"admin-activities" | "admin-membership"
+```
+
+- `navigate(p)` ฟังก์ชันเดียวใช้ทั้ง app — `setPage(p)` + `scrollTo(0,0)`
+- venue detail ใช้ pattern `venue-{docId}` แล้ว match กับ VenueContext
+
+---
+
+## Data Model — Venue (Firestore)
+
+```js
+{
+  name, loc, region, num, status,   // ข้อมูลพื้นฐาน
+  hours, address, phone, courts,
+  intro,                             // paragraph แนะนำ venue
+
+  // Hero / Background
+  bg,          // gradient color hex (hero section)
+  bgImage,     // URL รูป hero background (override bg)
+  bg1,         // gradient color hex (detail hero)
+  bg1Image,    // URL รูป detail hero (override bg1)
+
+  // Courts Section
+  courtsImageBg,      // color หรือ gradient
+  courtsImageBgImage, // URL รูป courts section
+  courtsImageCaption,
+  courtText,
+  courtText2,
+
+  // Club Section
+  clubImageBg,
+  clubImageBgImage,   // URL รูป club section
+  clubImageCaption,
+  clubText,
+  clubText2,
+
+  imageUrl,    // cover image ของ venue card
+
+  features: [{ num: string, label: string }]  // stats cards เช่น "4 / Courts"
+}
+```
+
+---
+
+## Admin Panel
+
+- Route: `/admin` (guard ด้วย Firebase Auth — ถ้าไม่ login redirect ไป AdminLoginPage)
+- **AdminVenuesPage** — CRUD venue: form รองรับ image upload (Supabase) + color picker (ChromePicker) สำหรับ bg fields
+- **AdminStoriesPage** — CRUD stories
+- **AdminActivitiesPage** — CRUD activities
+- **AdminMembershipPage** — จัดการ membership plans
+
+### Image Upload Flow
+
+```
+user เลือกไฟล์ → uploadImage() ใน supabaseClient.ts
+→ อัพโหลดไปที่ Supabase Storage bucket "kross_backend"
+→ path: {collection}/{docId}/{timestamp}.{ext}
+→ คืน public URL → เก็บใน Firestore field
+```
+
+---
+
+## Design System
+
+CSS Variables หลักใน `global.css`:
+- `--dark` — background หลัก (near black)
+- `--mid` / `--mid2` — card backgrounds
+- `--white` — text
+- `--green-highlight` — accent color (CTA, active states)
+
+Utility classes: `.btn-primary`, `.btn-ghost`, `.back-btn`, `.heading`, `.tag`, `.venue-name`
+
+---
+
+## Firebase & Supabase
+
+**Firebase**
+- Project ID: `kross-backend`
+- Auth Domain: `kross-backend.firebaseapp.com`
+- Firestore collections: `venues`, `stories`, `activities`, `membership` (คาดว่ามี)
+
+**Supabase**
+- Bucket: `kross_backend`
+- URL/Key อยู่ใน `.env` ตัวแปร `VITE_SUPABASE_URL` และ `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+---
+
+## Contact Form Email (Web3Forms)
+
+ฟอร์มหน้า **Contact** (`src/pages/ContactPage.jsx`) ส่งอีเมลผ่าน **Web3Forms** — เว็บเป็น frontend ล้วน (ไม่มี backend) จึงยิงอีเมลจากหน้าเว็บได้โดยตรง
+
+> เดิมใช้ EmailJS — ถอดออกแล้ว (`@emailjs/browser` ไม่อยู่ใน dependencies แล้ว)
+
+**ข้อความลูกค้าเข้ากล่องไหน?** Web3Forms ส่งไปยังกล่องที่ผูกกับ access key เท่านั้น (กำหนดตอนสมัคร ไม่ได้ตั้งในโค้ด เพื่อกันสแปม) ปัจจุบันต้องการให้เข้ากล่อง **krossinfo**
+
+**วิธีตั้งค่า / เปลี่ยนกล่องปลายทาง**
+1. เข้า https://web3forms.com → กรอกอีเมลปลายทาง (กล่อง **krossinfo**) → **Create Access Key**
+2. เปิดเมลกล่องนั้น จะได้ **Access Key** มา (สตริงแบบ UUID)
+3. วาง key ใน `src/pages/ContactPage.jsx`:
+   ```js
+   const WEB3FORMS_ACCESS_KEY = "วาง-access-key-ที่นี่";
+   ```
+4. บันทึก → ข้อความจากฟอร์มจะวิ่งเข้ากล่องทันที (ไม่ต้อง deploy backend เพิ่ม)
+
+**เปลี่ยนกล่องปลายทางในอนาคต:** สมัคร access key ใหม่ด้วยอีเมลใหม่ แล้วเปลี่ยนค่า `WEB3FORMS_ACCESS_KEY` เป็น key ตัวใหม่
+
+**หมายเหตุ**
+- Access key เปิดเผยใน frontend ได้ตามปกติของ Web3Forms — key คุมได้แค่ "ส่งเข้ากล่องที่ผูกไว้" จึงไม่ใช่ความลับ
+- โควตาฟรี ~250 ข้อความ/เดือน (ดูเงื่อนไขล่าสุดที่ web3forms.com)
+- กัน spam เพิ่มได้ด้วย honeypot / hCaptcha (ตั้งใน dashboard + เพิ่มฟิลด์ในฟอร์ม)
+- อีเมลที่แสดงบนหน้า Contact (`info@krosspadel.com`) เป็นแค่ข้อความที่โชว์ ไม่เกี่ยวกับปลายทางจริง
+
+---
+
+## Testing
+
+| Tool | หน้าที่ |
+|---|---|
+| Vitest | Test runner (ทำงานร่วมกับ Vite โดยตรง) |
+| @testing-library/react | Test React components |
+| @testing-library/jest-dom | Custom matchers เช่น `toBeInTheDocument()` |
+| jsdom | จำลอง browser environment |
+
+```bash
+npm test           # watch mode
+npm run test:run   # รันครั้งเดียวแล้วจบ (ใช้ใน CI)
+npm run test:ui    # เปิด browser UI ดู test results
+```
+
+**Tests ที่มีอยู่ — `src/utils/venueUtils.test.js`** (pure functions)
+- `locationWord(count)` — แปลงจำนวน venues เป็นคำอังกฤษ (เช่น `4` → `"Four"`, เกิน 10 คืน string ตัวเลข)
+- `totalCourts(venues)` — บวกจำนวน courts ทั้งหมด (ข้าม undefined/ค่าว่าง, รับ string ตัวเลขได้)
+
+**เพิ่ม test ใหม่:** สร้างไฟล์ `*.test.js` / `*.test.jsx` ข้างๆ ไฟล์ที่จะ test
+
+```js
+import { describe, it, expect } from "vitest";
+import { myFunction } from "./myFile";
+
+describe("myFunction", () => {
+    it("should do X when Y", () => {
+        expect(myFunction(input)).toBe(expected);
+    });
+});
+```
+
+**ควร test เพิ่มในอนาคต**
+- [ ] Component test — `VenuePreview`, `StoryPreview` renders ถูกต้อง
+- [ ] Integration test — form admin บันทึกแล้ว Firestore ได้รับข้อมูลถูก
+- [ ] E2E test (Playwright) — navigate ครบทุก page ไม่ crash

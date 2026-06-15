@@ -80,7 +80,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
             gap: "72px",
-            alignItems: "start"
+            alignItems: "center"
           }}>
             <div>
               <div className="tag">How To Book</div>
@@ -119,7 +119,6 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                 alt="KROSS Padel App"
                 style={{
                   width: "100%",
-                  maxWidth: 340,
                   height: "auto",
                   borderRadius: 12,
                   display: "block",
