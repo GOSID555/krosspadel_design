@@ -7,7 +7,7 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "All Levels",
     text: "A half-day clinic covering fundamentals, court movement, and match strategy. Coached by certified KROSS instructors.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/DSC01755.jpg",
   },
   {
     docId: "mock-2",
@@ -17,7 +17,7 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "Intermediate+",
     text: "Round-robin format for players with 1+ year experience. Prizes for top 3 pairs. Register as a pair or solo.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/IMG-242.jpg",
   },
   {
     docId: "mock-3",
@@ -27,7 +27,7 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "All Levels",
     text: "A social morning session exclusively for women. Light warm-up, drills, and social play. Coffee included.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/YOT-653.jpg",
   },
   {
     docId: "mock-4",
@@ -37,7 +37,7 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "Advanced",
     text: "Intensive 4-hour training block focusing on tactical play, fast-ball defense, and attacking volleys.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/YOT_4045.jpg",
   },
   {
     docId: "mock-5",
@@ -47,7 +47,7 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "Beginners",
     text: "Fun-first padel for kids aged 7–14. Safe, structured, and designed to build love for the sport.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/YOT-754.jpg",
   },
   {
     docId: "mock-6",
@@ -57,6 +57,6 @@ export const MOCKUP_ACTIVITIES = [
     club: "KROSS Onnut",
     level: "All Levels",
     text: "Monthly league for corporate teams. A great way to bond with colleagues on the court.",
-    imageUrl: "",
+    imageUrl: "/image/backgrounds/messageImage_1781413593523.jpg",
   },
 ];

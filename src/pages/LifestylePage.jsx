@@ -4,49 +4,54 @@ const BRANDS = [
   {
     num: "01",
     name: "KROSS PARK",
-    sub: "More Than A Club. It's A Community.",
-    body: "Our flagship padel club concept — premium courts, rooftop bars, wellness spaces, great food and a vibrant community designed around movement and connection.",
-    img: "/image/lifestyle_park.jpg",
+    sub: "The future of active lifestyle destinations.",
+    body: "KROSS PARK combines racquet sports, fitness, wellness, and social experiences into a single destination designed for modern urban communities.From padel and pickleball to HYROX training, group fitness classes, wellness facilities, food & beverage, and community events, KROSS PARK is designed to keep people active, connected, and engaged every day.",
+    img: "/image/backgrounds/KrossPark.png",
     accent: "var(--green-highlight)",
     products: [
-      { label: "Premium Courts", icon: "⬡" },
-      { label: "Rooftop Bar", icon: "⬡" },
-      { label: "Wellness Space", icon: "⬡" },
-      { label: "Restaurant", icon: "⬡" },
-      { label: "Pro Shop", icon: "⬡" },
-      { label: "Event Space", icon: "⬡" },
+      { label: "Padel Courts", icon: "⬡" },
+      { label: "Pickleball Courts ", icon: "⬡" },
+      { label: "HYROX Training ", icon: "⬡" },
+      { label: "Fitness Classes ", icon: "⬡" },
+      { label: "Wellness Spaces ", icon: "⬡" },
+      { label: "Rooftop Social Areas ", icon: "⬡" },
+      { label: "F&B · Community Events ", icon: "⬡" },
     ],
   },
   {
     num: "02",
     name: "KROSS ACTION",
-    sub: "Track. Analyze. Improve. All In One App.",
-    body: "Our performance tracking web app that helps you log padel matches, workouts and daily activities. Analyze your progress and stay motivated every day.",
-    img: "/image/lifestyle_action.jpg",
+    sub: "Move more. Stay consistent.",
+    body: "KROSS ACTION is our activity and wellness platform designed to help members build healthy habits through daily movement, challenges, rewards, and community accountability.Users can track workouts, sports activities, fitness classes, running sessions, and overall activity while earning points, maintaining streaks, and competing with friends.",
+    img: "/image/backgrounds/DSC03446.jpg",
     accent: "#4FC3F7",
     products: [
-      { label: "Match Tracking", icon: "⬡" },
-      { label: "Performance Stats", icon: "⬡" },
-      { label: "Workout Logger", icon: "⬡" },
-      { label: "Progress Analytics", icon: "⬡" },
-      { label: "Leaderboard", icon: "⬡" },
-      { label: "Coach Connect", icon: "⬡" },
+      { label: "Activity Tracking ", icon: "⬡" },
+      { label: "Daily Streaks ", icon: "⬡" },
+      { label: "Challenges", icon: "⬡" },
+      { label: "Rewards Program ", icon: "⬡" },
+      { label: "Community Feed ", icon: "⬡" },
+      { label: "Leaderboards", icon: "⬡" },
+      { label: "Wellness Goals ", icon: "⬡" },
+      { label: "Habit Building", icon: "⬡" },
     ],
   },
   {
     num: "03",
     name: "KROSS ACTIVE",
-    sub: "Performance Meets Style. Made To Move.",
-    body: "Our performance apparel brand. Designed for movement, built for comfort and created to represent the lifestyle we live on and off the court.",
-    img: "/image/lifestyle_active.jpg",
+    sub: "Built for players. Designed for movement.",
+    body: "KROSS ACTIVE is our retail and equipment division, providing high-quality products for players and active lifestyles both on and off the court.From apparel and accessories to padel rackets, balls, equipment, and exclusive collaborations, KROSS ACTIVE extends the brand beyond the venue experience.",
+    img: "/image/backgrounds/DSC02168.jpg",
     accent: "#FFD54F",
     products: [
-      { label: "Court Shirts", icon: "⬡" },
-      { label: "Training Shorts", icon: "⬡" },
-      { label: "Women's Collection", icon: "⬡" },
+      { label: "Performance Apparel ", icon: "⬡" },
+      { label: "Padel Rackets ", icon: "⬡" },
+      { label: "Padel Balls ", icon: "⬡" },
       { label: "Accessories", icon: "⬡" },
-      { label: "Limited Drops", icon: "⬡" },
-      { label: "Co-Lab Pieces", icon: "⬡" },
+      { label: "Training Equipment ", icon: "⬡" },
+      { label: "Limited Collections ", icon: "⬡" },
+      { label: "Teamwear ", icon: "⬡" },
+      { label: "Brand Collaborations", icon: "⬡" },
     ],
   },
 ];
@@ -57,7 +62,11 @@ export default function LifestylePage({ navigate }) {
       {/* HERO */}
       <section id="hero" style={{ padding: 0 }}>
         <div className="hero-video-wrap" style={{
-          background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
+          backgroundImage: " linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)),url('/image/backgrounds/DSC02039.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
         }} />
         <div className="hero-content">
           <div className="hero-eyebrow">The KROSS Universe</div>
@@ -159,9 +168,9 @@ export default function LifestylePage({ navigate }) {
             gap: 2
           }}>
             {[
-              { title: "Connection", desc: "Training, playing and engaging with the community to build lasting bonds on and off the court." },
-              { title: "Growth", desc: "Building our team and players from the ground up with world-class coaching and facilities." },
-              { title: "Expansion", desc: "Taking the KROSS experience beyond Bangkok — across Asia and beyond." },
+              { title: "COMMUNITY", desc: "We create communities through sport, events, fitness, and shared experiences that bring people together both on and off the court." },
+              { title: "WELLNESS", desc: "We promote active lifestyles by combining racquet sports, fitness, recovery, and healthy habits into a holistic ecosystem focused on long-term wellbeing." },
+              { title: "SCALE", desc: "We develop scalable concepts, technology, and operational systems that enable sustainable growth across Thailand and Southeast Asia." },
             ].map((item, i) => (
               <div key={i} style={{
                 padding: "40px 36px",

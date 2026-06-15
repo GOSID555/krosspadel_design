@@ -27,11 +27,11 @@ export default function BePartOfKrossPage({ navigate }) {
   ];
 
   const reasons = [
-    { title: "Strong & Fast-Growing Brand", desc: "KROSS has become the go-to destination for sport, lifestyle and community in Thailand." },
-    { title: "Proven Model", desc: "A tested business model with premium facilities, operational excellence and strong unit economics." },
-    { title: "Engaged Community", desc: "Access to a highly active and loyal community of players, members and fans." },
-    { title: "Multiple Revenue Streams", desc: "From memberships and court bookings to F&B, events, retail and partnerships." },
-    { title: "Full Support System", desc: "From site selection to staff training and marketing — we're with you every step of the way." },
+    { title: "Strong & Fast-Growing Brand", desc: "KROSS has established itself as one of the leading padel brands in Thailand, operating multiple venues and serving a rapidly growing community of players, partners, and corporate clients." },
+    { title: "PROVEN & SCALABLE MODEL", desc: "Our business model has been validated across multiple locations, combining strong unit economics, operational excellence, and repeatable systems that support sustainable expansion." },
+    { title: "ENGAGED COMMUNITY", desc: "At the core of KROSS is a highly active and loyal community built through leagues, tournaments, coaching programs, social events, and digital engagement." },
+    { title: "DIVERSIFIED REVENUE STREAMS", desc: "Revenue is generated through multiple channels including court bookings, coaching, memberships, tournaments, events, sponsorships, retail, food & beverage, and technology solutions." },
+    { title: "INTEGRATED ECOSYSTEM", desc: "Unlike traditional sports clubs, KROSS combines venues, events, coaching, technology, fitness, and lifestyle experiences into a single ecosystem, creating greater value for players, partners, and investors." },
   ];
 
   return (
@@ -125,22 +125,24 @@ export default function BePartOfKrossPage({ navigate }) {
               <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 32 }}>
                 <div style={{
                   width: 72, height: 72, borderRadius: "50%",
-                  background: "linear-gradient(135deg, var(--green-dark), var(--green-mid))",
+                  background: "url('/image/team/Nacho.png')",
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
                   border: "2px solid var(--green-highlight)",
                   flexShrink: 0,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 28
-                }}>👤</div>
+                }}></div>
                 <div>
-                  <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 20, letterSpacing: "1px", marginBottom: 4 }}>Hugo Cattaneo</div>
+                  <div style={{ fontFamily: "'Gotham Narrow', sans-serif", fontSize: 20, letterSpacing: "1px", marginBottom: 4 }}>NACHO CARBONERO</div>
                   <div style={{ fontSize: 12, color: "var(--green-highlight)", letterSpacing: "1px" }}>CEO & Co-Founder, KROSS</div>
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {[
-                  { icon: "✉", val: "hugo@krosspadel.com", href: "mailto:hugo@krosspadel.com" },
-                  { icon: "📞", val: "+66 80 590 0010", href: "tel:+66805900010" },
-                  { icon: "💬", val: "LINE ID: hugocattaneo", href: "https://line.me/ti/p/~hugocattaneo" },
+                  { icon: "✉", val: "info@krosspadel.com", href: "mailto:info@krosspadel.com" },
+                  { icon: "📞", val: "+66 83 601 9836", href: "tel:+66836019836" },
                 ].map((c, i) => (
                   <a key={i} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
                     style={{ fontSize: 13, color: "var(--white)", textDecoration: "none", opacity: 0.75, display: "flex", alignItems: "center", gap: 10 }}>
