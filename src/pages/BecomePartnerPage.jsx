@@ -1,16 +1,16 @@
 import Footer from "../components/Footer";
 
 const BRAND_PARTNERS = [
-  { name: "Corona",         category: "Beverage",    logo: "" },
-  { name: "Brew Yoga",      category: "Wellness",    logo: "" },
-  { name: "Meliã",          category: "Hospitality", logo: "" },
-  { name: "Marriott",       category: "Hospitality", logo: "" },
-  { name: "White Claw",     category: "Beverage",    logo: "" },
-  { name: "Hilton",         category: "Hospitality", logo: "" },
-  { name: "Lancôme",        category: "Beauty",      logo: "" },
-  { name: "Fliquid",        category: "Hydration",   logo: "" },
-  { name: "Espresso",       category: "Coffee",      logo: "" },
-  { name: "Monte Carlo/AP", category: "Sports",      logo: "" },
+  { name: "Corona",         category: "Beverage",    image:  "/image/logos/1.png" },
+  { name: "Brew Yoga",      category: "Wellness",    image:  "/image/logos/2.png" },
+  { name: "Meliã",          category: "Hospitality", image:  "/image/logos/3.png" },
+  { name: "Marriott",       category: "Hospitality", image:  "/image/logos/4.png" },
+  { name: "White Claw",     category: "Beverage",    image:  "/image/logos/5.png" },
+  { name: "Hilton",         category: "Hospitality", image:  "/image/logos/6.png" },
+  { name: "Lancôme",        category: "Beauty",      image:  "/image/logos/7.png" },
+  { name: "Fliquid",        category: "Hydration",   image:  "/image/logos/8.png" },
+  { name: "Espresso",       category: "Coffee",      image:  "/image/logos/9.png" },
+  { name: "Monte Carlo/AP", category: "Sports",      image:  "/image/logos/10.png" },
 ];
 
 const CARDS = [
@@ -64,9 +64,12 @@ export default function BecomePartnerPage({ navigate }) {
           {/* Partner logos grid */}
             <div style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-              borderTop: "1px solid rgba(255,255,255,0.15)",
-              borderLeft: "1px solid rgba(255,255,255,0.15)",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                background:"linear-gradient(135deg, #084030 100%)",
+                borderTop: "1px solid rgba(255,255,255,0.15)",
+                borderLeft: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: "24px",
+                overflow: "hidden", 
             }}>
               {BRAND_PARTNERS.map((b, i) => (
                 <div
@@ -84,9 +87,9 @@ export default function BecomePartnerPage({ navigate }) {
                   onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.07)"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
-                  {b.logo ? (
+                  {b.image ? (
                     <img
-                      src={b.logo}
+                      src={b.image}
                       alt={b.name}
                       style={{
                         maxWidth: "clamp(60px, 10vw, 110px)",

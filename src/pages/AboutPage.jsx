@@ -58,9 +58,15 @@ export default function AboutPage({ navigate }) {
         <div>
             {/* HERO SECTION */}
             <section id="hero" style={{ padding: 0 }}>
-                <div className="hero-video-wrap" style={{
-                    background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-                }} />
+                <div className="hero-video-wrap"
+                style={{
+                    backgroundImage: " linear-gradient(rgba(0, 0, 0, 0.4),rgba(0, 0, 0, 0.4)),url('/image/backgrounds/KROSS - Brand deck.png')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+                    WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+                }}
+                />
                 <div className="hero-content">
                     <div className="hero-eyebrow">Our Story</div>
                     <div className="hero-title">About KROSS</div>
