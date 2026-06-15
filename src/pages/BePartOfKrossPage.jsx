@@ -61,7 +61,7 @@ export default function BePartOfKrossPage({ navigate }) {
             More Than A Sports Club.<br />A Movement.
           </div>
           <p className="body-txt" style={{ fontSize: 18, lineHeight: 1.9, maxWidth: 560 }}>
-            KROSS is built around world-class facilities, a vibrant community and exceptional experiences on and off the court. We're growing fast — and inviting the right partners to grow with us.
+            KROSS is more than a venue. It is a rapidly growing racquet sports ecosystem where brands, communities, and experiences come together to create lasting impact.
           </p>
         </div>
       </section>
