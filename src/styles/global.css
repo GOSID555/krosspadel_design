@@ -1970,7 +1970,6 @@ nav.nav-compact .nav-right {
         grid-column: 1;
         grid-row: auto;
         order: 2;
-        height: 380px;
     }
 
     .app-showcase-grid .app-details {

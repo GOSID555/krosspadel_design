@@ -268,8 +268,8 @@ export default function HomePage({ navigate }) {
                     <a href="https://apps.apple.com/kz/app/kross-padel/id6741785490" target="_blank" rel="noreferrer" className="btn-primary" style={{ textDecoration: "none", display: "inline-block", alignSelf: "flex-start" }}>Download on App Store</a>
                 </div>
                 {/* Image */}
-                <div className="app-img-col" style={{ display: "flex", justifyContent: "center", alignItems: "stretch", overflow: "hidden" }}>
-                    <img src="/image/kross_app.png" alt="Kross App" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+                <div className="app-img-col" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img src="/image/kross_app.png" alt="Kross App" style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }}
                         onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextSibling.style.display = "flex"; }}
                     />
                     <div style={{ display: "none", width: 260, height: 520, border: "2px solid var(--border)", borderRadius: 32, alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12, opacity: 0.3 }}>
