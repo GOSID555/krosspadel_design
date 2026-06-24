@@ -54,6 +54,7 @@ src/
 ├── main.jsx
 ├── firebase.js                # Firebase config (db, auth)
 ├── supabaseClient.ts          # Supabase client + uploadImage()
+├── vite-env.d.ts
 │
 ├── context/
 │   ├── AuthContext.js         # Context สำหรับ user state
@@ -68,6 +69,7 @@ src/
 │   ├── Nav.jsx                # Navbar (รับ scrolled state จาก App)
 │   ├── Footer.jsx
 │   ├── BookModal.jsx          # Modal จองคอร์ท
+│   ├── MobileCarousel.jsx     # Carousel สำหรับ mobile
 │   └── Notif.jsx              # Toast notification
 │
 ├── pages/
@@ -75,21 +77,30 @@ src/
 │   ├── VenuesPage.jsx         # รายการ venues ทั้งหมด
 │   ├── VenueDetailPage.jsx    # หน้า detail ของ venue แต่ละอัน
 │   ├── ActivitiesPage.jsx
+│   ├── ActivityDetailPage.jsx # หน้า detail ของ activity แต่ละอัน
 │   ├── StoriesPage.jsx
+│   ├── StoryDetailPage.jsx    # หน้า detail ของ story แต่ละอัน
 │   ├── MembershipPage.jsx
 │   ├── ContactPage.jsx
 │   ├── AboutPage.jsx
-│   ├── BecomePartnerPage.jsx
+│   ├── LifestylePage.jsx
+│   ├── BecomePartnerPage.jsx  # Partner hub
+│   ├── BePartOfKrossPage.jsx  # Partner — เข้าร่วมกับ KROSS
+│   ├── FranchiseesPage.jsx    # Partner — แฟรนไชส์ (มีฟอร์ม)
+│   ├── BrandsCollabsPage.jsx  # Partner — brand collaborations
+│   ├── ComingSoonPage.jsx     # Placeholder สำหรับ feature ที่ยังไม่เปิด
 │   └── admin/
 │       ├── AdminLoginPage.jsx
 │       ├── AdminDashboard.jsx         # เมนูหลัก admin
 │       ├── AdminVenuesPage.jsx        # CRUD venues
 │       ├── AdminStoriesPage.jsx       # CRUD stories
 │       ├── AdminActivitiesPage.jsx    # CRUD activities
-│       └── AdminMembershipPage.jsx    # จัดการ membership plans
+│       ├── AdminMembershipPage.jsx    # จัดการ membership plans
+│       ├── AdminPricingPage.jsx       # จัดการ pricing
+│       └── AdminTeamPage.jsx          # จัดการ team members
 │
 ├── data/
-│   └── index.js               # Static data fallback (ถ้ามี)
+│   └── mockActivities.js      # Mock data สำหรับ activities
 │
 ├── test/
 │   └── setup.js               # import @testing-library/jest-dom
@@ -109,14 +120,24 @@ src/
 ใช้ `page` state string แทน URL routing:
 
 ```
-"home" | "venues" | "venue-{id}" | "activities" | "stories"
-"membership" | "contact" | "about" | "partner"
+// public
+"home" | "venues" | "venue-{id}" | "activities" | "activity-{id}"
+"stories" | "story-{id}" | "membership" | "contact" | "about" | "lifestyle"
+
+// partner
+"partner" | "partner-be-part" | "partner-franchisees" | "partner-brands"
+
+// coming soon (placeholder)
+"whatsapp" | "krosspark"
+
+// admin
 "admin-login" | "admin" | "admin-venues" | "admin-stories"
-"admin-activities" | "admin-membership"
+"admin-activities" | "admin-membership" | "admin-pricing" | "admin-team"
 ```
 
-- `navigate(p)` ฟังก์ชันเดียวใช้ทั้ง app — `setPage(p)` + `scrollTo(0,0)`
-- venue detail ใช้ pattern `venue-{docId}` แล้ว match กับ VenueContext
+- `navigate(p)` ฟังก์ชันเดียวใช้ทั้ง app — `setPage(p)` + `scrollTo(0,0)` + เคลียร์ hash
+- `#admin` ใน URL hash → เปิดหน้า admin ตรงๆ (ใช้ตอน bootstrap / กลับมาจาก hash)
+- detail page ใช้ pattern `venue-{docId}` / `activity-{id}` / `story-{id}` แล้ว match กับ data
 
 ---
 
@@ -158,11 +179,13 @@ src/
 
 ## Admin Panel
 
-- Route: `/admin` (guard ด้วย Firebase Auth — ถ้าไม่ login redirect ไป AdminLoginPage)
+- เข้าผ่าน `#admin` hash หรือ `navigate("admin")` (guard ด้วย Firebase Auth — ถ้าไม่ login จะ render AdminLoginPage แทน)
 - **AdminVenuesPage** — CRUD venue: form รองรับ image upload (Supabase) + color picker (ChromePicker) สำหรับ bg fields
 - **AdminStoriesPage** — CRUD stories
 - **AdminActivitiesPage** — CRUD activities
 - **AdminMembershipPage** — จัดการ membership plans
+- **AdminPricingPage** — จัดการ pricing
+- **AdminTeamPage** — จัดการ team members
 
 ### Image Upload Flow
 
