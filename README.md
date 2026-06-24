@@ -13,7 +13,7 @@
 - [Admin Panel](#admin-panel)
 - [Design System](#design-system)
 - [Firebase & Supabase](#firebase--supabase)
-- [Contact Form Email (Web3Forms)](#contact-form-email-web3forms)
+- [Contact Form (mailto)](#contact-form-mailto)
 - [Testing](#testing)
 
 ---
@@ -223,30 +223,21 @@ Utility classes: `.btn-primary`, `.btn-ghost`, `.back-btn`, `.heading`, `.tag`, 
 
 ---
 
-## Contact Form Email (Web3Forms)
+## Contact Form (mailto)
 
-ฟอร์มหน้า **Contact** (`src/pages/ContactPage.jsx`) ส่งอีเมลผ่าน **Web3Forms** — เว็บเป็น frontend ล้วน (ไม่มี backend) จึงยิงอีเมลจากหน้าเว็บได้โดยตรง
+ฟอร์มหน้า **Contact** (`src/pages/ContactPage.jsx`) ใช้ **`mailto:`** — พอลูกค้ากด **Send Message** เว็บจะเปิดแอปเมลของเครื่องลูกค้าเอง (Mail / Gmail / Outlook) พร้อมเนื้อหาที่กรอกไว้ครบ จ่าหน้าถึง KROSS แล้วลูกค้ากด Send ส่งเอง
 
-> เดิมใช้ EmailJS — ถอดออกแล้ว (`@emailjs/browser` ไม่อยู่ใน dependencies แล้ว)
+> ไม่ต้องใช้ backend / API key ใดๆ — เว็บเป็น frontend ล้วน
 
-**ข้อความลูกค้าเข้ากล่องไหน?** Web3Forms ส่งไปยังกล่องที่ผูกกับ access key เท่านั้น (กำหนดตอนสมัคร ไม่ได้ตั้งในโค้ด เพื่อกันสแปม) ปัจจุบันต้องการให้เข้ากล่อง **krossinfo**
-
-**วิธีตั้งค่า / เปลี่ยนกล่องปลายทาง**
-1. เข้า https://web3forms.com → กรอกอีเมลปลายทาง (กล่อง **krossinfo**) → **Create Access Key**
-2. เปิดเมลกล่องนั้น จะได้ **Access Key** มา (สตริงแบบ UUID)
-3. วาง key ใน `src/pages/ContactPage.jsx`:
-   ```js
-   const WEB3FORMS_ACCESS_KEY = "วาง-access-key-ที่นี่";
-   ```
-4. บันทึก → ข้อความจากฟอร์มจะวิ่งเข้ากล่องทันที (ไม่ต้อง deploy backend เพิ่ม)
-
-**เปลี่ยนกล่องปลายทางในอนาคต:** สมัคร access key ใหม่ด้วยอีเมลใหม่ แล้วเปลี่ยนค่า `WEB3FORMS_ACCESS_KEY` เป็น key ตัวใหม่
+**เปลี่ยนกล่องปลายทาง** — แก้ค่าตัวแปรเดียวบนสุดของ `src/pages/ContactPage.jsx`:
+```js
+const CONTACT_EMAIL = "info@krosspadel.com";
+```
 
 **หมายเหตุ**
-- Access key เปิดเผยใน frontend ได้ตามปกติของ Web3Forms — key คุมได้แค่ "ส่งเข้ากล่องที่ผูกไว้" จึงไม่ใช่ความลับ
-- โควตาฟรี ~250 ข้อความ/เดือน (ดูเงื่อนไขล่าสุดที่ web3forms.com)
-- กัน spam เพิ่มได้ด้วย honeypot / hCaptcha (ตั้งใน dashboard + เพิ่มฟิลด์ในฟอร์ม)
-- อีเมลที่แสดงบนหน้า Contact (`info@krosspadel.com`) เป็นแค่ข้อความที่โชว์ ไม่เกี่ยวกับปลายทางจริง
+- ข้อความถูกส่งจาก**อีเมลส่วนตัวของลูกค้า** ไม่ใช่ระบบกลาง
+- ถ้าเครื่องลูกค้าไม่ได้ตั้ง default mail app (เช่นใช้ Gmail บนเว็บที่ยังไม่ผูกกับ `mailto:`) การกดอาจไม่เด้ง — เป็นข้อจำกัดปกติของ `mailto:`
+- เดิมเคยใช้ EmailJS แล้ว Web3Forms — ถอดออกทั้งคู่แล้ว
 
 ---
 
