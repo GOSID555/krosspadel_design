@@ -1,41 +1,29 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
 
-// Web3Forms — submissions are delivered to whichever inbox the access key is
-// registered to. Sign up at https://web3forms.com using the KROSS "krossinfo"
-// inbox so customer messages land there, then paste the access key below.
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+// The form opens the visitor's own email client (mailto:) with the message
+// pre-filled and addressed to KROSS — the visitor then hits Send themselves.
+// No backend or API key required.
+const CONTACT_EMAIL = "info@krosspadel.com";
 
 export default function ContactPage({ navigate, notify }) {
-  const [sending, setSending] = useState(false);
   const [form, setForm] = useState({ name: "", last_name: "", email: "", title: "General Enquiry", message: "" });
 
   const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSending(true);
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          subject: `[KROSS Contact] ${form.title} — ${form.name} ${form.last_name}`.trim(),
-          from_name: `${form.name} ${form.last_name}`.trim(),
-          ...form,
-        }),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message || "Submit failed");
-      notify("Message sent! We'll reply within 24 hours.");
-      setForm({ name: "", last_name: "", email: "", title: "General Enquiry", message: "" });
-    } catch (err) {
-      console.error("Web3Forms error:", err);
-      notify("Failed to send. Please try again.");
-    } finally {
-      setSending(false);
-    }
+    const fullName = `${form.name} ${form.last_name}`.trim();
+    const subject = `[KROSS Contact] ${form.title} — ${fullName}`.trim();
+    const body = [
+      `Name: ${fullName}`,
+      `Email: ${form.email}`,
+      `Subject: ${form.title}`,
+      "",
+      form.message,
+    ].join("\n");
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    notify("Opening your email app to send the message…");
   };
 
   return (
@@ -104,8 +92,8 @@ export default function ContactPage({ navigate, notify }) {
                 <label style={{ fontSize: 12, opacity: 0.5, marginBottom: 8, display: "block", textTransform: "uppercase", letterSpacing: 0.5 }}>Message</label>
                 <textarea name="message" placeholder="Tell us how we can help..." rows={6} required value={form.message} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", background: "var(--dark)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", fontSize: 14, resize: "vertical" }} />
               </div>
-              <button type="submit" className="btn-primary" disabled={sending} style={{ width: "100%", opacity: sending ? 0.6 : 1 }}>
-                {sending ? "Sending..." : "Send Message"}
+              <button type="submit" className="btn-primary" style={{ width: "100%" }}>
+                Send Message
               </button>
             </form>
           </div>
