@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const coords = {
-  "KROSS ON NUT":   { lat: "13.7012", lon: "100.5998" },
+  "KROSS ONNUT":   { lat: "13.7012", lon: "100.5998" },
   "KROSS ASOKE":    { lat: "13.7376", lon: "100.5600" },
   "KROSS INDOOR":   { lat: "13.7306", lon: "100.5839" },
   "KROSS SKY":      { lat: "13.7217", lon: "100.5494" },

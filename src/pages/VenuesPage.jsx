@@ -48,44 +48,108 @@ export default function VenuesPage({ navigate, openBook }) {
           </div>
 
           {/* Bento grid */}
-          <div style={{
+        <div
+          style={{
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
             gridTemplateRows: "300px 190px",
-            gap: 6
-          }}>
-            {[
-              { label: "Padel", col: "1/3", row: "1", bg: "linear-gradient(145deg,#0d2b14,#1a4a28)" },
-              { label: "Bar", col: "3", row: "1/3", bg: "linear-gradient(145deg,#1a1508,#2e2710)" },
-              { label: "Wellness", col: "4", row: "1", bg: "linear-gradient(145deg,#0d1a28,#1a2e40)" },
-              { label: "Recovery", col: "1", row: "2", bg: "linear-gradient(145deg,#0d1a0d,#152614)" },
-              { label: "Food", col: "2", row: "2", bg: "linear-gradient(145deg,#1a0e08,#2e1a10)" },
-              { label: "Community", col: "4", row: "2", bg: "linear-gradient(145deg,#0d0d1a,#1a1a2e)" },
-            ].map((cell, i) => (
+            gap: 6,
+          }}
+        >
+          {[
+            {
+              label: "Padel",
+              col: "1/3",
+              row: "1",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783325014/YOT_2326_efwcgt.jpg')",
+              position: "center 35%",
+            },
+            {
+              label: "Bar",
+              col: "3",
+              row: "1/3",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783327448/DSC07745_dm5phy.jpg')",
+            },
+            {
+              label: "Wellness",
+              col: "4",
+              row: "1",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783321346/DSC00396_fzg3xb.jpg')",
+            },
+            {
+              label: "Recovery",
+              col: "1",
+              row: "2",
+              bg: "url('https://scontent.fbkk28-1.fna.fbcdn.net/v/t39.30808-6/472329217_588128387490729_7956572233588441056_n.jpg?stp=dst-jpg_tt6&cstp=mx1440x1441&ctp=s1440x1441&_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFK86ER-jbWSPs2eZfEEM8t9zFbI9d4dgz3MVsj13h2DL1AmkJt8CoQxJuaggJ5M7T9zzOzw12bGN6-GVgQ7h7o&_nc_ohc=I0LDkSVWlSYQ7kNvwEK7O60&_nc_oc=Adp4wZ-csZ5f7fJQZk-Z5CFXcyvsP1fh8aSGanytnp9wy7tjNDIfXcuSQ2iIU1HZIDxzKKgwO0vfYRYzTVclDT_L&_nc_zt=23&_nc_ht=scontent.fbkk28-1.fna&_nc_gid=INeV0UwzH8IGraMZs32tpw&_nc_ss=7b2a8&oh=00_AQAiydMQZc2FZq-qGIVP3FFDI_Y5OsPjbD9B9V0zHOXTmQ&oe=6A513430')",
+            },
+            {
+              label: "Food",
+              col: "2",
+              row: "2",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783330795/image_csqt9p.png')",
+            },
+            {
+              label: "Community",
+              col: "4",
+              row: "2",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783322648/YOT-355_n4v9dn.jpg')",
+            },
+          ].map((cell, i) => (
+            <div
+              key={i}
+              style={{
+                gridColumn: cell.col,
+                gridRow: cell.row,
+
+                backgroundImage: cell.bg,
+                backgroundSize: "cover",
+                backgroundPosition: cell.position ?? "center",
+                backgroundRepeat: "no-repeat",
+
+                position: "relative",
+                overflow: "hidden",
+                cursor: "default",
+              }}
+            >
+              {/* Overlay ทำให้ตัวหนังสืออ่านง่าย */}
               <div
-                key={i}
                 style={{
-                  gridColumn: cell.col,
-                  gridRow: cell.row,
-                  background: cell.bg,
-                  position: "relative",
-                  overflow: "hidden",
-                  cursor: "default"
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08))",
+                }}
+              />
+
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 20,
+                  left: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  fontSize: 9,
+                  letterSpacing: "3px",
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  zIndex: 1,
                 }}
               >
-                <div style={{
-                  position: "absolute",
-                  bottom: 20, left: 20,
-                  display: "flex", alignItems: "center", gap: 8,
-                  fontSize: 9, letterSpacing: "3px",
-                  textTransform: "uppercase", opacity: 0.5
-                }}>
-                  <span style={{ width: 14, height: 1, background: "var(--green-highlight)", display: "inline-block", flexShrink: 0 }} />
-                  {cell.label}
-                </div>
+                <span
+                  style={{
+                    width: 14,
+                    height: 1,
+                    background: "var(--green-highlight)",
+                    display: "inline-block",
+                    flexShrink: 0,
+                  }}
+                />
+                {cell.label}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
         </div>
       </section>
 

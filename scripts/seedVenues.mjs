@@ -16,7 +16,7 @@ const db = getFirestore(app);
 const venues = [
   {
     num: "01",
-    name: "KROSS ON NUT",
+    name: "KROSS ONNUT",
     loc: "On Nut · Bangkok",
     region: "Onnut",
     status: "Open",
