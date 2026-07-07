@@ -8,6 +8,16 @@ export const MOCKUP_ACTIVITIES = [
     level: "All Levels",
     text: "A half-day clinic covering fundamentals, court movement, and match strategy. Coached by certified KROSS instructors.",
     imageUrl: "/image/backgrounds/DSC01755.jpg",
+  },  
+  {
+    docId: "mock-1",
+    name: "Padel Clinic",
+    date: "2026-06-15",
+    time: "09:00 – 12:00",
+    club: "KROSS Onnut",
+    level: "All Levels",
+    text: "A half-day clinic covering fundamentals, court movement, and match strategy. Coached by certified KROSS instructors.",
+    imageUrl: "/image/backgrounds/DSC01755.jpg",
   },
   {
     docId: "mock-2",
