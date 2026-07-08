@@ -11,6 +11,26 @@ export default function HomePage({ navigate }) {
     const { venues } = useContext(VenueContext);
     const [stories, setStories] = useState([]);
     const [bookPopup, setBookPopup] = useState(false);
+    const [activities, setActivities] = useState([]);
+
+    useEffect(() => {
+        const load = async () => {
+        try {
+            const snap = await getDocs(collection(db, "activities"));
+
+            const docs = snap.docs.map((doc) => ({
+            docId: doc.id,
+            ...doc.data(),
+            }));
+
+            setActivities(docs);
+        } catch (err) {
+            console.error(err);
+        }
+        };
+
+        load();
+    }, []);
 
     const venueWord = locationWord(venues.length);
 
@@ -29,20 +49,31 @@ export default function HomePage({ navigate }) {
         <div>
             {/* VIDEO HERO */}
             <section id="hero" style={{ padding: 0 }}>
-                <div className="hero-video-wrap">
-                    <iframe
-                        src="https://www.youtube.com/embed/292h6TFzUVs?autoplay=1&mute=1&loop=1&playlist=292h6TFzUVs&controls=0&showinfo=0&rel=0"
+                <div className="hero-video-wrap" style={{ isolation: "isolate" }}>
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        disablePictureInPicture
+                        controls={false}
+                        poster="/images/poster.jpg"
                         style={{
-                            position: "absolute", top: "50%", left: "50%",
-                            transform: "translate(-50%, -50%) scale(1.5)",
-                            width: "100%", height: "100%",
-                            border: "none", pointerEvents: "none",
-                            filter: "brightness(0.6) saturate(0.9)"
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            pointerEvents: "none",
+                            transform: "translateZ(0)",
+                            willChange: "transform",
                         }}
-                        allow="autoplay; fullscreen"
-                    />
+                    >
+                        <source src="/videos/hero.mp4" type="video/mp4" />
+                    </video>
                 </div>
-                <div className="hero-content">
+                <div className="hero-content" style={{ isolation: "isolate" }}>
                     <div className="hero-eyebrow">Thailand's Premier Padel Clubs</div>
                     <div className="hero-title">KROSS</div>
                     <div className="hero-sub">Onnut · Asoke · Thonglor · Rama IV</div>
@@ -58,34 +89,10 @@ export default function HomePage({ navigate }) {
                                         zIndex: 99, minWidth: 220, padding: "8px 0",
                                         boxShadow: "0 16px 48px rgba(0,0,0,0.6)"
                                     }}>
-                                        <a
-                                            href="https://apps.apple.com/kz/app/kross-padel/id6741785490"
-                                            target="_blank" rel="noreferrer"
-                                            onClick={() => setBookPopup(false)}
-                                            style={{
-                                                display: "flex", alignItems: "center", gap: 12,
-                                                padding: "12px 20px", textDecoration: "none",
-                                                color: "var(--white)", fontSize: 13, fontWeight: 600,
-                                                letterSpacing: "0.5px", transition: "background 0.15s"
-                                            }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                                        >
+                                        <a href="https://apps.apple.com/kz/app/kross-padel/id6741785490" target="_blank" rel="noreferrer" onClick={() => setBookPopup(false)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 20px", textDecoration: "none", color: "var(--white)", fontSize: 13, fontWeight: 600, letterSpacing: "0.5px", transition: "background 0.15s" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                                             <span style={{ fontSize: 18 }}>📱</span> KROSS App
                                         </a>
-                                        <a
-                                            href="https://line.me/ti/p/~@krosspadel"
-                                            target="_blank" rel="noreferrer"
-                                            onClick={() => setBookPopup(false)}
-                                            style={{
-                                                display: "flex", alignItems: "center", gap: 12,
-                                                padding: "12px 20px", textDecoration: "none",
-                                                color: "var(--white)", fontSize: 13, fontWeight: 600,
-                                                letterSpacing: "0.5px", transition: "background 0.15s"
-                                            }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                                        >
+                                        <a href="https://line.me/ti/p/~@krosspadel" target="_blank" rel="noreferrer" onClick={() => setBookPopup(false)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 20px", textDecoration: "none", color: "var(--white)", fontSize: 13, fontWeight: 600, letterSpacing: "0.5px", transition: "background 0.15s" }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                                             <span style={{ fontSize: 18 }}>💬</span> LINE Official
                                         </a>
                                     </div>
@@ -142,7 +149,7 @@ export default function HomePage({ navigate }) {
             </section>
 
             {/* ACTIVITIES */}
-            {MOCKUP_ACTIVITIES.length > 0 && (
+            {activities.length > 0 && (
                 <section style={{ padding: "100px clamp(24px, 5vw, 72px) 0" }}>
                     <div style={{ padding: "0 0 52px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
                         <div>
@@ -151,38 +158,76 @@ export default function HomePage({ navigate }) {
                         </div>
                         <button className="btn-ghost" onClick={() => navigate("activities")}>All Activities</button>
                     </div>
+
                     <MobileCarousel>
-                    <div className="venues-grid activities-mob-scroll" data-scroll>
-                        {MOCKUP_ACTIVITIES.map((a) => (
-                            <div className="venue-card" key={a.docId} onClick={() => a.url ? window.open(a.url, "_blank", "noopener noreferrer") : navigate("activities")}>
-                                <div className="venue-bg-div" style={{
-                                    background: a.imageUrl
-                                        ? `url(${a.imageUrl}) center/cover no-repeat`
-                                        : "linear-gradient(135deg, var(--green-dark), var(--green-mid))"
-                                }} />
-                                <div className="venue-card-inner">
-                                    <div className="venue-overlay" />
-                                    {a.level && (
-                                        <div style={{
-                                            position: "absolute", top: 20, right: 20,
-                                            background: "rgba(0,0,0,0.55)", backdropFilter: "blur(8px)",
-                                            border: "1px solid rgba(45,168,79,0.5)",
-                                            color: "var(--green-highlight)",
-                                            fontSize: 10, fontWeight: 700, letterSpacing: "1.5px",
-                                            textTransform: "uppercase", padding: "5px 10px",
-                                            borderRadius: 2
-                                        }}>{a.level}</div>
-                                    )}
-                                    <div className="venue-info">
-                                        {a.date && <div style={{ fontSize: 10, letterSpacing: "2px", textTransform: "uppercase", opacity: 0.55, marginBottom: 10 }}>{formatDate(a.date)}</div>}
-                                        <div className="venue-name">{a.name}</div>
-                                        <div className="venue-loc">{a.club}</div>
-                                        <div className="venue-cta">View Activity →</div>
+                        <div className="venues-grid activities-mob-scroll" data-scroll>
+                            {activities.map((a) => (
+                                <div
+                                    className="venue-card"
+                                    key={a.docId}
+                                    onClick={() =>
+                                        a.url
+                                            ? window.open(a.url, "_blank", "noopener,noreferrer")
+                                            : navigate("activities")
+                                    }
+                                >
+                                    <div
+                                        className="venue-bg-div"
+                                        style={{
+                                            background: a.imageUrl
+                                                ? `url(${a.imageUrl}) center/cover no-repeat`
+                                                : "linear-gradient(135deg, var(--green-dark), var(--green-mid))",
+                                        }}
+                                    />
+
+                                    <div className="venue-card-inner">
+                                        <div className="venue-overlay" />
+
+                                        {a.level && (
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    top: 20,
+                                                    right: 20,
+                                                    background: "rgba(0,0,0,0.55)",
+                                                    backdropFilter: "blur(8px)",
+                                                    border: "1px solid rgba(45,168,79,0.5)",
+                                                    color: "var(--green-highlight)",
+                                                    fontSize: 10,
+                                                    fontWeight: 700,
+                                                    letterSpacing: "1.5px",
+                                                    textTransform: "uppercase",
+                                                    padding: "5px 10px",
+                                                    borderRadius: 2,
+                                                }}
+                                            >
+                                                {a.level}
+                                            </div>
+                                        )}
+
+                                        <div className="venue-info">
+                                            {a.date && (
+                                                <div
+                                                    style={{
+                                                        fontSize: 10,
+                                                        letterSpacing: "2px",
+                                                        textTransform: "uppercase",
+                                                        opacity: 0.55,
+                                                        marginBottom: 10,
+                                                    }}
+                                                >
+                                                    {formatDate(a.date?.toDate ? a.date.toDate() : a.date)}
+                                                </div>
+                                            )}
+
+                                            <div className="venue-name">{a.name}</div>
+                                            <div className="venue-loc">{a.club}</div>
+                                            <div className="venue-cta">View Activity →</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
                     </MobileCarousel>
                 </section>
             )}

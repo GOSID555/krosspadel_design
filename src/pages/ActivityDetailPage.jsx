@@ -108,7 +108,7 @@ export default function ActivityDetailPage({ navigate, activityId }) {
             <div>
               <div className="tag" style={{ marginBottom: 20 }}>About This Event</div>
               <p style={{ fontSize: 17, lineHeight: 2, opacity: 0.8, whiteSpace: "pre-line" }}>
-                {activity.text || "No description available."}
+                {activity.detail || "No description available."}
               </p>
             </div>
           </div>

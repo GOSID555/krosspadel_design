@@ -2,10 +2,10 @@ import { useState, useRef, useLayoutEffect } from "react";
 
 const LEFT_LINKS = [
   { p: "about", label: "We Are Kross" },
-  { p: "venues", label: "We Are Venues" },
-  { p: "activities", label: "We Are Activities" },
-  { p: "lifestyle", label: "We Are Lifestyle" },
-  { p: "stories", label: "We Are Stories" },
+  { p: "venues", label: "Venues" },
+  { p: "activities", label: "Activities" },
+  { p: "lifestyle", label: "Lifestyle" },
+  { p: "stories", label: "Stories" },
 ];
 
 const RIGHT_LINKS = [

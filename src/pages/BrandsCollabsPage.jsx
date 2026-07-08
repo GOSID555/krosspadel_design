@@ -127,9 +127,9 @@ export default function BrandsCollabsPage({ navigate }) {
             gap: 20,
           }}>
             {BRAND_PARTNERS.map((b, i) => (
-              <div key={i} style={{
+              <div key={i} style={{ 
                 padding: "48px 56px",
-                background: "var(--low)",
+                background: "linear-gradient(135deg, #084030 100%)",
                 border: "1px solid var(--border)",
                 minWidth: 220,
                 display: "flex",

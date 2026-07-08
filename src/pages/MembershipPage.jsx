@@ -63,9 +63,13 @@ export default function MembershipPage({ navigate, notify, openBook }) {
     <div>
       {/* HERO */}
       <section id="hero" style={{ padding: 0 }}>
-        <div className="hero-video-wrap" style={{
-          background: "linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%)"
-        }} />
+          <div className="hero-video-wrap" style={{
+          backgroundImage: " linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783336186/DSC09854_e17j2p.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+          }} />
         <div className="hero-content">
           <div className="hero-eyebrow">Unlimited Access</div>
           <div className="hero-title">Book & Pricing</div>
