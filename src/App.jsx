@@ -34,20 +34,26 @@ import AdminPricingPage from "./pages/admin/AdminPricingPage";
 function AppInner() {
   const { user } = useContext(AuthContext);
   const { venues } = useContext(VenueContext);
-  const [page, setPage] = useState(window.location.hash === "#admin" ? "admin" : "home");
+  const getCurrentPage = () => {
+  const path = window.location.pathname;
+    if (path === "/" || path === "") return "home";
+
+    return path.replace("/", "");
+  };
+  const [page, setPage] = useState(getCurrentPage());
   const [bookOpen, setBookOpen] = useState(false);
   const [notifMsg, setNotifMsg] = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  const navigate = (p) => { setPage(p); window.scrollTo(0, 0); window.location.hash = ""; };
+  const navigate = (p) => {
+    setPage(p);
 
-  useEffect(() => {
-    const onHash = () => {
-      if (window.location.hash === "#admin") { setPage("admin"); window.scrollTo(0, 0); }
-    };
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+    const url = p === "home" ? "/" : `/${p}`;
+    window.history.pushState({}, "", url);
+
+    window.scrollTo(0, 0);
+  };
+
   const openBook = () => window.open("https://apps.apple.com/kz/app/kross-padel/id6741785490", "_blank");
   const notify = (msg) => { setNotifMsg(msg); setTimeout(() => setNotifMsg(""), 3200); };
 
@@ -63,6 +69,17 @@ function AppInner() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  useEffect(() => {
+  const onPopState = () => {
+      setPage(getCurrentPage());
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener("popstate", onPopState);
+
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+  
   const venueMatch = page.startsWith("venue-")
     ? venues.find(v => "venue-" + v.id === page)
     : null;
