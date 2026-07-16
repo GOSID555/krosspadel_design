@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { uploadImage } from "../../cloudinaryClient";
@@ -45,6 +45,7 @@ export default function AdminActivitiesPage({ navigate }) {
     const [form, setForm] = useState(EMPTY);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
 
     const load = async () => {
         const snap = await getDocs(collection(db, "activities"));
@@ -92,8 +93,10 @@ export default function AdminActivitiesPage({ navigate }) {
             setForm(f => ({ ...f, imageUrl }));
         } catch (error) {
             console.error("Image upload error:", error);
+            alert("อัปโหลดรูปไม่สำเร็จ: " + error.message);
         }
         setUploading(false);
+        e.target.value = "";
     };
 
     // LIST
@@ -159,9 +162,9 @@ export default function AdminActivitiesPage({ navigate }) {
                     </div>
                     {/* Date */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Date</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Day</div>
                         <input
-                            type="date"
+                            type="string"
                             value={form.date || ""}
                             onChange={e => handleChange("date", e.target.value)}
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, colorScheme: "dark" }}
@@ -197,12 +200,22 @@ export default function AdminActivitiesPage({ navigate }) {
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4 }}
                         />
                     </div>
-                    {/* Description */}
+                    {/* text */}
                     <div>
-                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Description</div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Text</div>
                         <textarea
                             value={form.text || ""}
                             onChange={e => handleChange("text", e.target.value)}
+                            rows={5}
+                            style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
+                        />
+                    </div>
+                   {/* Description */}
+                    <div>
+                        <div style={{ fontSize: 12, opacity: 0.5, marginBottom: 6, textTransform: "uppercase" }}>Detail</div>
+                        <textarea
+                            value={form.detail || ""}
+                            onChange={e => handleChange("detail", e.target.value)}
                             rows={5}
                             style={{ width: "100%", padding: "12px 16px", background: "var(--mid)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--white)", borderRadius: 4, resize: "vertical" }}
                         />
@@ -211,23 +224,22 @@ export default function AdminActivitiesPage({ navigate }) {
                     <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
                         <div className="tag" style={{ marginBottom: 8 }}>Cover Image</div>
                         <div style={{ opacity: 0.7, fontSize: 13, marginBottom: 12 }}>Upload activity image (shown as card background)</div>
-                        <label style={{ display: "inline-block", cursor: "pointer" }}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                disabled={uploading}
-                                style={{ display: "none" }}
-                            />
-                            <button
-                                type="button"
-                                className="btn-ghost"
-                                disabled={uploading}
-                                onClick={(e) => { e.currentTarget.previousElementSibling?.click(); }}
-                            >
-                                {uploading ? "Uploading..." : "Choose Image"}
-                            </button>
-                        </label>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            style={{ display: "none" }}
+                        />
+                        <button
+                            type="button"
+                            className="btn-ghost"
+                            disabled={uploading}
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            {uploading ? "Uploading..." : "Choose Image"}
+                        </button>
                         {form.imageUrl && (
                             <div style={{ marginTop: 12 }}>
                                 <img src={form.imageUrl} alt="Cover" style={{ maxWidth: "100%", maxHeight: 160, borderRadius: 4, objectFit: "cover" }} />

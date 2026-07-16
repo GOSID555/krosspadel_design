@@ -80,7 +80,7 @@ export default function VenuesPage({ navigate, openBook }) {
               label: "Recovery",
               col: "1",
               row: "2",
-              bg: "url('https://scontent.fbkk28-1.fna.fbcdn.net/v/t39.30808-6/472329217_588128387490729_7956572233588441056_n.jpg?stp=dst-jpg_tt6&cstp=mx1440x1441&ctp=s1440x1441&_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFK86ER-jbWSPs2eZfEEM8t9zFbI9d4dgz3MVsj13h2DL1AmkJt8CoQxJuaggJ5M7T9zzOzw12bGN6-GVgQ7h7o&_nc_ohc=I0LDkSVWlSYQ7kNvwEK7O60&_nc_oc=Adp4wZ-csZ5f7fJQZk-Z5CFXcyvsP1fh8aSGanytnp9wy7tjNDIfXcuSQ2iIU1HZIDxzKKgwO0vfYRYzTVclDT_L&_nc_zt=23&_nc_ht=scontent.fbkk28-1.fna&_nc_gid=INeV0UwzH8IGraMZs32tpw&_nc_ss=7b2a8&oh=00_AQAiydMQZc2FZq-qGIVP3FFDI_Y5OsPjbD9B9V0zHOXTmQ&oe=6A513430')",
+              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1784184700/YOT_00178_gmgcm8.jpg')",
             },
             {
               label: "Food",

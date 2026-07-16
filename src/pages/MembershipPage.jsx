@@ -3,27 +3,6 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Footer from "../components/Footer";
 
-const MOCKUP_PLANS = [
-  {
-    docId: "mock-plan-1",
-    name: "Kross Pass 20 hrs",
-    price: "16,000",
-    priceLabel: "20 hours",
-    validity: "Valid 3 months · Non-transferable · Use for regular booking",
-    perks: "20 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
-    featured: false,
-  },
-  {
-    docId: "mock-plan-2",
-    name: "Kross Pass 30 hrs",
-    price: "24,000",
-    priceLabel: "30 hours",
-    validity: "Valid 3 months · Non-transferable · Use for regular booking",
-    perks: "30 hours court time\nAll KROSS venues\nFlexible scheduling\nOnline booking via app",
-    featured: true,
-  },
-];
-
 const PRICE_TABS = [
   { key: "court_rental", label: "Court Rental" },
   { key: "coaching", label: "Coaching" },
@@ -39,6 +18,10 @@ function parseRows(rows) {
 export default function MembershipPage({ navigate, notify, openBook }) {
   const [plans, setPlans] = useState([]);
   const [pricing, setPricing] = useState([]);
+  const [courtRentals, setCourtRentals] = useState([]);
+  const [coaching, setCoaching] = useState([]);
+  const [activities, setActivities] = useState([]); // Added activities state
+  const [racketRentals, setRacketRentals] = useState([]);
   const [tab, setTab] = useState("court_rental");
 
   useEffect(() => {
@@ -46,11 +29,18 @@ export default function MembershipPage({ navigate, notify, openBook }) {
     Promise.all([
       getDocs(collection(db, "plans")),
       getDocs(collection(db, "pricing")),
-    ]).then(([plansSnap, pricingSnap]) => {
+      getDocs(collection(db, "courtRental")),
+      getDocs(collection(db, "coaching")),
+      getDocs(collection(db, "racketRental")),
+      getDocs(collection(db, "activities")), // Added fetch for activities collection
+    ]).then(([plansSnap, pricingSnap, courtRentalSnap, coachingSnap, racketRentalSnap, activitiesSnap]) => {
       if (cancelled) return;
-      if (plansSnap.docs.length > 0)
-        setPlans(plansSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(p => !p.hidden));
+      setPlans(plansSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(p => !p.hidden));
       setPricing(pricingSnap.docs.map(d => ({ docId: d.id, ...d.data() })));
+      setCourtRentals(courtRentalSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(v => !v.hidden));
+      setCoaching(coachingSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(v => !v.hidden));
+      setRacketRentals(racketRentalSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(v => !v.hidden));
+      setActivities(activitiesSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(v => !v.hidden)); // Safe mapping assignment
     });
     return () => { cancelled = true; };
   }, []);
@@ -171,56 +161,293 @@ export default function MembershipPage({ navigate, notify, openBook }) {
             ))}
           </div>
 
-          {tabItems.length === 0 ? (
-            <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
-              Pricing coming soon
-            </div>
-          ) : (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
-              gap: 24
-            }}>
-              {tabItems.map(item => {
-                const rows = parseRows(item.rows);
-                return (
-                  <div key={item.docId} style={{
-                    background: "var(--mid)",
-                    border: "1px solid var(--border)",
-                    padding: "28px 32px"
-                  }}>
-                    <div style={{
-                      fontFamily: "'Gotham Narrow', sans-serif",
-                      fontSize: 14, letterSpacing: "2px",
-                      textTransform: "uppercase", marginBottom: 20,
-                      color: "var(--white)"
-                    }}>{item.name}</div>
-                    <div>
-                      {rows.map((row, i) => (
-                        <div key={i} style={{
-                          display: "flex", justifyContent: "space-between", alignItems: "baseline",
-                          padding: "12px 0",
-                          borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
-                        }}>
-                          <div>
-                            <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
-                            {row.note && (
-                              <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
-                            )}
-                          </div>
-                          <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
-                            <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
-                            {row.unit && (
-                              <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
-                            )}
-                          </div>
+          {tab === "court_rental" ? (
+            courtRentals.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Pricing coming soon
+              </div>
+            ) : (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                gap: 24
+              }}>
+                {courtRentals.map(venue => {
+                  const indoorSlots = venue.indoor ? Object.values(venue.indoor) : [];
+                  const outdoorSlots = venue.outdoor ? Object.values(venue.outdoor) : [];
+                  return (
+                    <div key={venue.docId} style={{
+                      background: "var(--mid)",
+                      border: "1px solid var(--border)",
+                      padding: "28px 32px"
+                    }}>
+                      <div style={{
+                        fontFamily: "'Gotham Narrow', sans-serif",
+                        fontSize: 14, letterSpacing: "2px",
+                        textTransform: "uppercase", marginBottom: 20,
+                        color: "var(--white)"
+                      }}>{venue.name}</div>
+
+                      {indoorSlots.length > 0 && (
+                        <div style={{ marginBottom: 16 }}>
+                          <div style={{
+                            fontSize: 11, letterSpacing: "1.5px", textTransform: "uppercase",
+                            color: "var(--green-highlight)", opacity: 0.8, marginBottom: 8
+                          }}>Indoor</div>
+                          {indoorSlots.map((slot, i) => (
+                            <div key={i} style={{
+                              display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                              padding: "12px 0",
+                              borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                            }}>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{slot.time}</div>
+                              <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                                <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{slot.price}</span>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
+
+                      {outdoorSlots.length > 0 && (
+                        <div>
+                          <div style={{
+                            fontSize: 11, letterSpacing: "1.5px", textTransform: "uppercase",
+                            color: "var(--green-highlight)", opacity: 0.8, marginBottom: 8
+                          }}>Outdoor</div>
+                          {outdoorSlots.map((slot, i) => (
+                            <div key={i} style={{
+                              display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                              padding: "12px 0",
+                              borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                            }}>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{slot.time}</div>
+                              <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                                <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{slot.price}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )
+          ) : tab === "coaching" ? (
+            coaching.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Pricing coming soon
+              </div>
+            ) : (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                gap: 24
+              }}>
+                {coaching.map(item => {
+                  const rows = item.row ? Object.values(item.row) : [];
+                  return (
+                    <div key={item.docId} style={{
+                      background: "var(--mid)",
+                      border: "1px solid var(--border)",
+                      padding: "28px 32px"
+                    }}>
+                      {item.name && (
+                        <div style={{
+                          fontFamily: "'Gotham Narrow', sans-serif",
+                          fontSize: 14, letterSpacing: "2px",
+                          textTransform: "uppercase", marginBottom: 20,
+                          color: "var(--white)"
+                        }}>{item.name}</div>
+                      )}
+                      <div>
+                        {rows.map((row, i) => (
+                          <div key={i} style={{
+                            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                            padding: "12px 0",
+                            borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                          }}>
+                            <div>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
+                              {row.note && (
+                                <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
+                              )}
+                            </div>
+                            <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                              <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
+                              {row.unit && (
+                                <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : tab === "activities" ? (
+            activities.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Pricing coming soon
+              </div>
+            ) : (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                gap: 24
+              }}>
+                {activities.map(item => {
+                  const rows = item.row ? Object.values(item.row) : [];
+                  return (
+                    <div key={item.docId} style={{
+                      background: "var(--mid)",
+                      border: "1px solid var(--border)",
+                      padding: "28px 32px"
+                    }}>
+                      {item.name && (
+                        <div style={{
+                          fontFamily: "'Gotham Narrow', sans-serif",
+                          fontSize: 14, letterSpacing: "2px",
+                          textTransform: "uppercase", marginBottom: 20,
+                          color: "var(--white)"
+                        }}>{item.name}</div>
+                      )}
+                      <div>
+                        {rows.map((row, i) => (
+                          <div key={i} style={{
+                            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                            padding: "12px 0",
+                            borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                          }}>
+                            <div>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
+                              {row.note && (
+                                <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
+                              )}
+                            </div>
+                            <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                              <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
+                              {row.unit && (
+                                <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : tab === "racket_rental" ? (
+            racketRentals.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Pricing coming soon
+              </div>
+            ) : (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                gap: 24
+              }}>
+                {racketRentals.map(item => {
+                  const rows = item.row ? Object.values(item.row) : [];
+                  return (
+                    <div key={item.docId} style={{
+                      background: "var(--mid)",
+                      border: "1px solid var(--border)",
+                      padding: "28px 32px"
+                    }}>
+                      {item.name && (
+                        <div style={{
+                          fontFamily: "'Gotham Narrow', sans-serif",
+                          fontSize: 14, letterSpacing: "2px",
+                          textTransform: "uppercase", marginBottom: 20,
+                          color: "var(--white)"
+                        }}>{item.name}</div>
+                      )}
+                      <div>
+                        {rows.map((row, i) => (
+                          <div key={i} style={{
+                            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                            padding: "12px 0",
+                            borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                          }}>
+                            <div>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
+                              {row.note && (
+                                <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
+                              )}
+                            </div>
+                            <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                              <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
+                              {row.unit && (
+                                <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : (
+            tabItems.length === 0 ? (
+              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+                Pricing coming soon
+              </div>
+            ) : (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                gap: 24
+              }}>
+                {tabItems.map(item => {
+                  const rows = parseRows(item.rows);
+                  return (
+                    <div key={item.docId} style={{
+                      background: "var(--mid)",
+                      border: "1px solid var(--border)",
+                      padding: "28px 32px"
+                    }}>
+                      <div style={{
+                        fontFamily: "'Gotham Narrow', sans-serif",
+                        fontSize: 14, letterSpacing: "2px",
+                        textTransform: "uppercase", marginBottom: 20,
+                        color: "var(--white)"
+                      }}>{item.name}</div>
+                      <div>
+                        {rows.map((row, i) => (
+                          <div key={i} style={{
+                            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                            padding: "12px 0",
+                            borderTop: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none"
+                          }}>
+                            <div>
+                              <div style={{ fontSize: 13, opacity: 0.7 }}>{row.label}</div>
+                              {row.note && (
+                                <div style={{ fontSize: 11, opacity: 0.35, marginTop: 3, lineHeight: 1.5 }}>{row.note}</div>
+                              )}
+                            </div>
+                            <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 16 }}>
+                              <span style={{ color: "var(--green-highlight)", fontWeight: 700, fontSize: 16 }}>฿{row.price}</span>
+                              {row.unit && (
+                                <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 4 }}>{row.unit}</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
           )}
         </div>
       </section>
@@ -234,19 +461,17 @@ export default function MembershipPage({ navigate, notify, openBook }) {
             All plans include access to all KROSS venues, priority booking, coaching discounts, and exclusive member events.
           </p>
 
-          {(() => {
-            const displayPlans = plans.length > 0 ? plans : MOCKUP_PLANS;
-            return displayPlans.length === 0 ? (
-              <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
-                Packages coming soon
-              </div>
-            ) : (
+          {plans.length === 0 ? (
+            <div style={{ opacity: 0.3, fontSize: 14, textAlign: "center", padding: "64px 0" }}>
+              Packages coming soon
+            </div>
+          ) : (
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
               gap: 24, alignItems: "stretch"
             }}>
-              {displayPlans.map(p => (
+              {plans.map(p => (
                 <div
                   key={p.docId || p.name}
                   style={{
@@ -288,8 +513,7 @@ export default function MembershipPage({ navigate, notify, openBook }) {
                 </div>
               ))}
             </div>
-            );
-          })()}
+          )}
         </div>
       </section>
 

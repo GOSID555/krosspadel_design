@@ -113,8 +113,8 @@ export default function ContactPage({ navigate, notify }) {
             {[
               { venue: "On Nut", phone: "097-285-6133", hours: "07:00–23:00", address: "89 Soi Chinnamat, Phra Khanong" },
               { venue: "Asoke", phone: "084-043-8893", hours: "07:00–22:00", address: "30 Sukhumvit 21 Rd, 8F" },
-              { venue: "Thonglor", phone: "080-331-3883", hours: "08:00–22:00", address: "88 Soi Sukhumvit 49" },
-              { venue: "Rama 4", phone: "091-860-7150", hours: "07:00–23:00", address: "135 Ardnarong Road, Khlong Toei" },
+              { venue: "Sky", phone: "080-331-3883", hours: "08:00–22:00", address: "88 Soi Sukhumvit 49" },
+              { venue: "Indoor", phone: "091-860-7150", hours: "07:00–23:00", address: "135 Ardnarong Road, Khlong Toei" },
             ].map((item, i) => (
               <div key={i} style={{
                 padding: "40px 36px",
