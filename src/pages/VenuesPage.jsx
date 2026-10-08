@@ -74,7 +74,7 @@ export default function VenuesPage({ navigate, openBook }) {
               label: "Wellness",
               col: "4",
               row: "1",
-              bg: "url('https://res.cloudinary.com/vtjrp9sy/image/upload/v1783321346/DSC00396_fzg3xb.jpg')",
+              bg: "url('https://res.cloudinary.com/xqqizwkp/image/upload/v1791446910/YOT_1742.jpg')",
             },
             {
               label: "Recovery",
